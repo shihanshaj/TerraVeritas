@@ -1,0 +1,25 @@
+{
+  "scenario_a_plan_status": "plan_success",
+  "scenario_a_resource_changes": [
+    "aws_s3_bucket.data",
+    "aws_s3_bucket_acl.data"
+  ],
+  "scenario_b_plan_status": "plan_success",
+  "scenario_b_resource_changes": [
+    "aws_s3_bucket.data",
+    "aws_s3_bucket_acl.data",
+    "aws_s3_bucket_public_access_block.data"
+  ],
+  "before_invariant_status": "fail",
+  "before_invariant_violated_conditions": [
+    "acl_grants_public"
+  ],
+  "after_invariant_status": "pass",
+  "after_invariant_violated_conditions": [],
+  "oracle_classification": "true_fix",
+  "oracle_confidence": "medium",
+  "oracle_reasons": [
+    "the invariant was violated before the repair and is satisfied after it",
+    "no unauthenticated-reachable ACL grant or bucket-policy statement found"
+  ]
+}

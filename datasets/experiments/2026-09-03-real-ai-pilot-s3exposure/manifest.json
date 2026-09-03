@@ -1,0 +1,9 @@
+{
+  "experiment_id": "2026-09-03-real-ai-pilot-s3exposure",
+  "matrix_cells": [
+    "case1_acl_only-000",
+    "case2_policy_only-000",
+    "case3_acl_and_policy-000"
+  ],
+  "record_count": 3
+}
