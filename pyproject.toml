@@ -1,0 +1,58 @@
+[project]
+name = "terraveritas"
+version = "0.1.0"
+description = "Automated security-intent oracle for detecting deceptive AI-generated Terraform security repairs."
+readme = "README.md"
+authors = [
+    { name = "Shihan Shajahan", email = "shihanshaj@gmail.com" }
+]
+requires-python = ">=3.13,<3.14"
+dependencies = [
+    "checkov>=3.3.0",
+    "bc-python-hcl2>=0.4.3",
+]
+
+[tool.uv]
+# Every published checkov release through 3.3.16 (latest as of this review)
+# pins asteval==1.0.6 exactly, which carries GHSA-9w56-46f6-3qhx /
+# CVE-2026-55244 (found by `uvx pip-audit`, Prompt 12 security review) with
+# no checkov release available yet that unpins it. Forcing the patched
+# version despite checkov's exact pin — verified against the full test
+# suite (all passing) that this doesn't break checkov's actual behavior for
+# how this project invokes it (static analysis only, no custom Python check
+# plugins loaded, --skip-download). See SECURITY.md for the full writeup.
+override-dependencies = ["asteval>=1.0.9"]
+
+[project.scripts]
+terraveritas = "terraveritas.cli:main"
+
+[build-system]
+requires = ["uv_build>=0.10.11,<0.11.0"]
+build-backend = "uv_build"
+
+[dependency-groups]
+dev = [
+    "pytest>=8.3.0",
+    "pytest-cov>=6.0.0",
+    "ruff>=0.8.0",
+    "mypy>=1.13.0",
+]
+
+[tool.ruff]
+line-length = 100
+target-version = "py313"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B", "SIM"]
+
+[tool.mypy]
+python_version = "3.13"
+strict = true
+exclude = ["^fixtures/", "^tests/fixtures/"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-ra"
+
+[tool.uv.build-backend]
+module-root = "src"

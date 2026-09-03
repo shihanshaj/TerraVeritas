@@ -1,0 +1,38 @@
+__pycache__/
+*.pyc
+.venv/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+*.egg-info/
+dist/
+build/
+.coverage
+htmlcov/
+
+# Terraform
+.terraform/
+.terraform.lock.hcl
+# Provider filesystem mirror (scripts/build_provider_mirror.py) — a ~680MB
+# extracted binary, deliberately not committed. Machine-specific (built for
+# the local OS/arch) and reproducible from the script, not from git history.
+.terraform-mirror/
+.terraformrc
+*.tfstate
+*.tfstate.*
+crash.log
+crash.*.log
+*.tfvars
+*.tfvars.json
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
+
+# Secrets / local config
+.env
+*.pem
+*.key
+
+# OS
+.DS_Store
