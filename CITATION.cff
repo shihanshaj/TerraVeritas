@@ -1,0 +1,27 @@
+cff-version: 1.2.0
+message: >-
+  This is a research software artifact, not an accompanying published
+  paper — no paper currently exists for this project. If you use
+  TerraVeritas, please cite the software directly using the metadata
+  below. This file intentionally omits a DOI and a preferred-citation
+  entry, since neither a permanent archival record nor a publication
+  exists yet — do not treat their absence as an oversight.
+title: TerraVeritas
+type: software
+version: 0.1.0
+date-released: "2026-09-04"
+abstract: >-
+  A research pipeline for evaluating whether an AI-generated repair to a
+  Terraform security finding genuinely satisfies the underlying AWS
+  security property, as opposed to merely making a static-analysis
+  scanner stop flagging it. Implements one machine-checkable security
+  invariant (S3 public-access exposure), a real Terraform-plan-based
+  evaluation pipeline, a differential scanner-evidence engine, and an
+  oracle that classifies a repair as TRUE_FIX, DECEPTIVE_FIX, PARTIAL_FIX,
+  REGRESSION, INVALID_CONFIGURATION, or INCONCLUSIVE with an explicit
+  evidence trail. Phase 1 research prototype — see README.md for exactly
+  what is and is not implemented today.
+authors:
+  - given-names: Shihan
+    family-names: Shajahan
+license: MIT
