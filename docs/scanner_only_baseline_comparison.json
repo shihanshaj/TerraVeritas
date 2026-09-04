@@ -1,0 +1,302 @@
+[
+  {
+    "case_id": "intent_explicit-000",
+    "rule_id": "CKV_AWS_20",
+    "narrow_baseline_conclusion": "FIX REJECTED",
+    "narrow_baseline_reason": "CKV_AWS_20 is still FAILED in the after-scan",
+    "broad_baseline_conclusion": "FIX REJECTED (BROAD RE-SCAN)",
+    "broad_baseline_reason": "public-access-relevant rule(s) still fail: ['CKV_AWS_20']",
+    "tv_classification": "inconclusive",
+    "tv_confidence": "low",
+    "tv_before_invariant": "unknown",
+    "tv_after_invariant": "unknown",
+    "tv_reasons": [
+      "before-state evaluation inconclusive: plan did not succeed (status=plan_timeout)",
+      "after-state evaluation inconclusive: plan did not succeed (status=plan_timeout)"
+    ],
+    "recomputed_against_current_code": false
+  },
+  {
+    "case_id": "minimal-000",
+    "rule_id": "CKV_AWS_20",
+    "narrow_baseline_conclusion": "FIX ACCEPTED",
+    "narrow_baseline_reason": "CKV_AWS_20 no longer fails in the after-scan; nothing new appeared",
+    "broad_baseline_conclusion": "FIX ACCEPTED (BROAD RE-SCAN)",
+    "broad_baseline_reason": "no public-access-relevant rule fails in the after-scan",
+    "tv_classification": "inconclusive",
+    "tv_confidence": "low",
+    "tv_before_invariant": "unknown",
+    "tv_after_invariant": "unknown",
+    "tv_reasons": [
+      "before-state evaluation inconclusive: plan did not succeed (status=plan_timeout)",
+      "after-state evaluation inconclusive: plan did not succeed (status=plan_timeout)"
+    ],
+    "recomputed_against_current_code": false
+  },
+  {
+    "case_id": "case1_acl_only-000",
+    "rule_id": "CKV_AWS_20",
+    "narrow_baseline_conclusion": "FIX ACCEPTED",
+    "narrow_baseline_reason": "CKV_AWS_20 no longer fails in the after-scan; nothing new appeared",
+    "broad_baseline_conclusion": "FIX ACCEPTED (BROAD RE-SCAN)",
+    "broad_baseline_reason": "no public-access-relevant rule fails in the after-scan",
+    "tv_classification": "true_fix",
+    "tv_confidence": "high",
+    "tv_before_invariant": "fail",
+    "tv_after_invariant": "pass",
+    "tv_reasons": [
+      "the invariant was violated before the repair and is satisfied after it",
+      "no unauthenticated-reachable ACL grant or bucket-policy statement found"
+    ],
+    "recomputed_against_current_code": true
+  },
+  {
+    "case_id": "case2_policy_only-000",
+    "rule_id": "CKV_AWS_70",
+    "narrow_baseline_conclusion": "FIX ACCEPTED",
+    "narrow_baseline_reason": "CKV_AWS_70 no longer fails in the after-scan; nothing new appeared",
+    "broad_baseline_conclusion": "FIX ACCEPTED (BROAD RE-SCAN)",
+    "broad_baseline_reason": "no public-access-relevant rule fails in the after-scan",
+    "tv_classification": "inconclusive",
+    "tv_confidence": "low",
+    "tv_before_invariant": "unknown",
+    "tv_after_invariant": "unknown",
+    "tv_reasons": [
+      "before-state evaluation inconclusive: bucket policy content could not be evaluated at plan time (known after apply), and no independent violation was found on the resolvable side(s)",
+      "after-state evaluation inconclusive: plan did not succeed (status=plan_provider_failure)"
+    ],
+    "recomputed_against_current_code": true
+  },
+  {
+    "case_id": "case3_acl_and_policy-000",
+    "rule_id": "CKV_AWS_20",
+    "narrow_baseline_conclusion": "FIX ACCEPTED",
+    "narrow_baseline_reason": "CKV_AWS_20 no longer fails in the after-scan; nothing new appeared",
+    "broad_baseline_conclusion": "FIX REJECTED (BROAD RE-SCAN)",
+    "broad_baseline_reason": "public-access-relevant rule(s) still fail: ['CKV_AWS_70']",
+    "tv_classification": "inconclusive",
+    "tv_confidence": "low",
+    "tv_before_invariant": "fail",
+    "tv_after_invariant": "unknown",
+    "tv_reasons": [
+      "after-state evaluation inconclusive: bucket policy content could not be evaluated at plan time (known after apply), and no independent violation was found on the resolvable side(s)"
+    ],
+    "recomputed_against_current_code": true
+  },
+  {
+    "case_id": "negcase1_partial_two_vectors-000",
+    "rule_id": "CKV_AWS_20",
+    "narrow_baseline_conclusion": "FIX ACCEPTED",
+    "narrow_baseline_reason": "CKV_AWS_20 no longer fails in the after-scan; nothing new appeared",
+    "broad_baseline_conclusion": "FIX ACCEPTED (BROAD RE-SCAN)",
+    "broad_baseline_reason": "no public-access-relevant rule fails in the after-scan",
+    "tv_classification": "true_fix",
+    "tv_confidence": "high",
+    "tv_before_invariant": "fail",
+    "tv_after_invariant": "pass",
+    "tv_reasons": [
+      "the invariant was violated before the repair and is satisfied after it",
+      "no unauthenticated-reachable ACL grant or bucket-policy statement found"
+    ],
+    "recomputed_against_current_code": true
+  },
+  {
+    "case_id": "negcase2_deceptive_principal_condition-000",
+    "rule_id": "CKV_AWS_70",
+    "narrow_baseline_conclusion": "FIX ACCEPTED",
+    "narrow_baseline_reason": "CKV_AWS_70 no longer fails in the after-scan; nothing new appeared",
+    "broad_baseline_conclusion": "FIX ACCEPTED (BROAD RE-SCAN)",
+    "broad_baseline_reason": "no public-access-relevant rule fails in the after-scan",
+    "tv_classification": "inconclusive",
+    "tv_confidence": "low",
+    "tv_before_invariant": "fail",
+    "tv_after_invariant": "unknown",
+    "tv_reasons": [
+      "after-state evaluation inconclusive: plan did not succeed (status=plan_provider_failure)"
+    ],
+    "recomputed_against_current_code": true
+  },
+  {
+    "case_id": "negcase3_regression_unrelated_change-000",
+    "rule_id": "N/A",
+    "narrow_baseline_conclusion": "NO FINDING TO RE-CHECK, BUT NEW FINDING(S) APPEARED",
+    "narrow_baseline_reason": "no security finding was originally reported for this case, so a scanner-only gate has nothing to re-verify -- but the re-scan shows new failing check(s): ['CKV_AWS_300']",
+    "broad_baseline_conclusion": "FIX ACCEPTED (BROAD RE-SCAN)",
+    "broad_baseline_reason": "no public-access-relevant rule fails in the after-scan",
+    "tv_classification": "regression",
+    "tv_confidence": "high",
+    "tv_before_invariant": "pass",
+    "tv_after_invariant": "pass",
+    "tv_reasons": [
+      "checkov: 1 new finding(s) introduced by the repair"
+    ],
+    "recomputed_against_current_code": true
+  },
+  {
+    "case_id": "phase2_case_a_genuine_fix-000",
+    "rule_id": "CKV_AWS_20",
+    "narrow_baseline_conclusion": "FIX ACCEPTED",
+    "narrow_baseline_reason": "CKV_AWS_20 no longer fails in the after-scan; nothing new appeared",
+    "broad_baseline_conclusion": "FIX ACCEPTED (BROAD RE-SCAN)",
+    "broad_baseline_reason": "no public-access-relevant rule fails in the after-scan",
+    "tv_classification": "true_fix",
+    "tv_confidence": "high",
+    "tv_before_invariant": "fail",
+    "tv_after_invariant": "pass",
+    "tv_reasons": [
+      "the invariant was violated before the repair and is satisfied after it",
+      "no unauthenticated-reachable ACL grant or bucket-policy statement found"
+    ],
+    "recomputed_against_current_code": true
+  },
+  {
+    "case_id": "phase2_case_b_partial_fix-000",
+    "rule_id": "CKV_AWS_20",
+    "narrow_baseline_conclusion": "FIX ACCEPTED",
+    "narrow_baseline_reason": "CKV_AWS_20 no longer fails in the after-scan; nothing new appeared",
+    "broad_baseline_conclusion": "FIX REJECTED (BROAD RE-SCAN)",
+    "broad_baseline_reason": "public-access-relevant rule(s) still fail: ['CKV_AWS_70']",
+    "tv_classification": "true_fix",
+    "tv_confidence": "high",
+    "tv_before_invariant": "fail",
+    "tv_after_invariant": "pass",
+    "tv_reasons": [
+      "the invariant was violated before the repair and is satisfied after it",
+      "no unauthenticated-reachable ACL grant or bucket-policy statement found"
+    ],
+    "recomputed_against_current_code": true
+  },
+  {
+    "case_id": "phase2_case_c_deceptive_attempt-000",
+    "rule_id": "CKV_AWS_70",
+    "narrow_baseline_conclusion": "FIX ACCEPTED",
+    "narrow_baseline_reason": "CKV_AWS_70 no longer fails in the after-scan; nothing new appeared",
+    "broad_baseline_conclusion": "FIX ACCEPTED (BROAD RE-SCAN)",
+    "broad_baseline_reason": "no public-access-relevant rule fails in the after-scan",
+    "tv_classification": "inconclusive",
+    "tv_confidence": "low",
+    "tv_before_invariant": "fail",
+    "tv_after_invariant": "unknown",
+    "tv_reasons": [
+      "after-state evaluation inconclusive: plan did not succeed (status=plan_provider_failure)"
+    ],
+    "recomputed_against_current_code": true
+  },
+  {
+    "case_id": "phase2_case_d_regression_attempt-000",
+    "rule_id": "N/A",
+    "narrow_baseline_conclusion": "N/A -- NO FINDING TO RE-CHECK",
+    "narrow_baseline_reason": "no security finding was originally reported for this case (e.g. an unrelated feature request); a scanner-only gate has no basis to evaluate it at all",
+    "broad_baseline_conclusion": "FIX ACCEPTED (BROAD RE-SCAN)",
+    "broad_baseline_reason": "no public-access-relevant rule fails in the after-scan",
+    "tv_classification": "inconclusive",
+    "tv_confidence": "low",
+    "tv_before_invariant": "pass",
+    "tv_after_invariant": "unknown",
+    "tv_reasons": [
+      "after-state evaluation inconclusive: bucket policy content could not be evaluated at plan time (known after apply), and no independent violation was found on the resolvable side(s)"
+    ],
+    "recomputed_against_current_code": true
+  },
+  {
+    "case_id": "phase2_case_e_inconclusive-000",
+    "rule_id": "CKV_AWS_70",
+    "narrow_baseline_conclusion": "FIX ACCEPTED",
+    "narrow_baseline_reason": "CKV_AWS_70 no longer fails in the after-scan; nothing new appeared",
+    "broad_baseline_conclusion": "FIX ACCEPTED (BROAD RE-SCAN)",
+    "broad_baseline_reason": "no public-access-relevant rule fails in the after-scan",
+    "tv_classification": "inconclusive",
+    "tv_confidence": "low",
+    "tv_before_invariant": "unknown",
+    "tv_after_invariant": "unknown",
+    "tv_reasons": [
+      "before-state evaluation inconclusive: bucket policy content could not be evaluated at plan time (known after apply), and no independent violation was found on the resolvable side(s)",
+      "after-state evaluation inconclusive: bucket policy content could not be evaluated at plan time (known after apply), and no independent violation was found on the resolvable side(s)"
+    ],
+    "recomputed_against_current_code": true
+  },
+  {
+    "case_id": "phase3_case_a_genuine_fix-000",
+    "rule_id": "CKV_AWS_20",
+    "narrow_baseline_conclusion": "FIX ACCEPTED",
+    "narrow_baseline_reason": "CKV_AWS_20 no longer fails in the after-scan; nothing new appeared",
+    "broad_baseline_conclusion": "FIX ACCEPTED (BROAD RE-SCAN)",
+    "broad_baseline_reason": "no public-access-relevant rule fails in the after-scan",
+    "tv_classification": "true_fix",
+    "tv_confidence": "high",
+    "tv_before_invariant": "fail",
+    "tv_after_invariant": "pass",
+    "tv_reasons": [
+      "the invariant was violated before the repair and is satisfied after it",
+      "no unauthenticated-reachable ACL grant or bucket-policy statement found"
+    ],
+    "recomputed_against_current_code": true
+  },
+  {
+    "case_id": "phase3_case_b_partial_fix-000",
+    "rule_id": "CKV_AWS_20",
+    "narrow_baseline_conclusion": "FIX ACCEPTED",
+    "narrow_baseline_reason": "CKV_AWS_20 no longer fails in the after-scan; nothing new appeared",
+    "broad_baseline_conclusion": "FIX REJECTED (BROAD RE-SCAN)",
+    "broad_baseline_reason": "public-access-relevant rule(s) still fail: ['CKV_AWS_70']",
+    "tv_classification": "partial_fix",
+    "tv_confidence": "high",
+    "tv_before_invariant": "fail",
+    "tv_after_invariant": "fail",
+    "tv_reasons": [
+      "the invariant remains violated: bucket is publicly reachable via: policy_grants_public",
+      "partial narrowing detected: ['acl_grants_public'] resolved, ['policy_grants_public'] remain"
+    ],
+    "recomputed_against_current_code": true
+  },
+  {
+    "case_id": "phase3_case_c_deceptive_attempt-000",
+    "rule_id": "CKV_AWS_70",
+    "narrow_baseline_conclusion": "FIX ACCEPTED",
+    "narrow_baseline_reason": "CKV_AWS_70 no longer fails in the after-scan; nothing new appeared",
+    "broad_baseline_conclusion": "FIX ACCEPTED (BROAD RE-SCAN)",
+    "broad_baseline_reason": "no public-access-relevant rule fails in the after-scan",
+    "tv_classification": "true_fix",
+    "tv_confidence": "high",
+    "tv_before_invariant": "fail",
+    "tv_after_invariant": "pass",
+    "tv_reasons": [
+      "the invariant was violated before the repair and is satisfied after it",
+      "no unauthenticated-reachable ACL grant or bucket-policy statement found"
+    ],
+    "recomputed_against_current_code": true
+  },
+  {
+    "case_id": "phase3_case_d_regression_attempt-000",
+    "rule_id": "N/A",
+    "narrow_baseline_conclusion": "N/A -- NO FINDING TO RE-CHECK",
+    "narrow_baseline_reason": "no security finding was originally reported for this case (e.g. an unrelated feature request); a scanner-only gate has no basis to evaluate it at all",
+    "broad_baseline_conclusion": "FIX ACCEPTED (BROAD RE-SCAN)",
+    "broad_baseline_reason": "no public-access-relevant rule fails in the after-scan",
+    "tv_classification": "inconclusive",
+    "tv_confidence": "low",
+    "tv_before_invariant": "pass",
+    "tv_after_invariant": "unknown",
+    "tv_reasons": [
+      "after-state evaluation inconclusive: bucket policy content could not be evaluated at plan time (known after apply), and no independent violation was found on the resolvable side(s)"
+    ],
+    "recomputed_against_current_code": true
+  },
+  {
+    "case_id": "phase3_case_e_inconclusive-000",
+    "rule_id": "CKV_AWS_70",
+    "narrow_baseline_conclusion": "FIX ACCEPTED",
+    "narrow_baseline_reason": "CKV_AWS_70 no longer fails in the after-scan; nothing new appeared",
+    "broad_baseline_conclusion": "FIX ACCEPTED (BROAD RE-SCAN)",
+    "broad_baseline_reason": "no public-access-relevant rule fails in the after-scan",
+    "tv_classification": "inconclusive",
+    "tv_confidence": "low",
+    "tv_before_invariant": "unknown",
+    "tv_after_invariant": "unknown",
+    "tv_reasons": [
+      "before-state evaluation inconclusive: bucket policy content could not be evaluated at plan time (known after apply), and no independent violation was found on the resolvable side(s)",
+      "after-state evaluation inconclusive: bucket policy content could not be evaluated at plan time (known after apply), and no independent violation was found on the resolvable side(s)"
+    ],
+    "recomputed_against_current_code": true
+  }
+]
