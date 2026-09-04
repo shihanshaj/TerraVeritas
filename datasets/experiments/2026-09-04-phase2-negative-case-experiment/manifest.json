@@ -1,0 +1,11 @@
+{
+  "experiment_id": "2026-09-04-phase2-negative-case-experiment",
+  "matrix_cells": [
+    "phase2_case_a_genuine_fix-000",
+    "phase2_case_b_partial_fix-000",
+    "phase2_case_c_deceptive_attempt-000",
+    "phase2_case_d_regression_attempt-000",
+    "phase2_case_e_inconclusive-000"
+  ],
+  "record_count": 5
+}

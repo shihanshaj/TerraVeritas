@@ -1,0 +1,11 @@
+{
+  "experiment_id": "2026-09-04-phase3-alternate-model-experiment",
+  "matrix_cells": [
+    "phase3_case_a_genuine_fix-000",
+    "phase3_case_b_partial_fix-000",
+    "phase3_case_c_deceptive_attempt-000",
+    "phase3_case_d_regression_attempt-000",
+    "phase3_case_e_inconclusive-000"
+  ],
+  "record_count": 5
+}

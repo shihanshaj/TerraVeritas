@@ -1,0 +1,9 @@
+{
+  "experiment_id": "2026-09-04-negative-case-pilot-s3exposure",
+  "matrix_cells": [
+    "negcase1_partial_two_vectors-000",
+    "negcase2_deceptive_principal_condition-000",
+    "negcase3_regression_unrelated_change-000"
+  ],
+  "record_count": 3
+}
