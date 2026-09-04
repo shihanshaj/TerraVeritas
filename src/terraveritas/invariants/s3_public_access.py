@@ -46,6 +46,29 @@ Disclosed scope gaps (see also the design review):
   this environment's provider-registry constraint is resolved — see
   terraform/plan.py) before this invariant is relied on for a bare-bucket
   case in an actual evaluation run.
+
+Policy-unresolved partial evaluation (investigated and fixed against real
+data — see datasets/experiments/2026-09-03-real-ai-pilot-s3exposure/records/
+case3_acl_and_policy-000.json and fixtures/real_plans/): an idiomatic bucket
+policy that interpolates the bucket's own `.arn` (e.g.
+`Resource = "${aws_s3_bucket.data.arn}/*"`) is entirely unknown in a
+create-action plan, since `arn` is AWS-computed and not known until apply.
+This previously caused a blanket UNKNOWN for the whole bucket, discarding
+even a fully-resolved, independently-conclusive ACL on the same resource.
+Investigated and REJECTED: reconstructing the policy's Principal/Effect/
+Action independently of Resource from Terraform's static configuration
+graph. A real captured plan (see the fixture above) confirms
+`configuration.root_module.resources[].expressions.policy` for a
+`jsonencode(...)`-built policy collapses to a flat `{"references": [...]}`
+list — Terraform's plan JSON does not preserve the internal structure of a
+function-call argument, so there is no sub-key evidence to reconstruct.
+This is not a limitation of this project's tooling; it is how Terraform's
+`show -json` configuration section is defined, verified directly against
+real output, not assumed. What IS implemented: the ACL side and the policy
+side are evaluated independently. An unresolved side can still contribute a
+FAIL (an unresolved policy can only make a bucket already publicly exposed
+via its ACL MORE exposed, never less), but is never treated as evidence
+toward PASS — reaching PASS requires both sides to be resolved and safe.
 """
 
 from __future__ import annotations
@@ -163,62 +186,117 @@ def evaluate_s3_public_access_exposure(plan: PlanResult, bucket_address: str) ->
     # correctly treats an absent/unresolved access_control_policy as "no
     # explicit grants visible via that mechanism" (isinstance(..., list)),
     # which is the accurate reading when the user never authored it.
-    if acl is not None and "acl" in acl.after_unknown_keys:
-        return _unknown(
-            bucket_address, "ACL content is unresolved at plan time (known after apply)"
-        )
-    if policy is not None and "policy" in policy.after_unknown_keys:
-        return _unknown(
-            bucket_address, "policy content is unresolved at plan time (known after apply)"
-        )
+    #
+    # ACL-unresolved and policy-unresolved are tracked SEPARATELY, not as a
+    # single whole-bucket gate, and each side is evaluated independently
+    # whenever it isn't unresolved. This is a deliberate, narrow partial
+    # evaluation, not field-level JSON decomposition: a real captured plan
+    # (fixtures/real_plans/, and datasets/experiments/.../case3_acl_and_policy)
+    # confirmed that Terraform's `configuration.expressions.policy` collapses
+    # an entire `jsonencode(...)` call into a flat `references` list with no
+    # sub-key structure — there is no way to learn Principal/Effect/Action
+    # independently of Resource from that source, so that approach was
+    # investigated and rejected, not attempted. What IS safe: when one side
+    # (e.g. a literal `acl = "public-read"`) is fully resolved and already
+    # proves public exposure, an unresolved OTHER side cannot make that
+    # bucket any safer — it can only mean the exposure is broader than shown.
+    # An unresolved side is therefore allowed to contribute a FAIL, but is
+    # NEVER treated as evidence toward PASS: `*_neutralized` is `None`
+    # (not True) whenever its side is unresolved, and PASS is only reached
+    # when BOTH sides are resolved and neither is neutralized-False.
+    acl_unresolved = acl is not None and "acl" in acl.after_unknown_keys
+    policy_unresolved = policy is not None and "policy" in policy.after_unknown_keys
+    evidence["acl_unresolved_at_plan_time"] = acl_unresolved
+    evidence["policy_unresolved_at_plan_time"] = policy_unresolved
 
     # --- ACL side ---
-    ignore_public_acls = _get_bool(bpa, "ignore_public_acls")
-    object_ownership = _get_str(ownership, "rule", nested_key="object_ownership")
-
-    acl_grants_public = _acl_grants_public(acl)
-    if acl_grants_public is None:
-        return _unknown(bucket_address, "ACL grant content not evaluable (redacted/unparseable)")
-    evidence["acl_grants_public"] = acl_grants_public
-
-    # Absence of a Block Public Access / Object Ownership resource in THIS
-    # config is informative, not unknown: it means this config declares no
-    # such protection. (Whether an account-level BPA setting outside this
-    # config might still protect the bucket is a disclosed, safe-direction
-    # gap — see module docstring — never a reason to return UNKNOWN here.)
-    if object_ownership == "BucketOwnerEnforced" or ignore_public_acls is True:
-        acl_neutralized = True
+    acl_neutralized: bool | None
+    if acl_unresolved:
+        acl_neutralized = None
     else:
-        acl_neutralized = not acl_grants_public
+        ignore_public_acls = _get_bool(bpa, "ignore_public_acls")
+        object_ownership = _get_str(ownership, "rule", nested_key="object_ownership")
+        acl_grants_public = _acl_grants_public(acl)
+        if acl_grants_public is None:
+            # Ambiguous (redacted/unparseable), not unresolved-at-plan-time —
+            # same safety treatment either way: never assume safe.
+            acl_neutralized = None
+        else:
+            evidence["acl_grants_public"] = acl_grants_public
+            # Absence of a Block Public Access / Object Ownership resource in
+            # THIS config is informative, not unknown: it means this config
+            # declares no such protection. (Whether an account-level BPA
+            # setting outside this config might still protect the bucket is a
+            # disclosed, safe-direction gap — see module docstring — never a
+            # reason to return UNKNOWN here.)
+            if object_ownership == "BucketOwnerEnforced" or ignore_public_acls is True:
+                acl_neutralized = True
+            else:
+                acl_neutralized = not acl_grants_public
 
     # --- Policy side ---
-    restrict_public_buckets = _get_bool(bpa, "restrict_public_buckets")
-    try:
-        policy_grants_public = _policy_grants_public(policy)
-    except _Ambiguous as exc:
-        return _unknown(bucket_address, str(exc))
-    evidence["policy_grants_public"] = policy_grants_public
-
-    if not policy_grants_public or restrict_public_buckets is True:
-        policy_neutralized = True
+    policy_neutralized: bool | None
+    if policy_unresolved:
+        policy_neutralized = None
     else:
-        policy_neutralized = False
+        restrict_public_buckets = _get_bool(bpa, "restrict_public_buckets")
+        try:
+            policy_grants_public = _policy_grants_public(policy)
+        except _Ambiguous:
+            # Same treatment as unresolved: cannot confirm safety, but a
+            # known violation on the other side still stands.
+            policy_neutralized = None
+        else:
+            evidence["policy_grants_public"] = policy_grants_public
+            if not policy_grants_public or restrict_public_buckets is True:
+                policy_neutralized = True
+            else:
+                policy_neutralized = False
 
     violated: list[str] = []
-    if not acl_neutralized:
+    if acl_neutralized is False:
         violated.append("acl_grants_public")
-    if not policy_neutralized:
+    if policy_neutralized is False:
         violated.append("policy_grants_public")
 
     if violated:
+        reason = f"bucket is publicly reachable via: {', '.join(violated)}"
+        unresolved_sides = [
+            label
+            for label, flag in (("ACL", acl_unresolved), ("bucket policy", policy_unresolved))
+            if flag
+        ]
+        if unresolved_sides:
+            reason += (
+                f" (note: {' and '.join(unresolved_sides)} content is also unresolved "
+                "at plan time and was not evaluated — actual exposure may be broader "
+                "than shown)"
+            )
         return InvariantResult(
             invariant_id=INVARIANT_ID,
             resource_address=bucket_address,
             status=InvariantStatus.FAIL,
             violated_conditions=violated,
-            reason=f"bucket is publicly reachable via: {', '.join(violated)}",
+            reason=reason,
             evidence=evidence,
         )
+
+    if acl_neutralized is None or policy_neutralized is None:
+        unresolved_sides = [
+            label
+            for label, flag in (
+                ("ACL", acl_neutralized is None),
+                ("bucket policy", policy_neutralized is None),
+            )
+            if flag
+        ]
+        return _unknown(
+            bucket_address,
+            f"{' and '.join(unresolved_sides)} content could not be evaluated at plan "
+            "time (known after apply), and no independent violation was found on the "
+            "resolvable side(s)",
+        )
+
     return InvariantResult(
         invariant_id=INVARIANT_ID,
         resource_address=bucket_address,

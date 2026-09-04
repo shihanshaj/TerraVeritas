@@ -616,3 +616,185 @@ def test_end_to_end_policy_with_delete_object_only_is_still_detected() -> None:
 
     assert result.status == InvariantStatus.FAIL
     assert result.violated_conditions == ["policy_grants_public"]
+
+
+# --- Regression tests: policy-unresolved partial evaluation ---
+# Root cause: a bucket policy that interpolates the bucket's own computed
+# `.arn` (e.g. Resource = "${aws_s3_bucket.data.arn}/*") is entirely unknown
+# at plan time in a create-action plan. The invariant previously returned a
+# blanket UNKNOWN for the whole bucket the moment this happened, discarding
+# a fully-resolved, independently-conclusive ACL on the SAME resource. This
+# was a real, observed failure: three genuine AI-generated repairs in
+# datasets/experiments/2026-09-03-real-ai-pilot-s3exposure/ all classified
+# INCONCLUSIVE for exactly this reason, including case3_acl_and_policy,
+# whose before-state had a literal, fully-resolved `acl = "public-read"`
+# sitting right next to the unresolved policy. Investigated and rejected:
+# reconstructing Principal/Effect/Action independently of Resource from
+# Terraform's static configuration graph — a real captured plan (see the
+# fixtures loaded below, extracted verbatim from that same experiment
+# record) confirms `configuration...expressions.policy` for a
+# `jsonencode(...)`-built policy collapses to a flat `references` list with
+# no sub-key structure to recover. What IS implemented: independent
+# evaluation of the ACL and policy sides, where an unresolved side can
+# contribute a FAIL (it can only make an already-exposed bucket MORE
+# exposed) but is NEVER treated as evidence toward PASS.
+
+
+def test_real_plan_acl_public_policy_unresolved_now_correctly_fails() -> None:
+    """The exact real scenario that was previously stuck at UNKNOWN: ACL is
+    a literal, resolved `public-read`; the bucket policy is unresolved
+    (references the bucket's own .arn). The known-public ACL alone must be
+    sufficient to reach FAIL, without needing the policy to be resolved."""
+    plan = _load_real_plan("s3_acl_public_policy_unresolved_before_plan.json")
+
+    result = evaluate_s3_public_access_exposure(plan, "aws_s3_bucket.data")
+
+    assert result.status == InvariantStatus.FAIL
+    assert result.violated_conditions == ["acl_grants_public"]
+    assert "policy" in result.reason.lower()
+    assert result.evidence["policy_unresolved_at_plan_time"] is True
+
+
+def test_real_plan_acl_private_policy_unresolved_stays_unknown_never_pass() -> None:
+    """Critical safety case, using real data from the SAME experiment's
+    after-state: the AI's repair made the ACL private (known, safe) but left
+    the bucket policy resource in place, still unresolved. The invariant
+    must NOT report PASS just because the resolvable side looks safe — the
+    unresolved policy could still be granting public access, and there is no
+    independent evidence it isn't. This must stay UNKNOWN."""
+    plan = _load_real_plan("s3_acl_private_policy_unresolved_after_plan.json")
+
+    result = evaluate_s3_public_access_exposure(plan, "aws_s3_bucket.data")
+
+    assert result.status == InvariantStatus.UNKNOWN
+    assert result.violated_conditions == []
+
+
+def test_policy_known_public_acl_unresolved_still_fails() -> None:
+    """Symmetric direction (synthetic — no real captured plan exercises this
+    shape yet): a fully resolved, public bucket policy must independently
+    prove FAIL even when the ACL resource's own content happens to be
+    unresolved at plan time."""
+    from terraveritas.models.plan import PlannedResourceChange
+
+    plan = plan_with(
+        [
+            bucket_resource(),
+            PlannedResourceChange(
+                address="aws_s3_bucket_acl.data",
+                resource_type="aws_s3_bucket_acl",
+                resource_name="data",
+                provider_name="registry.terraform.io/hashicorp/aws",
+                actions=["create"],
+                after={"bucket": "my-bucket"},
+                after_unknown_keys=["acl"],
+            ),
+            resource(
+                "aws_s3_bucket_policy.data",
+                "aws_s3_bucket_policy",
+                {
+                    "bucket": "my-bucket",
+                    "policy": json.dumps(
+                        {
+                            "Statement": [
+                                {
+                                    "Effect": "Allow",
+                                    "Principal": "*",
+                                    "Action": "s3:GetObject",
+                                    "Resource": "arn:aws:s3:::my-bucket/*",
+                                }
+                            ]
+                        }
+                    ),
+                },
+            ),
+        ]
+    )
+
+    result = evaluate_s3_public_access_exposure(plan, BUCKET)
+
+    assert result.status == InvariantStatus.FAIL
+    assert result.violated_conditions == ["policy_grants_public"]
+    assert result.evidence["acl_unresolved_at_plan_time"] is True
+
+
+def test_policy_known_safe_acl_unresolved_stays_unknown_never_pass() -> None:
+    """Symmetric safety case (synthetic): the policy is resolved and safe,
+    but the ACL is unresolved. Must stay UNKNOWN, not PASS — the unresolved
+    ACL could still be granting public access via a canned string or an
+    explicit grant block that simply wasn't known at plan time."""
+    from terraveritas.models.plan import PlannedResourceChange
+
+    plan = plan_with(
+        [
+            bucket_resource(),
+            PlannedResourceChange(
+                address="aws_s3_bucket_acl.data",
+                resource_type="aws_s3_bucket_acl",
+                resource_name="data",
+                provider_name="registry.terraform.io/hashicorp/aws",
+                actions=["create"],
+                after={"bucket": "my-bucket"},
+                after_unknown_keys=["acl"],
+            ),
+            resource(
+                "aws_s3_bucket_policy.data",
+                "aws_s3_bucket_policy",
+                {
+                    "bucket": "my-bucket",
+                    "policy": json.dumps(
+                        {
+                            "Statement": [
+                                {
+                                    "Effect": "Allow",
+                                    "Principal": {"AWS": "arn:aws:iam::123456789012:root"},
+                                    "Action": "s3:GetObject",
+                                    "Resource": "arn:aws:s3:::my-bucket/*",
+                                }
+                            ]
+                        }
+                    ),
+                },
+            ),
+        ]
+    )
+
+    result = evaluate_s3_public_access_exposure(plan, BUCKET)
+
+    assert result.status == InvariantStatus.UNKNOWN
+    assert result.violated_conditions == []
+
+
+def test_both_acl_and_policy_unresolved_stays_unknown() -> None:
+    """Baseline unaffected by this fix: with no independently-resolved side
+    at all, the result must remain UNKNOWN exactly as before."""
+    from terraveritas.models.plan import PlannedResourceChange
+
+    plan = plan_with(
+        [
+            bucket_resource(),
+            PlannedResourceChange(
+                address="aws_s3_bucket_acl.data",
+                resource_type="aws_s3_bucket_acl",
+                resource_name="data",
+                provider_name="registry.terraform.io/hashicorp/aws",
+                actions=["create"],
+                after={"bucket": "my-bucket"},
+                after_unknown_keys=["acl"],
+            ),
+            PlannedResourceChange(
+                address="aws_s3_bucket_policy.data",
+                resource_type="aws_s3_bucket_policy",
+                resource_name="data",
+                provider_name="registry.terraform.io/hashicorp/aws",
+                actions=["create"],
+                after={"bucket": "my-bucket"},
+                after_unknown_keys=["policy"],
+            ),
+        ]
+    )
+
+    result = evaluate_s3_public_access_exposure(plan, BUCKET)
+
+    assert result.status == InvariantStatus.UNKNOWN
+    assert result.violated_conditions == []

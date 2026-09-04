@@ -56,12 +56,24 @@ These are honestly the current gaps, not aspirational feature requests:
   from blind Claude subagent invocations only (no external vendor API is
   wired into this repository) — see the README's "Running an experiment"
   section for exactly what that means.
-- **The documented, disclosed invariant blind spot**: a bucket policy
-  whose `Resource` references the bucket's own computed `.arn` is
-  unresolved in every plan this pipeline produces. A partial-evaluation
-  approach (resolving `Principal`/`Effect`/`Action` even when `Resource`
-  alone is unknown) is a real, scoped research question, not yet
-  investigated.
+- **Partially resolved**: a bucket policy whose `Resource` references the
+  bucket's own computed `.arn` is unresolved in every create-action plan
+  this pipeline produces. Investigated: field-level reconstruction
+  (resolving `Principal`/`Effect`/`Action` independently of `Resource`) is
+  **not possible** from Terraform's plan JSON — a real captured plan
+  confirms `configuration...expressions.policy` for a `jsonencode(...)`
+  call collapses to a flat reference list with no sub-key structure (see
+  `s3_public_access.py`'s module docstring). What's implemented instead:
+  the ACL and policy sides are evaluated independently, so a resolved,
+  independently-public ACL is no longer discarded just because the policy
+  is unresolved — verified against real data
+  (`tests/invariants/test_s3_public_access.py`'s
+  policy-unresolved-partial-evaluation tests). Remaining, still-open: a
+  bucket exposed *only* through an unresolved policy (no ACL, or a safe
+  ACL) still correctly reports UNKNOWN, not a verdict — genuinely resolving
+  that case would need a different evidence source than the plan JSON
+  (e.g. parsing the raw HCL policy expression directly), which has not
+  been attempted.
 
 ## Code style
 
