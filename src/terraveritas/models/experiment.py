@@ -14,6 +14,7 @@ from dataclasses import dataclass, field
 from datetime import datetime
 from typing import Any
 
+from terraveritas.models.baseline import ScannerOnlyBaseline
 from terraveritas.models.diff import DifferentialResult
 from terraveritas.models.finding import ScanResult
 from terraveritas.models.invariant import InvariantResult
@@ -94,3 +95,24 @@ class RepairRecord:
     after_plan: PlanResult | None = None
     before_invariant: InvariantResult | None = None
     after_invariant: InvariantResult | None = None
+
+    # What a scanner-only baseline (no plan, no invariant) would have
+    # concluded about this same repair, computed from the same before/after
+    # scan evidence above. Additive, optional (default None) for the same
+    # reason as the plan/invariant fields: older records predate this.
+    # See evaluation/scanner_baseline.py and
+    # docs/scanner_only_baseline_comparison.md.
+    scanner_baseline: ScannerOnlyBaseline | None = None
+
+    # Anything observed about the generation or evaluation environment that
+    # could affect how this record should be read -- e.g. "subagent
+    # returned tool_uses=0", "local inference unavailable, machine had
+    # <100MB free RAM", "plan failed on a live-AWS-dependent data source".
+    # Before this field existed, exactly one script (run_real_ai_pilot.py)
+    # recorded this ad hoc, under a non-standard "anomaly" key buried inside
+    # `environment` -- found during the Phase 7 schema audit (see
+    # docs/experiment_result_schema.md) and not applied consistently
+    # anywhere else. Empty list, not None, when nothing was observed --
+    # "no anomalies" should be a stated fact in every record, not an
+    # absence to infer.
+    environment_anomalies: list[str] = field(default_factory=list)

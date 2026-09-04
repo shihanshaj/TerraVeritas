@@ -12,6 +12,7 @@ from pathlib import Path
 
 from terraveritas.experiments.identifiers import content_hash
 from terraveritas.experiments.storage import load_record, record_to_dict, save_record
+from terraveritas.models.baseline import BaselineConclusion, ScannerOnlyBaseline
 from terraveritas.models.diff import (
     DifferentialResult,
     NewFinding,
@@ -116,6 +117,13 @@ def _full_record() -> RepairRecord:
             label="illustrative_only", annotator="test", labeled_at=_TS, notes="synthetic"
         ),
         environment={"terraform_version": "1.14.3"},
+        scanner_baseline=ScannerOnlyBaseline(
+            narrow_conclusion=BaselineConclusion.FIX_ACCEPTED,
+            narrow_reason="CKV_AWS_20 no longer fails in the after-scan",
+            broad_conclusion=BaselineConclusion.FIX_REJECTED,
+            broad_reason="CKV_AWS_70 still fails",
+        ),
+        environment_anomalies=["subagent returned tool_uses=0"],
     )
 
 

@@ -17,6 +17,7 @@ from enum import Enum
 from pathlib import Path
 from typing import Any
 
+from terraveritas.models.baseline import BaselineConclusion, ScannerOnlyBaseline
 from terraveritas.models.diff import (
     DifferentialResult,
     NewFinding,
@@ -217,6 +218,17 @@ def _invariant_result_from_dict(d: dict[str, Any] | None) -> InvariantResult | N
     )
 
 
+def _scanner_baseline_from_dict(d: dict[str, Any] | None) -> ScannerOnlyBaseline | None:
+    if d is None:
+        return None
+    return ScannerOnlyBaseline(
+        narrow_conclusion=BaselineConclusion(d["narrow_conclusion"]),
+        narrow_reason=d["narrow_reason"],
+        broad_conclusion=BaselineConclusion(d["broad_conclusion"]),
+        broad_reason=d["broad_reason"],
+    )
+
+
 def load_record(path: Path) -> RepairRecord:
     d = json.loads(path.read_text())
     return RepairRecord(
@@ -249,6 +261,8 @@ def load_record(path: Path) -> RepairRecord:
         after_plan=_plan_result_from_dict(d.get("after_plan")),
         before_invariant=_invariant_result_from_dict(d.get("before_invariant")),
         after_invariant=_invariant_result_from_dict(d.get("after_invariant")),
+        scanner_baseline=_scanner_baseline_from_dict(d.get("scanner_baseline")),
+        environment_anomalies=d.get("environment_anomalies", []),
     )
 
 
