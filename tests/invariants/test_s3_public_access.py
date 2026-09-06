@@ -18,7 +18,7 @@ from terraveritas.invariants.s3_public_access import (
 from terraveritas.models.invariant import InvariantStatus
 from terraveritas.models.plan import PlanResult, PlanStatus
 
-from .helpers import plan_with, resource
+from .helpers import plan_with, resource, resource_with_unknown
 
 BUCKET = "aws_s3_bucket.data"
 
@@ -790,6 +790,122 @@ def test_both_acl_and_policy_unresolved_stays_unknown() -> None:
                 actions=["create"],
                 after={"bucket": "my-bucket"},
                 after_unknown_keys=["policy"],
+            ),
+        ]
+    )
+
+    result = evaluate_s3_public_access_exposure(plan, BUCKET)
+
+    assert result.status == InvariantStatus.UNKNOWN
+    assert result.violated_conditions == []
+
+
+# --- Regression tests: BPA rescue must apply even when content is unresolved ---
+# Root cause: the ACL and policy branches only consult their independent
+# Block Public Access / Object Ownership rescue (ignore_public_acls,
+# BucketOwnerEnforced, restrict_public_buckets) INSIDE the "content is
+# resolved" branch. When content is unresolved, the function short-circuits
+# straight to *_neutralized = None before ever checking whether an
+# independent, content-blind protective flag was already declared and
+# known -- even though restrict_public_buckets=True (or
+# ignore_public_acls=True / BucketOwnerEnforced) neutralizes the relevant
+# vector at the AWS enforcement layer regardless of what the ACL/policy
+# document actually says. Found via two real, independently-generated AI
+# repairs (phase2_case_d_regression_attempt, phase3_case_d_regression_
+# attempt) that added a real aws_s3_bucket_policy referencing an unresolved
+# value on top of an already-BPA-locked-down bucket -- both were very
+# likely genuinely safe repairs that TerraVeritas could not confirm,
+# reported as INCONCLUSIVE for a reason that turned out to be fixable.
+
+
+def test_real_plan_restrict_public_buckets_rescues_unresolved_policy() -> None:
+    """Real captured plan from phase2_case_d_regression_attempt's after-state:
+    aws_s3_bucket_public_access_block declares restrict_public_buckets=true
+    (fully resolved), while the new aws_s3_bucket_policy's content is
+    unresolved (built from a data source referencing the bucket's own
+    .arn). Before this fix: UNKNOWN. The BPA flag alone is sufficient
+    evidence to neutralize the policy vector regardless of its content."""
+    plan = _load_real_plan("s3_bpa_restrict_public_buckets_policy_unresolved_plan.json")
+
+    result = evaluate_s3_public_access_exposure(plan, "aws_s3_bucket.data")
+
+    assert result.status == InvariantStatus.PASS
+    assert result.violated_conditions == []
+
+
+def test_ignore_public_acls_rescues_unresolved_acl() -> None:
+    """Symmetric direction (synthetic -- no real captured plan exercises
+    this shape yet): ignore_public_acls=true is fully resolved and
+    independently neutralizes the ACL vector regardless of the ACL's own
+    content, which is unresolved here. Must be PASS, not UNKNOWN, given a
+    policy side that is also independently safe (none declared)."""
+    plan = plan_with(
+        [
+            bucket_resource(),
+            resource_with_unknown(
+                "aws_s3_bucket_acl.data",
+                "aws_s3_bucket_acl",
+                after={"bucket": "my-bucket"},
+                unknown_keys=["acl"],
+            ),
+            resource(
+                "aws_s3_bucket_public_access_block.data",
+                "aws_s3_bucket_public_access_block",
+                {
+                    "bucket": "my-bucket",
+                    "ignore_public_acls": True,
+                    "restrict_public_buckets": False,
+                },
+            ),
+        ]
+    )
+
+    result = evaluate_s3_public_access_exposure(plan, BUCKET)
+
+    assert result.status == InvariantStatus.PASS
+    assert result.violated_conditions == []
+
+
+def test_bucket_owner_enforced_rescues_unresolved_acl() -> None:
+    """Same rescue, via Object Ownership rather than the BPA flag."""
+    plan = plan_with(
+        [
+            bucket_resource(),
+            resource_with_unknown(
+                "aws_s3_bucket_acl.data",
+                "aws_s3_bucket_acl",
+                after={"bucket": "my-bucket"},
+                unknown_keys=["acl"],
+            ),
+            resource(
+                "aws_s3_bucket_ownership_controls.data",
+                "aws_s3_bucket_ownership_controls",
+                {"bucket": "my-bucket", "rule": [{"object_ownership": "BucketOwnerEnforced"}]},
+            ),
+        ]
+    )
+
+    result = evaluate_s3_public_access_exposure(plan, BUCKET)
+
+    assert result.status == InvariantStatus.PASS
+    assert result.violated_conditions == []
+
+
+def test_unresolved_policy_without_restrict_public_buckets_still_unknown() -> None:
+    """Safety-preserving companion: the rescue must be conditional on the
+    flag actually being True. No BPA resource at all (so
+    restrict_public_buckets is simply absent, not True) alongside an
+    unresolved policy must stay UNKNOWN, not silently become PASS --
+    confirms the fix didn't widen the rescue beyond what's actually
+    declared and known."""
+    plan = plan_with(
+        [
+            bucket_resource(),
+            resource_with_unknown(
+                "aws_s3_bucket_policy.data",
+                "aws_s3_bucket_policy",
+                after={"bucket": "my-bucket"},
+                unknown_keys=["policy"],
             ),
         ]
     )

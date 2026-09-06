@@ -209,13 +209,34 @@ def evaluate_s3_public_access_exposure(plan: PlanResult, bucket_address: str) ->
     evidence["acl_unresolved_at_plan_time"] = acl_unresolved
     evidence["policy_unresolved_at_plan_time"] = policy_unresolved
 
+    # BPA/Object-Ownership rescue checks come FIRST, before the unresolved
+    # gates below, and are evaluated unconditionally. This is deliberate:
+    # ignore_public_acls / BucketOwnerEnforced / restrict_public_buckets
+    # neutralize their vector at the AWS enforcement layer regardless of
+    # what the ACL/policy document itself says -- they don't require
+    # reading that content at all. A prior version of this function checked
+    # these only inside the "content is resolved" branch, so an unresolved
+    # ACL or policy short-circuited straight to *_neutralized = None even
+    # when one of these flags was already fully known and true. Found via
+    # two real, independently-generated AI repairs that added a new,
+    # unresolved policy on top of an already-BPA-locked-down bucket -- both
+    # were very likely genuinely safe and were reported INCONCLUSIVE for a
+    # reason that turned out to be fixable (see fixtures/real_plans/
+    # s3_bpa_restrict_public_buckets_policy_unresolved_plan.json and
+    # tests/invariants/test_s3_public_access.py's "BPA rescue" section).
+    ignore_public_acls = _get_bool(bpa, "ignore_public_acls")
+    object_ownership = _get_str(ownership, "rule", nested_key="object_ownership")
+    restrict_public_buckets = _get_bool(bpa, "restrict_public_buckets")
+    acl_rescued_by_bpa = object_ownership == "BucketOwnerEnforced" or ignore_public_acls is True
+    policy_rescued_by_bpa = restrict_public_buckets is True
+
     # --- ACL side ---
     acl_neutralized: bool | None
-    if acl_unresolved:
+    if acl_rescued_by_bpa:
+        acl_neutralized = True
+    elif acl_unresolved:
         acl_neutralized = None
     else:
-        ignore_public_acls = _get_bool(bpa, "ignore_public_acls")
-        object_ownership = _get_str(ownership, "rule", nested_key="object_ownership")
         acl_grants_public = _acl_grants_public(acl)
         if acl_grants_public is None:
             # Ambiguous (redacted/unparseable), not unresolved-at-plan-time —
@@ -229,17 +250,15 @@ def evaluate_s3_public_access_exposure(plan: PlanResult, bucket_address: str) ->
             # setting outside this config might still protect the bucket is a
             # disclosed, safe-direction gap — see module docstring — never a
             # reason to return UNKNOWN here.)
-            if object_ownership == "BucketOwnerEnforced" or ignore_public_acls is True:
-                acl_neutralized = True
-            else:
-                acl_neutralized = not acl_grants_public
+            acl_neutralized = not acl_grants_public
 
     # --- Policy side ---
     policy_neutralized: bool | None
-    if policy_unresolved:
+    if policy_rescued_by_bpa:
+        policy_neutralized = True
+    elif policy_unresolved:
         policy_neutralized = None
     else:
-        restrict_public_buckets = _get_bool(bpa, "restrict_public_buckets")
         try:
             policy_grants_public = _policy_grants_public(policy)
         except _Ambiguous:
@@ -248,10 +267,7 @@ def evaluate_s3_public_access_exposure(plan: PlanResult, bucket_address: str) ->
             policy_neutralized = None
         else:
             evidence["policy_grants_public"] = policy_grants_public
-            if not policy_grants_public or restrict_public_buckets is True:
-                policy_neutralized = True
-            else:
-                policy_neutralized = False
+            policy_neutralized = not policy_grants_public
 
     violated: list[str] = []
     if acl_neutralized is False:

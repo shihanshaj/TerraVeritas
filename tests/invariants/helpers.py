@@ -31,6 +31,28 @@ def resource(
     )
 
 
+def resource_with_unknown(
+    address: str,
+    resource_type: str,
+    *,
+    after: dict[str, Any],
+    unknown_keys: list[str],
+) -> PlannedResourceChange:
+    """Like `resource()`, but for a resource whose content is unresolved at
+    plan time — `after_unknown_keys` lists which keys are known only after
+    apply, matching a real `resource_changes[].change.after_unknown` shape."""
+    name = address.split(".")[-1]
+    return PlannedResourceChange(
+        address=address,
+        resource_type=resource_type,
+        resource_name=name,
+        provider_name="registry.terraform.io/hashicorp/aws",
+        actions=["create"],
+        after=after,
+        after_unknown_keys=unknown_keys,
+    )
+
+
 def plan_with(resources: list[PlannedResourceChange]) -> PlanResult:
     return PlanResult(
         target_path="/fixture",
