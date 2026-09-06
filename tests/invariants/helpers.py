@@ -11,9 +11,12 @@ implies.
 
 from __future__ import annotations
 
+import json
+from pathlib import Path
 from typing import Any
 
 from terraveritas.models.plan import PlannedResourceChange, PlanResult, PlanStatus
+from terraveritas.terraform.plan import _extract_resource_changes
 
 
 def resource(
@@ -59,4 +62,21 @@ def plan_with(resources: list[PlannedResourceChange]) -> PlanResult:
         status=PlanStatus.PLAN_SUCCESS,
         terraform_version="1.14.3",
         resource_changes=resources,
+    )
+
+
+def load_real_plan(fixture_name: str) -> PlanResult:
+    """Loads a real captured plan from fixtures/real_plans/ through this
+    project's own real parsing path (_extract_resource_changes), not a
+    hand-rolled re-parse — exercises exactly the code a live run does.
+    Shared across every invariant's test file (S3, IAM, network) since all
+    three verify against real Terraform CLI output the same way."""
+    fixture_path = Path(__file__).resolve().parents[2] / "fixtures" / "real_plans" / fixture_name
+    raw = json.loads(fixture_path.read_text())
+    return PlanResult(
+        target_path=str(fixture_path),
+        status=PlanStatus.PLAN_SUCCESS,
+        terraform_version=raw.get("terraform_version"),
+        resource_changes=_extract_resource_changes(raw),
+        raw_plan_json=raw,
     )

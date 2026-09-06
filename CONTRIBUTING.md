@@ -40,14 +40,30 @@ Prerequisites section if the mirror build step is unfamiliar.
 
 These are honestly the current gaps, not aspirational feature requests:
 
-- **Four of five frozen-scope security invariants are unimplemented**
-  (security-group ingress, IAM wildcard grants, network reachability,
-  storage encryption). Each needs its own threat-model design pass before
-  any code — see `src/terraveritas/invariants/s3_public_access.py`'s
-  module docstring for the depth of AWS-semantics grounding a new
-  invariant is expected to have, and note its own disclosed scope gaps
-  (legacy ACL attributes, S3 Access Points) as an example of what "done"
-  looks like: bounded and disclosed, not claimed complete.
+- **Three of the originally-scoped security invariants remain
+  unimplemented** (network reachability and storage encryption, plus
+  broader coverage of IAM exposure beyond the narrow inline-role-policy
+  case below). Two were added — `iam_excessive_privilege.py`
+  (`IAM_EXCESSIVE_PRIVILEGE_EXPOSURE`, grounded in AWS Config's own
+  `IAM_POLICY_NO_STATEMENTS_WITH_ADMIN_ACCESS` rule) and
+  `network_exposure.py` (`NETWORK_SENSITIVE_PORT_EXPOSURE`, grounded in
+  AWS Config's `restricted-ssh` and `restricted-common-ports` rules) —
+  each scoped deliberately narrow on its first pass (IAM: only
+  `aws_iam_role` + directly-attached inline `aws_iam_role_policy`, not
+  managed-policy attachments or user/group policies; network: only the
+  inline `ingress` block on `aws_security_group`, not the decoupled
+  `aws_security_group_rule` resources), with the gaps disclosed in each
+  module's own docstring rather than silently assumed complete. Any new
+  invariant needs its own threat-model design pass grounded in real AWS
+  documentation before any code — see any of the three existing
+  invariants' module docstrings for the depth of AWS-semantics grounding
+  and disclosed-scope-gap discipline expected, and note that a real
+  `terraform plan` run against a real fixture caught a genuine bug in the
+  network invariant (a per-index "known after apply" marker shaped as a
+  list, e.g. `[False]`, is truthy in Python even though it means "known" —
+  the first implementation attempt treated every security group as
+  UNKNOWN unconditionally) before a single test was ever written against
+  it — do not skip that step for a new invariant.
 - **Trivy and KICS scanner adapters** — the interface
   (`scanners/base.py::ScannerAdapter`) is designed for this; only Checkov
   is implemented.
