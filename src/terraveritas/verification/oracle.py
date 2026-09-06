@@ -127,7 +127,9 @@ def classify_repair(
         )
 
     looks_improved, disagreement_notes = _scanner_shows_improvement(
-        differential_results, invariant_before.resource_address, invariant_after.resource_address
+        differential_results,
+        _related_addresses(invariant_before),
+        _related_addresses(invariant_after),
     )
     confidence = Confidence.HIGH if differential_results else Confidence.MEDIUM
 
@@ -217,30 +219,59 @@ def _has_relevant_new_findings(
     return found, notes
 
 
+def _related_addresses(invariant: InvariantResult) -> frozenset[str]:
+    """The set of Terraform resource addresses a scanner-evidence comparison
+    should treat as "this security judgment," not just the invariant's own
+    single `resource_address`. Falls back to that bare address when an
+    invariant doesn't populate `related_resource_addresses` (the field is
+    additive/optional — see models/invariant.py), so an invariant that
+    hasn't been updated degrades to the old, narrower behavior rather than
+    matching nothing at all."""
+    return frozenset(invariant.related_resource_addresses or [invariant.resource_address])
+
+
 def _scanner_shows_improvement(
     differential_results: list[DifferentialResult],
-    before_address: str,
-    after_address: str,
+    before_addresses: frozenset[str],
+    after_addresses: frozenset[str],
 ) -> tuple[bool, list[str]]:
-    """Conservative: requires at least one scanner to show the resource's
-    finding removed, AND no scanner to show it persistent or merely
-    relocated (still failing under a new address) — a single contradicting
-    scanner is enough to withhold the "looks improved" signal entirely."""
+    """Conservative: requires at least one scanner to show a finding removed
+    from within the relevant resource set, AND no scanner to show a finding
+    persistent or relocated within that same set — a single contradicting
+    scanner is enough to withhold the "looks improved" signal entirely.
+
+    Scoped to a SET of addresses, not one bucket address, because a scanner
+    can attribute a finding about the same security judgment to a different
+    Terraform resource than the one an invariant names as its primary
+    identity — e.g. Checkov attributes a bucket-policy Principal finding
+    (CKV_AWS_70) to the separate `aws_s3_bucket_policy` resource, not the
+    bucket. A resource-address-only comparison would never see that finding
+    clear, regardless of whether the repair actually fixed it. Scoped to
+    exactly the set an invariant reports examining — not scanner-wide
+    (a completely unrelated resource's finding clearing must never count
+    here) and not the full Terraform dependency graph (an unrelated
+    resource three hops away isn't part of this judgment either) — see
+    docs/deceptive_fix_scoping.md for the analysis behind this choice."""
+    relevant = before_addresses | after_addresses
     saw_removed = False
     saw_contradiction = False
     notes: list[str] = []
     for d in differential_results:
-        removed_here = any(r.before.resource_id == before_address for r in d.removed)
+        removed_here = any(r.before.resource_id in relevant for r in d.removed)
         persistent_here = any(
-            p.before.resource_id == before_address or p.after.resource_id == after_address
+            p.before.resource_id in relevant or p.after.resource_id in relevant
             for p in d.persistent
         )
-        relocated_here = any(rl.before.resource_id == before_address for rl in d.relocated)
+        relocated_here = any(
+            rl.before.resource_id in relevant or rl.after.resource_id in relevant
+            for rl in d.relocated
+        )
         if removed_here and not persistent_here and not relocated_here:
             saw_removed = True
         if persistent_here or relocated_here:
             saw_contradiction = True
             notes.append(
-                f"{d.scanner_name}: still flags or relocates a finding for this resource"
+                f"{d.scanner_name}: still flags or relocates a finding within the "
+                "resource set this judgment covers"
             )
     return (saw_removed and not saw_contradiction), notes

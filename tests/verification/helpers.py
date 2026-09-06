@@ -24,6 +24,7 @@ def invariant_result(
     violated_conditions: list[str] | None = None,
     reason: str = "",
     invariant_id: str = "S3_PUBLIC_ACCESS_EXPOSURE",
+    related_resource_addresses: list[str] | None = None,
 ) -> InvariantResult:
     return InvariantResult(
         invariant_id=invariant_id,
@@ -31,6 +32,7 @@ def invariant_result(
         status=status,
         violated_conditions=violated_conditions or [],
         reason=reason or status.value,
+        related_resource_addresses=related_resource_addresses or [],
     )
 
 

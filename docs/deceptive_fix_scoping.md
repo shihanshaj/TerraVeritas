@@ -1,0 +1,45 @@
+# DECEPTIVE_FIX scoping: resource-level vs. finding-level vs. invariant scope vs. dependency graph
+
+**Status: fixed. `InvariantResult.related_resource_addresses` + oracle scoping change committed. No historical experiment record was modified — see the re-evaluation section below, which is read-only.**
+
+## The problem, confirmed against real data
+
+`_scanner_shows_improvement` (the function backing `DECEPTIVE_FIX` detection) compared scanner evidence against exactly one Terraform resource address: the invariant's own `resource_address`, always the bucket's (`aws_s3_bucket.data`). Checkov does not always attribute a relevant finding to the bucket. `S3AllowsAnyPrincipal` (`CKV_AWS_70`) is a `BaseResourceCheck` with `supported_resources=['aws_s3_bucket', 'aws_s3_bucket_policy']` — it registers its finding against *whichever resource block actually carries the `policy` attribute*, which for the common pattern (a separate `aws_s3_bucket_policy` resource) is that resource's own address, never the bucket's.
+
+Confirmed directly against real data, not inferred: `phase2_case_c_deceptive_attempt`'s stored differential shows `CKV_AWS_70` removed with `resource_id: "aws_s3_bucket_policy.data"`. The oracle's bucket-address-only comparison would never see that removal, regardless of whether the underlying repair was good, bad, or actually deceptive.
+
+## The four scoping options, evaluated against this project's actual code and data
+
+**A. Resource level (what existed).** Compare only the invariant's own bare address. Simple and precise, but proven too narrow by the case above — rejected as insufficient, not as wrong in principle.
+
+**B. Finding level (rule_id only, any resource).** Match a cleared/persistent finding by rule ID alone, regardless of which resource it's on. Rejected: this would let a completely unrelated bucket's policy finding count as "improvement" for the bucket actually being evaluated. It also contradicts an explicit, existing design decision in this codebase — `differential/scanner_diff.py`'s own docstring already rejects "content similarity heuristics... as a source of false confidence" for exactly this reason. Matching on rule ID with no resource identity check is the same mistake in a different shape.
+
+**C. Policy/invariant scope (what was implemented).** Compare against exactly the set of Terraform resource addresses the invariant itself resolved while reaching its verdict — for `S3_PUBLIC_ACCESS_EXPOSURE`, the bucket plus whichever of its ACL / policy / Block-Public-Access / ownership-controls resources were found. This is bounded by the invariant's own existing correlation logic (`_find_by_bucket`/`_find_by_bucket_reference`, already built and tested for the invariant's own before/after evaluation) — no new correlation logic was needed, only exposing what already gets computed. It cannot pick up an unrelated bucket's finding, because the invariant's own reference-graph walk never resolves an unrelated resource into this set in the first place.
+
+**D. Full dependency graph.** Follow every transitive Terraform reference from the bucket (a data source three hops away, an IAM role referenced by a policy Principal that happens to be a separate resource, etc.). Rejected: unbounded, no natural stopping point, and not what "was this specific reported vulnerability actually fixed" should mean — a change to an unrelated resource four hops away isn't evidence about this security property. This would also make the (separate, already-known-imprecise — see below) regression-detection signal drastically worse, not better.
+
+**Decision: C.** It directly matches the shape of the problem the real data demonstrated (a *sibling* resource within the same logical security unit, not an arbitrary graph node), and it costs nothing new to compute — the invariant already does this correlation for its own purposes.
+
+## Implementation
+
+- `InvariantResult` gains `related_resource_addresses: list[str]` (additive, defaults to `[]`) — every address an invariant evaluation actually consulted.
+- `s3_public_access.py` populates it with the bucket plus whichever of ACL/policy/BPA/ownership-controls were actually found, on every return path (FAIL, PASS, and the "both sides partially unresolved" UNKNOWN case).
+- `oracle.py`'s `_scanner_shows_improvement` now takes the *union* of the before- and after-state related-address sets, not a single address pair, and matches removed/persistent/relocated findings against membership in that set. A `_related_addresses()` helper falls back to the bare `resource_address` when an invariant doesn't populate the new field, so an invariant that hasn't been updated degrades to the old behavior rather than silently matching nothing.
+
+## Methodology followed
+
+Read the existing code, confirmed the exact real differential shape that exposes the bug (`phase2_case_c`'s stored record), then wrote 4 new oracle-level tests using that real data and two clean synthetic cases *before* changing `oracle.py`/`invariant.py`. Verified by stashing the fix and re-running: all 4 new tests fail against the unfixed code (a `TypeError`, since the field the tests construct doesn't exist yet without the fix — an unambiguous reproduction). Restored the fix; all 4 pass. Ran the full `tests/verification/` and `tests/invariants/` suites (57/57), then the complete suite (221/221), `ruff`, and `mypy --strict` — all clean.
+
+One of the four new tests (`test_real_differential_still_correctly_withholds_deceptive_fix_on_genuine_contradiction`) uses the *exact* real resource IDs from `phase2_case_c`'s stored differential, specifically to confirm the fix has real precision, not just real breadth: `CKV2_AWS_6` (missing Block Public Access) genuinely persists on the bucket's own address in that data, so `looks_improved` correctly stays `False` even after the fix — the fix makes a sibling-resource finding *visible*, it does not make every sibling-resource case resolve to `DECEPTIVE_FIX` regardless of other evidence.
+
+## Effect on the historical corpus — re-evaluated read-only, no stored record touched
+
+All 17 real records with full plan evidence were re-evaluated under the current code (this fix plus the earlier BPA-rescue fix). **Zero classifications differ from what's already stored.** This is a fully honest result, not a disappointing one to gloss over: only **one** real record — `phase3_case_b_partial_fix` — ever reaches the `before=FAIL, after=FAIL` branch where `_scanner_shows_improvement` has any effect on the outcome at all, and in that case the repair genuinely never touched the sibling policy resource (Checkov correctly reports it as still-persistent, not cleared), so there was never a finding for the old, narrower scoping to miss. `phase2_case_c_deceptive_attempt` — the one case that actually demonstrates the bug — never reaches that branch either, because its Terraform plan failed for an unrelated reason (a live-AWS-dependent data source, the infrastructure limitation documented since Phase 2/8) and gets short-circuited to `INCONCLUSIVE` before the scanner-improvement check is ever computed.
+
+**What this fix actually buys, stated precisely**: it removes a structural false-negative risk for any *future* case where a repair genuinely produces a scanner-satisfying-but-still-insecure result on a sibling resource and the plan itself succeeds. It does not manufacture a `DECEPTIVE_FIX` example that doesn't exist in the current corpus, and it should not be described as having done so.
+
+## A connected finding, deliberately not acted on here
+
+`_has_relevant_new_findings` — the signal behind `REGRESSION` detection — has an even broader version of the same underlying question ("what scanner evidence counts as relevant to this security judgment?") and currently answers it as "any new finding anywhere in the whole scan, no resource scoping at all." This is the exact mechanism behind `negcase3_regression_unrelated_change`'s real `REGRESSION` verdict, which fired because of an unrelated lifecycle-configuration finding (`CKV_AWS_300`), not a real security regression — already flagged as a known imprecision in the Phase 8 analysis, before this investigation.
+
+Applying the same `related_resource_addresses` scoping to `_has_relevant_new_findings` would exclude that finding (it's on `aws_s3_bucket_lifecycle_configuration.data`, never part of the invariant's related set) and would flip `negcase3`'s classification from `REGRESSION` to `INCONCLUSIVE` ("nothing to fix" — both before and after states are `PASS` at the invariant level; the AI's change was unrelated to public-access exposure). That would remove the only real `REGRESSION` example currently in the corpus. Whether "new findings scoped to the invariant's resource set" or "any new finding, anywhere, disclosed as out-of-scope evidence" is the right definition of a security regression is a genuine, opinionated design question this investigation surfaced but was not asked to resolve — Priority 3 named the `DECEPTIVE_FIX` problem specifically. Flagged here rather than fixed silently.

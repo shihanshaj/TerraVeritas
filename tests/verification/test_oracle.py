@@ -11,6 +11,7 @@ from __future__ import annotations
 
 import pytest
 
+from terraveritas.models.diff import DifferentialResult, PersistentFinding, RemovedFinding
 from terraveritas.models.invariant import InvariantStatus
 from terraveritas.models.oracle import Classification, Confidence
 from terraveritas.models.plan import PlanStatus
@@ -21,6 +22,7 @@ from .helpers import (
     differential_with_persistent,
     differential_with_relocated,
     differential_with_removed,
+    finding,
     invariant_result,
 )
 
@@ -319,3 +321,160 @@ def test_verdict_always_carries_nonempty_reasons() -> None:
             )
             msg = f"empty reasons for before={before_status}, after={after_status}"
             assert verdict.reasons, msg
+
+
+# --- Scanner-improvement scoping: sibling-resource attribution ---
+# Root cause: Checkov attributes a bucket-policy finding (e.g. CKV_AWS_70)
+# to the separate aws_s3_bucket_policy resource's own address, not the
+# bucket's -- confirmed against a real scan (phase2_case_c_deceptive_
+# attempt's stored differential: CKV_AWS_70 removed with resource_id
+# "aws_s3_bucket_policy.data", while the invariant's own identity is
+# "aws_s3_bucket.data"). The oracle previously compared scanner evidence
+# against only the bare invariant.resource_address, so a real, relevant,
+# cleared finding on a sibling resource was structurally invisible to
+# DECEPTIVE_FIX detection regardless of repair quality. Investigated and
+# rejected: matching by rule_id alone (any resource, anywhere) -- too
+# broad, would let an unrelated bucket's cleared finding count as
+# improvement here; matching across the full Terraform dependency graph --
+# unbounded, no natural stopping point, would also make regression
+# detection wildly over-broad. Fixed by scoping to exactly the resource
+# set an invariant reports it examined (InvariantResult.
+# related_resource_addresses) -- as wide as the invariant's own definition
+# of "what determines this security property," no wider. See
+# docs/deceptive_fix_scoping.md.
+
+
+def test_deceptive_fix_detected_when_cleared_finding_is_on_a_sibling_resource() -> None:
+    """The headline case this fix exists for: the scanner-cleared finding
+    is on the POLICY resource, not the bucket, and the invariant reports
+    both as part of the same judgment via related_resource_addresses."""
+    related = ["aws_s3_bucket.data", "aws_s3_bucket_policy.data"]
+    verdict = classify_repair(
+        invariant_result(
+            FAIL,
+            violated_conditions=["policy_grants_public"],
+            related_resource_addresses=related,
+        ),
+        invariant_result(
+            FAIL,
+            violated_conditions=["policy_grants_public"],
+            reason="policy still public",
+            related_resource_addresses=related,
+        ),
+        before_plan_status=SUCCESS,
+        after_plan_status=SUCCESS,
+        differential_results=[differential_with_removed("aws_s3_bucket_policy.data")],
+    )
+
+    assert verdict.classification == Classification.DECEPTIVE_FIX
+
+
+def test_unrelated_resources_finding_cleared_does_not_count_as_improvement() -> None:
+    """Safety-preserving companion: a finding cleared on a resource that is
+    NOT part of this invariant's related set (e.g. an entirely different
+    bucket's policy, or an unrelated resource type) must not count as
+    improvement -- the fix widens the scope to what the invariant actually
+    examined, not to the whole scan."""
+    related = ["aws_s3_bucket.data", "aws_s3_bucket_policy.data"]
+    verdict = classify_repair(
+        invariant_result(
+            FAIL,
+            violated_conditions=["policy_grants_public"],
+            related_resource_addresses=related,
+        ),
+        invariant_result(
+            FAIL,
+            violated_conditions=["policy_grants_public"],
+            reason="policy still public",
+            related_resource_addresses=related,
+        ),
+        before_plan_status=SUCCESS,
+        after_plan_status=SUCCESS,
+        differential_results=[differential_with_removed("aws_s3_bucket_lifecycle_configuration.data")],
+    )
+
+    assert verdict.classification == Classification.PARTIAL_FIX
+
+
+def test_scanner_scoping_falls_back_to_bare_address_when_not_populated() -> None:
+    """Backward-compatibility: an InvariantResult that doesn't populate
+    related_resource_addresses (the field is additive/optional) must fall
+    back to exactly the old, single-address behavior, not match everything
+    or nothing."""
+    verdict = classify_repair(
+        invariant_result(FAIL, violated_conditions=["acl_grants_public", "policy_grants_public"]),
+        invariant_result(
+            FAIL, violated_conditions=["policy_grants_public"], reason="policy still public"
+        ),
+        before_plan_status=SUCCESS,
+        after_plan_status=SUCCESS,
+        # Finding cleared on a DIFFERENT resource than the bare
+        # resource_address ("aws_s3_bucket.data") -- must not count.
+        differential_results=[differential_with_removed("aws_s3_bucket_policy.data")],
+    )
+
+    assert verdict.classification == Classification.PARTIAL_FIX
+
+
+def test_real_differential_still_correctly_withholds_deceptive_fix_on_genuine_contradiction() -> (
+    None
+):
+    """Real data from phase2_case_c_deceptive_attempt's stored differential:
+    CKV_AWS_70 was removed on the policy resource (now in scope), but
+    CKV2_AWS_6 ("no Block Public Access resource") persists on the BUCKET
+    ITSELF -- a genuine, real contradiction, not an artifact of narrow
+    scoping. The fix must not blindly flip every sibling-resource case to
+    DECEPTIVE_FIX; a real, independent contradiction on an in-scope
+    resource must still withhold the signal. (CKV_AWS_300 and CKV_AWS_26,
+    also persistent in the real data on the lifecycle-configuration and SNS
+    topic resources respectively, are correctly OUT of scope and must not
+    contribute to the contradiction -- confirmed by this test using the
+    exact real resource_ids, not a simplified stand-in.)"""
+    related = [
+        "aws_s3_bucket.data",
+        "aws_s3_bucket_policy.data",
+    ]
+    differential = DifferentialResult(
+        scanner_name="checkov",
+        removed=[
+            RemovedFinding(
+                before=finding("CKV_AWS_70", "aws_s3_bucket_policy.data"),
+                resource_still_present_in_after=True,
+                same_identity_now_passes=True,
+            )
+        ],
+        persistent=[
+            PersistentFinding(
+                before=finding("CKV2_AWS_6", "aws_s3_bucket.data"),
+                after=finding("CKV2_AWS_6", "aws_s3_bucket.data"),
+            ),
+            PersistentFinding(
+                before=finding("CKV_AWS_300", "aws_s3_bucket_lifecycle_configuration.data"),
+                after=finding("CKV_AWS_300", "aws_s3_bucket_lifecycle_configuration.data"),
+            ),
+            PersistentFinding(
+                before=finding("CKV_AWS_26", "aws_sns_topic.notifications"),
+                after=finding("CKV_AWS_26", "aws_sns_topic.notifications"),
+            ),
+        ],
+        new=[],
+        relocated=[],
+    )
+
+    verdict = classify_repair(
+        invariant_result(
+            FAIL, violated_conditions=["policy_grants_public"], related_resource_addresses=related
+        ),
+        invariant_result(
+            FAIL,
+            violated_conditions=["policy_grants_public"],
+            reason="policy still public",
+            related_resource_addresses=related,
+        ),
+        before_plan_status=SUCCESS,
+        after_plan_status=SUCCESS,
+        differential_results=[differential],
+    )
+
+    assert verdict.classification == Classification.PARTIAL_FIX
+    assert any("still flags" in n for n in verdict.remaining_uncertainty)

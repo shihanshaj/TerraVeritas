@@ -173,6 +173,19 @@ def evaluate_s3_public_access_exposure(plan: PlanResult, bucket_address: str) ->
         "ownership_declared": ownership is not None,
     }
 
+    # Every Terraform resource address this evaluation actually consults --
+    # not just the bucket's own address. A scanner (Checkov in particular)
+    # attributes a policy-content finding (e.g. CKV_AWS_70) to the SEPARATE
+    # aws_s3_bucket_policy resource's own address, not the bucket's, because
+    # that's a regular per-resource check, not a graph-based one -- verified
+    # directly against a real scan (see docs/deceptive_fix_scoping.md). A
+    # caller comparing scanner evidence against only `bucket_address` would
+    # never see that finding at all, regardless of whether it was actually
+    # resolved. This is the set such a caller should use instead.
+    related_addresses = [bucket_address] + [
+        r.address for r in (acl, policy, bpa, ownership) if r is not None
+    ]
+
     # A plan-time-unresolved value for the actual grant content must never
     # be treated as evidence of safety — check after_unknown_keys before
     # reading the content at all, not after. Gates on "acl" only, not
@@ -295,6 +308,7 @@ def evaluate_s3_public_access_exposure(plan: PlanResult, bucket_address: str) ->
             violated_conditions=violated,
             reason=reason,
             evidence=evidence,
+            related_resource_addresses=related_addresses,
         )
 
     if acl_neutralized is None or policy_neutralized is None:
@@ -311,6 +325,7 @@ def evaluate_s3_public_access_exposure(plan: PlanResult, bucket_address: str) ->
             f"{' and '.join(unresolved_sides)} content could not be evaluated at plan "
             "time (known after apply), and no independent violation was found on the "
             "resolvable side(s)",
+            related=related_addresses,
         )
 
     return InvariantResult(
@@ -320,10 +335,13 @@ def evaluate_s3_public_access_exposure(plan: PlanResult, bucket_address: str) ->
         violated_conditions=[],
         reason="no unauthenticated-reachable ACL grant or bucket-policy statement found",
         evidence=evidence,
+        related_resource_addresses=related_addresses,
     )
 
 
-def _unknown(bucket_address: str, reason: str) -> InvariantResult:
+def _unknown(
+    bucket_address: str, reason: str, *, related: list[str] | None = None
+) -> InvariantResult:
     return InvariantResult(
         invariant_id=INVARIANT_ID,
         resource_address=bucket_address,
@@ -331,6 +349,7 @@ def _unknown(bucket_address: str, reason: str) -> InvariantResult:
         violated_conditions=[],
         reason=reason,
         evidence={},
+        related_resource_addresses=related if related is not None else [bucket_address],
     )
 
 
