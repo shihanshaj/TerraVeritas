@@ -1,0 +1,3096 @@
+{
+  "after_invariant": {
+    "evidence": {},
+    "invariant_id": "S3_PUBLIC_ACCESS_EXPOSURE",
+    "reason": "plan did not succeed (status=plan_provider_failure)",
+    "related_resource_addresses": [
+      "aws_s3_bucket.data"
+    ],
+    "resource_address": "aws_s3_bucket.data",
+    "status": "unknown",
+    "violated_conditions": []
+  },
+  "after_plan": {
+    "commands_run": [
+      [
+        "terraform",
+        "init",
+        "-input=false",
+        "-no-color"
+      ],
+      [
+        "terraform",
+        "validate",
+        "-no-color",
+        "-json"
+      ],
+      [
+        "terraform",
+        "plan",
+        "-input=false",
+        "-no-color",
+        "-json",
+        "-out=tfplan"
+      ]
+    ],
+    "error_message": "reading STS Caller Identity: operation error STS: GetCallerIdentity, https response error StatusCode: 403, RequestID: 70909f87-6d83-4b09-9d47-802c5ce11a8a, api error InvalidClientTokenId: The security token included in the request is invalid.",
+    "finished_at": "2026-09-06T06:49:51.410269+00:00",
+    "raw_plan_json": null,
+    "resource_changes": [],
+    "started_at": "2026-09-06T06:49:45.235833+00:00",
+    "status": "plan_provider_failure",
+    "target_path": "/var/folders/3d/1nhgvqps0y96vkby6tmvzb6r0000gn/T/tmpsxw2063w",
+    "terraform_version": null
+  },
+  "after_plan_status": "plan_provider_failure",
+  "after_scan": {
+    "command": [
+      "checkov",
+      "-d",
+      "/var/folders/3d/1nhgvqps0y96vkby6tmvzb6r0000gn/T/tmpuwsmwth7",
+      "-o",
+      "json",
+      "--compact",
+      "--framework",
+      "terraform",
+      "--skip-download"
+    ],
+    "error_message": null,
+    "exit_code": 1,
+    "findings": [
+      {
+        "description": "Ensure S3 bucket policy does not lockout all but root user. (Prevent lockouts needing root account fixes)",
+        "file_path": "/main.tf",
+        "line_end": 5,
+        "line_start": 3,
+        "outcome": "passed",
+        "raw_evidence": {
+          "bc_category": null,
+          "bc_check_id": null,
+          "benchmarks": {},
+          "caller_file_line_range": null,
+          "caller_file_path": null,
+          "check_class": "checkov.terraform.checks.resource.aws.S3ProtectAgainstPolicyLockout",
+          "check_id": "CKV_AWS_93",
+          "check_len": null,
+          "check_name": "Ensure S3 bucket policy does not lockout all but root user. (Prevent lockouts needing root account fixes)",
+          "check_result": {
+            "evaluated_keys": [
+              "policy"
+            ],
+            "result": "PASSED"
+          },
+          "code_block": null,
+          "connected_node": null,
+          "definition_context_file_path": "/var/folders/3d/1nhgvqps0y96vkby6tmvzb6r0000gn/T/tmpuwsmwth7/main.tf",
+          "description": null,
+          "details": [],
+          "entity_tags": null,
+          "evaluations": null,
+          "file_abs_path": "/var/folders/3d/1nhgvqps0y96vkby6tmvzb6r0000gn/T/tmpuwsmwth7/main.tf",
+          "file_line_range": [
+            3,
+            5
+          ],
+          "file_path": "/main.tf",
+          "fixed_definition": null,
+          "guideline": null,
+          "repo_file_path": "/var/folders/3d/1nhgvqps0y96vkby6tmvzb6r0000gn/T/tmpuwsmwth7/main.tf",
+          "resource": "aws_s3_bucket.data",
+          "resource_address": null,
+          "severity": null,
+          "short_description": null,
+          "vulnerability_details": null
+        },
+        "resource_id": "aws_s3_bucket.data",
+        "resource_type": "aws_s3_bucket",
+        "rule_id": "CKV_AWS_93",
+        "scan_timestamp": "2026-09-06T06:49:37.026587+00:00",
+        "scanner_name": "checkov",
+        "scanner_version": "3.3.16",
+        "severity": null
+      },
+      {
+        "description": "Ensure S3 bucket does not allow an action with any Principal",
+        "file_path": "/main.tf",
+        "line_end": 22,
+        "line_start": 7,
+        "outcome": "passed",
+        "raw_evidence": {
+          "bc_category": null,
+          "bc_check_id": null,
+          "benchmarks": {},
+          "caller_file_line_range": null,
+          "caller_file_path": null,
+          "check_class": "checkov.terraform.checks.resource.aws.S3AllowsAnyPrincipal",
+          "check_id": "CKV_AWS_70",
+          "check_len": null,
+          "check_name": "Ensure S3 bucket does not allow an action with any Principal",
+          "check_result": {
+            "evaluated_keys": [
+              "policy"
+            ],
+            "result": "PASSED"
+          },
+          "code_block": null,
+          "connected_node": null,
+          "definition_context_file_path": "/var/folders/3d/1nhgvqps0y96vkby6tmvzb6r0000gn/T/tmpuwsmwth7/main.tf",
+          "description": null,
+          "details": [],
+          "entity_tags": null,
+          "evaluations": null,
+          "file_abs_path": "/var/folders/3d/1nhgvqps0y96vkby6tmvzb6r0000gn/T/tmpuwsmwth7/main.tf",
+          "file_line_range": [
+            7,
+            22
+          ],
+          "file_path": "/main.tf",
+          "fixed_definition": null,
+          "guideline": null,
+          "repo_file_path": "/var/folders/3d/1nhgvqps0y96vkby6tmvzb6r0000gn/T/tmpuwsmwth7/main.tf",
+          "resource": "aws_s3_bucket_policy.data",
+          "resource_address": null,
+          "severity": null,
+          "short_description": null,
+          "vulnerability_details": null
+        },
+        "resource_id": "aws_s3_bucket_policy.data",
+        "resource_type": "aws_s3_bucket_policy",
+        "rule_id": "CKV_AWS_70",
+        "scan_timestamp": "2026-09-06T06:49:37.026587+00:00",
+        "scanner_name": "checkov",
+        "scanner_version": "3.3.16",
+        "severity": null
+      },
+      {
+        "description": "Ensure S3 bucket policy does not lockout all but root user. (Prevent lockouts needing root account fixes)",
+        "file_path": "/main.tf",
+        "line_end": 22,
+        "line_start": 7,
+        "outcome": "passed",
+        "raw_evidence": {
+          "bc_category": null,
+          "bc_check_id": null,
+          "benchmarks": {},
+          "caller_file_line_range": null,
+          "caller_file_path": null,
+          "check_class": "checkov.terraform.checks.resource.aws.S3ProtectAgainstPolicyLockout",
+          "check_id": "CKV_AWS_93",
+          "check_len": null,
+          "check_name": "Ensure S3 bucket policy does not lockout all but root user. (Prevent lockouts needing root account fixes)",
+          "check_result": {
+            "evaluated_keys": [
+              "policy"
+            ],
+            "result": "PASSED"
+          },
+          "code_block": null,
+          "connected_node": null,
+          "definition_context_file_path": "/var/folders/3d/1nhgvqps0y96vkby6tmvzb6r0000gn/T/tmpuwsmwth7/main.tf",
+          "description": null,
+          "details": [],
+          "entity_tags": null,
+          "evaluations": null,
+          "file_abs_path": "/var/folders/3d/1nhgvqps0y96vkby6tmvzb6r0000gn/T/tmpuwsmwth7/main.tf",
+          "file_line_range": [
+            7,
+            22
+          ],
+          "file_path": "/main.tf",
+          "fixed_definition": null,
+          "guideline": null,
+          "repo_file_path": "/var/folders/3d/1nhgvqps0y96vkby6tmvzb6r0000gn/T/tmpuwsmwth7/main.tf",
+          "resource": "aws_s3_bucket_policy.data",
+          "resource_address": null,
+          "severity": null,
+          "short_description": null,
+          "vulnerability_details": null
+        },
+        "resource_id": "aws_s3_bucket_policy.data",
+        "resource_type": "aws_s3_bucket_policy",
+        "rule_id": "CKV_AWS_93",
+        "scan_timestamp": "2026-09-06T06:49:37.026587+00:00",
+        "scanner_name": "checkov",
+        "scanner_version": "3.3.16",
+        "severity": null
+      },
+      {
+        "description": "S3 Bucket has an ACL defined which allows public READ access.",
+        "file_path": "/main.tf",
+        "line_end": 5,
+        "line_start": 3,
+        "outcome": "passed",
+        "raw_evidence": {
+          "bc_category": null,
+          "bc_check_id": null,
+          "benchmarks": {},
+          "caller_file_line_range": null,
+          "caller_file_path": null,
+          "check_class": "checkov.common.graph.checks_infra.base_check",
+          "check_id": "CKV_AWS_20",
+          "check_len": null,
+          "check_name": "S3 Bucket has an ACL defined which allows public READ access.",
+          "check_result": {
+            "entity": {
+              "aws_s3_bucket": {
+                "data": {
+                  "__address__": "aws_s3_bucket.data",
+                  "__end_line__": 5,
+                  "__start_line__": 3,
+                  "bucket": [
+                    "terraveritas-phase2e-bucket"
+                  ]
+                }
+              }
+            },
+            "evaluated_keys": [
+              "access_control_policy/grant/*/grantee/uri",
+              "access_control_policy",
+              "acl",
+              "resource_type",
+              "access_control_policy/grant"
+            ],
+            "result": "PASSED"
+          },
+          "code_block": null,
+          "connected_node": null,
+          "definition_context_file_path": "/var/folders/3d/1nhgvqps0y96vkby6tmvzb6r0000gn/T/tmpuwsmwth7/main.tf",
+          "description": null,
+          "details": [],
+          "entity_tags": null,
+          "evaluations": null,
+          "file_abs_path": "/var/folders/3d/1nhgvqps0y96vkby6tmvzb6r0000gn/T/tmpuwsmwth7/main.tf",
+          "file_line_range": [
+            3,
+            5
+          ],
+          "file_path": "/main.tf",
+          "fixed_definition": null,
+          "guideline": null,
+          "repo_file_path": "/var/folders/3d/1nhgvqps0y96vkby6tmvzb6r0000gn/T/tmpuwsmwth7/main.tf",
+          "resource": "aws_s3_bucket.data",
+          "resource_address": null,
+          "severity": null,
+          "short_description": null,
+          "vulnerability_details": null
+        },
+        "resource_id": "aws_s3_bucket.data",
+        "resource_type": "aws_s3_bucket",
+        "rule_id": "CKV_AWS_20",
+        "scan_timestamp": "2026-09-06T06:49:37.026587+00:00",
+        "scanner_name": "checkov",
+        "scanner_version": "3.3.16",
+        "severity": null
+      },
+      {
+        "description": "S3 Bucket has an ACL defined which allows public WRITE access.",
+        "file_path": "/main.tf",
+        "line_end": 5,
+        "line_start": 3,
+        "outcome": "passed",
+        "raw_evidence": {
+          "bc_category": null,
+          "bc_check_id": null,
+          "benchmarks": {},
+          "caller_file_line_range": null,
+          "caller_file_path": null,
+          "check_class": "checkov.common.graph.checks_infra.base_check",
+          "check_id": "CKV_AWS_57",
+          "check_len": null,
+          "check_name": "S3 Bucket has an ACL defined which allows public WRITE access.",
+          "check_result": {
+            "entity": {
+              "aws_s3_bucket": {
+                "data": {
+                  "__address__": "aws_s3_bucket.data",
+                  "__end_line__": 5,
+                  "__start_line__": 3,
+                  "bucket": [
+                    "terraveritas-phase2e-bucket"
+                  ]
+                }
+              }
+            },
+            "evaluated_keys": [
+              "access_control_policy/grant/*/grantee/uri",
+              "access_control_policy",
+              "acl",
+              "resource_type",
+              "access_control_policy/grant",
+              "access_control_policy/grant/*/permission"
+            ],
+            "result": "PASSED"
+          },
+          "code_block": null,
+          "connected_node": null,
+          "definition_context_file_path": "/var/folders/3d/1nhgvqps0y96vkby6tmvzb6r0000gn/T/tmpuwsmwth7/main.tf",
+          "description": null,
+          "details": [],
+          "entity_tags": null,
+          "evaluations": null,
+          "file_abs_path": "/var/folders/3d/1nhgvqps0y96vkby6tmvzb6r0000gn/T/tmpuwsmwth7/main.tf",
+          "file_line_range": [
+            3,
+            5
+          ],
+          "file_path": "/main.tf",
+          "fixed_definition": null,
+          "guideline": null,
+          "repo_file_path": "/var/folders/3d/1nhgvqps0y96vkby6tmvzb6r0000gn/T/tmpuwsmwth7/main.tf",
+          "resource": "aws_s3_bucket.data",
+          "resource_address": null,
+          "severity": null,
+          "short_description": null,
+          "vulnerability_details": null
+        },
+        "resource_id": "aws_s3_bucket.data",
+        "resource_type": "aws_s3_bucket",
+        "rule_id": "CKV_AWS_57",
+        "scan_timestamp": "2026-09-06T06:49:37.026587+00:00",
+        "scanner_name": "checkov",
+        "scanner_version": "3.3.16",
+        "severity": null
+      },
+      {
+        "description": "Ensure all data stored in the S3 bucket is securely encrypted at rest",
+        "file_path": "/main.tf",
+        "line_end": 5,
+        "line_start": 3,
+        "outcome": "passed",
+        "raw_evidence": {
+          "bc_category": null,
+          "bc_check_id": null,
+          "benchmarks": {},
+          "caller_file_line_range": null,
+          "caller_file_path": null,
+          "check_class": "checkov.common.graph.checks_infra.base_check",
+          "check_id": "CKV_AWS_19",
+          "check_len": null,
+          "check_name": "Ensure all data stored in the S3 bucket is securely encrypted at rest",
+          "check_result": {
+            "entity": {
+              "aws_s3_bucket": {
+                "data": {
+                  "__address__": "aws_s3_bucket.data",
+                  "__end_line__": 5,
+                  "__start_line__": 3,
+                  "bucket": [
+                    "terraveritas-phase2e-bucket"
+                  ]
+                }
+              }
+            },
+            "evaluated_keys": [
+              "server_side_encryption_configuration/rule/apply_server_side_encryption_by_default/sse_algorithm",
+              "resource_type",
+              "rule/apply_server_side_encryption_by_default/sse_algorithm"
+            ],
+            "result": "PASSED"
+          },
+          "code_block": null,
+          "connected_node": null,
+          "definition_context_file_path": "/var/folders/3d/1nhgvqps0y96vkby6tmvzb6r0000gn/T/tmpuwsmwth7/main.tf",
+          "description": null,
+          "details": [],
+          "entity_tags": null,
+          "evaluations": null,
+          "file_abs_path": "/var/folders/3d/1nhgvqps0y96vkby6tmvzb6r0000gn/T/tmpuwsmwth7/main.tf",
+          "file_line_range": [
+            3,
+            5
+          ],
+          "file_path": "/main.tf",
+          "fixed_definition": null,
+          "guideline": null,
+          "repo_file_path": "/var/folders/3d/1nhgvqps0y96vkby6tmvzb6r0000gn/T/tmpuwsmwth7/main.tf",
+          "resource": "aws_s3_bucket.data",
+          "resource_address": null,
+          "severity": null,
+          "short_description": null,
+          "vulnerability_details": null
+        },
+        "resource_id": "aws_s3_bucket.data",
+        "resource_type": "aws_s3_bucket",
+        "rule_id": "CKV_AWS_19",
+        "scan_timestamp": "2026-09-06T06:49:37.026587+00:00",
+        "scanner_name": "checkov",
+        "scanner_version": "3.3.16",
+        "severity": null
+      },
+      {
+        "description": "Ensure S3 buckets should have event notifications enabled",
+        "file_path": "/main.tf",
+        "line_end": 5,
+        "line_start": 3,
+        "outcome": "failed",
+        "raw_evidence": {
+          "bc_category": null,
+          "bc_check_id": null,
+          "benchmarks": {},
+          "caller_file_line_range": null,
+          "caller_file_path": null,
+          "check_class": "checkov.common.graph.checks_infra.base_check",
+          "check_id": "CKV2_AWS_62",
+          "check_len": null,
+          "check_name": "Ensure S3 buckets should have event notifications enabled",
+          "check_result": {
+            "entity": {
+              "aws_s3_bucket": {
+                "data": {
+                  "__address__": "aws_s3_bucket.data",
+                  "__end_line__": 5,
+                  "__start_line__": 3,
+                  "bucket": [
+                    "terraveritas-phase2e-bucket"
+                  ]
+                }
+              }
+            },
+            "evaluated_keys": [
+              "resource_type"
+            ],
+            "result": "FAILED"
+          },
+          "code_block": null,
+          "connected_node": null,
+          "definition_context_file_path": "/var/folders/3d/1nhgvqps0y96vkby6tmvzb6r0000gn/T/tmpuwsmwth7/main.tf",
+          "description": null,
+          "details": [],
+          "entity_tags": null,
+          "evaluations": null,
+          "file_abs_path": "/var/folders/3d/1nhgvqps0y96vkby6tmvzb6r0000gn/T/tmpuwsmwth7/main.tf",
+          "file_line_range": [
+            3,
+            5
+          ],
+          "file_path": "/main.tf",
+          "fixed_definition": null,
+          "guideline": null,
+          "repo_file_path": "/var/folders/3d/1nhgvqps0y96vkby6tmvzb6r0000gn/T/tmpuwsmwth7/main.tf",
+          "resource": "aws_s3_bucket.data",
+          "resource_address": null,
+          "severity": null,
+          "short_description": null,
+          "vulnerability_details": null
+        },
+        "resource_id": "aws_s3_bucket.data",
+        "resource_type": "aws_s3_bucket",
+        "rule_id": "CKV2_AWS_62",
+        "scan_timestamp": "2026-09-06T06:49:37.026587+00:00",
+        "scanner_name": "checkov",
+        "scanner_version": "3.3.16",
+        "severity": null
+      },
+      {
+        "description": "Ensure that S3 bucket has a Public Access block",
+        "file_path": "/main.tf",
+        "line_end": 5,
+        "line_start": 3,
+        "outcome": "failed",
+        "raw_evidence": {
+          "bc_category": null,
+          "bc_check_id": null,
+          "benchmarks": {},
+          "caller_file_line_range": null,
+          "caller_file_path": null,
+          "check_class": "checkov.common.graph.checks_infra.base_check",
+          "check_id": "CKV2_AWS_6",
+          "check_len": null,
+          "check_name": "Ensure that S3 bucket has a Public Access block",
+          "check_result": {
+            "entity": {
+              "aws_s3_bucket": {
+                "data": {
+                  "__address__": "aws_s3_bucket.data",
+                  "__end_line__": 5,
+                  "__start_line__": 3,
+                  "bucket": [
+                    "terraveritas-phase2e-bucket"
+                  ]
+                }
+              }
+            },
+            "evaluated_keys": [
+              "block_public_acls",
+              "resource_type",
+              "block_public_policy"
+            ],
+            "result": "FAILED"
+          },
+          "code_block": null,
+          "connected_node": null,
+          "definition_context_file_path": "/var/folders/3d/1nhgvqps0y96vkby6tmvzb6r0000gn/T/tmpuwsmwth7/main.tf",
+          "description": null,
+          "details": [],
+          "entity_tags": null,
+          "evaluations": null,
+          "file_abs_path": "/var/folders/3d/1nhgvqps0y96vkby6tmvzb6r0000gn/T/tmpuwsmwth7/main.tf",
+          "file_line_range": [
+            3,
+            5
+          ],
+          "file_path": "/main.tf",
+          "fixed_definition": null,
+          "guideline": null,
+          "repo_file_path": "/var/folders/3d/1nhgvqps0y96vkby6tmvzb6r0000gn/T/tmpuwsmwth7/main.tf",
+          "resource": "aws_s3_bucket.data",
+          "resource_address": null,
+          "severity": null,
+          "short_description": null,
+          "vulnerability_details": null
+        },
+        "resource_id": "aws_s3_bucket.data",
+        "resource_type": "aws_s3_bucket",
+        "rule_id": "CKV2_AWS_6",
+        "scan_timestamp": "2026-09-06T06:49:37.026587+00:00",
+        "scanner_name": "checkov",
+        "scanner_version": "3.3.16",
+        "severity": null
+      },
+      {
+        "description": "Ensure that an S3 bucket has a lifecycle configuration",
+        "file_path": "/main.tf",
+        "line_end": 5,
+        "line_start": 3,
+        "outcome": "failed",
+        "raw_evidence": {
+          "bc_category": null,
+          "bc_check_id": null,
+          "benchmarks": {},
+          "caller_file_line_range": null,
+          "caller_file_path": null,
+          "check_class": "checkov.common.graph.checks_infra.base_check",
+          "check_id": "CKV2_AWS_61",
+          "check_len": null,
+          "check_name": "Ensure that an S3 bucket has a lifecycle configuration",
+          "check_result": {
+            "entity": {
+              "aws_s3_bucket": {
+                "data": {
+                  "__address__": "aws_s3_bucket.data",
+                  "__end_line__": 5,
+                  "__start_line__": 3,
+                  "bucket": [
+                    "terraveritas-phase2e-bucket"
+                  ]
+                }
+              }
+            },
+            "evaluated_keys": [
+              "lifecycle_rule",
+              "resource_type"
+            ],
+            "result": "FAILED"
+          },
+          "code_block": null,
+          "connected_node": null,
+          "definition_context_file_path": "/var/folders/3d/1nhgvqps0y96vkby6tmvzb6r0000gn/T/tmpuwsmwth7/main.tf",
+          "description": null,
+          "details": [],
+          "entity_tags": null,
+          "evaluations": null,
+          "file_abs_path": "/var/folders/3d/1nhgvqps0y96vkby6tmvzb6r0000gn/T/tmpuwsmwth7/main.tf",
+          "file_line_range": [
+            3,
+            5
+          ],
+          "file_path": "/main.tf",
+          "fixed_definition": null,
+          "guideline": null,
+          "repo_file_path": "/var/folders/3d/1nhgvqps0y96vkby6tmvzb6r0000gn/T/tmpuwsmwth7/main.tf",
+          "resource": "aws_s3_bucket.data",
+          "resource_address": null,
+          "severity": null,
+          "short_description": null,
+          "vulnerability_details": null
+        },
+        "resource_id": "aws_s3_bucket.data",
+        "resource_type": "aws_s3_bucket",
+        "rule_id": "CKV2_AWS_61",
+        "scan_timestamp": "2026-09-06T06:49:37.026587+00:00",
+        "scanner_name": "checkov",
+        "scanner_version": "3.3.16",
+        "severity": null
+      },
+      {
+        "description": "Ensure the S3 bucket has access logging enabled",
+        "file_path": "/main.tf",
+        "line_end": 5,
+        "line_start": 3,
+        "outcome": "failed",
+        "raw_evidence": {
+          "bc_category": null,
+          "bc_check_id": null,
+          "benchmarks": {},
+          "caller_file_line_range": null,
+          "caller_file_path": null,
+          "check_class": "checkov.common.graph.checks_infra.base_check",
+          "check_id": "CKV_AWS_18",
+          "check_len": null,
+          "check_name": "Ensure the S3 bucket has access logging enabled",
+          "check_result": {
+            "entity": {
+              "aws_s3_bucket": {
+                "data": {
+                  "__address__": "aws_s3_bucket.data",
+                  "__end_line__": 5,
+                  "__start_line__": 3,
+                  "bucket": [
+                    "terraveritas-phase2e-bucket"
+                  ]
+                }
+              }
+            },
+            "evaluated_keys": [
+              "logging",
+              "resource_type"
+            ],
+            "result": "FAILED"
+          },
+          "code_block": null,
+          "connected_node": null,
+          "definition_context_file_path": "/var/folders/3d/1nhgvqps0y96vkby6tmvzb6r0000gn/T/tmpuwsmwth7/main.tf",
+          "description": null,
+          "details": [],
+          "entity_tags": null,
+          "evaluations": null,
+          "file_abs_path": "/var/folders/3d/1nhgvqps0y96vkby6tmvzb6r0000gn/T/tmpuwsmwth7/main.tf",
+          "file_line_range": [
+            3,
+            5
+          ],
+          "file_path": "/main.tf",
+          "fixed_definition": null,
+          "guideline": null,
+          "repo_file_path": "/var/folders/3d/1nhgvqps0y96vkby6tmvzb6r0000gn/T/tmpuwsmwth7/main.tf",
+          "resource": "aws_s3_bucket.data",
+          "resource_address": null,
+          "severity": null,
+          "short_description": null,
+          "vulnerability_details": null
+        },
+        "resource_id": "aws_s3_bucket.data",
+        "resource_type": "aws_s3_bucket",
+        "rule_id": "CKV_AWS_18",
+        "scan_timestamp": "2026-09-06T06:49:37.026587+00:00",
+        "scanner_name": "checkov",
+        "scanner_version": "3.3.16",
+        "severity": null
+      },
+      {
+        "description": "Ensure that S3 buckets are encrypted with KMS by default",
+        "file_path": "/main.tf",
+        "line_end": 5,
+        "line_start": 3,
+        "outcome": "failed",
+        "raw_evidence": {
+          "bc_category": null,
+          "bc_check_id": null,
+          "benchmarks": {},
+          "caller_file_line_range": null,
+          "caller_file_path": null,
+          "check_class": "checkov.common.graph.checks_infra.base_check",
+          "check_id": "CKV_AWS_145",
+          "check_len": null,
+          "check_name": "Ensure that S3 buckets are encrypted with KMS by default",
+          "check_result": {
+            "entity": {
+              "aws_s3_bucket": {
+                "data": {
+                  "__address__": "aws_s3_bucket.data",
+                  "__end_line__": 5,
+                  "__start_line__": 3,
+                  "bucket": [
+                    "terraveritas-phase2e-bucket"
+                  ]
+                }
+              }
+            },
+            "evaluated_keys": [
+              "server_side_encryption_configuration/rule/apply_server_side_encryption_by_default/sse_algorithm",
+              "resource_type",
+              "rule/apply_server_side_encryption_by_default/sse_algorithm"
+            ],
+            "result": "FAILED"
+          },
+          "code_block": null,
+          "connected_node": null,
+          "definition_context_file_path": "/var/folders/3d/1nhgvqps0y96vkby6tmvzb6r0000gn/T/tmpuwsmwth7/main.tf",
+          "description": null,
+          "details": [],
+          "entity_tags": null,
+          "evaluations": null,
+          "file_abs_path": "/var/folders/3d/1nhgvqps0y96vkby6tmvzb6r0000gn/T/tmpuwsmwth7/main.tf",
+          "file_line_range": [
+            3,
+            5
+          ],
+          "file_path": "/main.tf",
+          "fixed_definition": null,
+          "guideline": null,
+          "repo_file_path": "/var/folders/3d/1nhgvqps0y96vkby6tmvzb6r0000gn/T/tmpuwsmwth7/main.tf",
+          "resource": "aws_s3_bucket.data",
+          "resource_address": null,
+          "severity": null,
+          "short_description": null,
+          "vulnerability_details": null
+        },
+        "resource_id": "aws_s3_bucket.data",
+        "resource_type": "aws_s3_bucket",
+        "rule_id": "CKV_AWS_145",
+        "scan_timestamp": "2026-09-06T06:49:37.026587+00:00",
+        "scanner_name": "checkov",
+        "scanner_version": "3.3.16",
+        "severity": null
+      },
+      {
+        "description": "Ensure that S3 bucket has cross-region replication enabled",
+        "file_path": "/main.tf",
+        "line_end": 5,
+        "line_start": 3,
+        "outcome": "failed",
+        "raw_evidence": {
+          "bc_category": null,
+          "bc_check_id": null,
+          "benchmarks": {},
+          "caller_file_line_range": null,
+          "caller_file_path": null,
+          "check_class": "checkov.common.graph.checks_infra.base_check",
+          "check_id": "CKV_AWS_144",
+          "check_len": null,
+          "check_name": "Ensure that S3 bucket has cross-region replication enabled",
+          "check_result": {
+            "entity": {
+              "aws_s3_bucket": {
+                "data": {
+                  "__address__": "aws_s3_bucket.data",
+                  "__end_line__": 5,
+                  "__start_line__": 3,
+                  "bucket": [
+                    "terraveritas-phase2e-bucket"
+                  ]
+                }
+              }
+            },
+            "evaluated_keys": [
+              "resource_type",
+              "replication_configuration/rules/*/status",
+              "rule/*/status"
+            ],
+            "result": "FAILED"
+          },
+          "code_block": null,
+          "connected_node": null,
+          "definition_context_file_path": "/var/folders/3d/1nhgvqps0y96vkby6tmvzb6r0000gn/T/tmpuwsmwth7/main.tf",
+          "description": null,
+          "details": [],
+          "entity_tags": null,
+          "evaluations": null,
+          "file_abs_path": "/var/folders/3d/1nhgvqps0y96vkby6tmvzb6r0000gn/T/tmpuwsmwth7/main.tf",
+          "file_line_range": [
+            3,
+            5
+          ],
+          "file_path": "/main.tf",
+          "fixed_definition": null,
+          "guideline": null,
+          "repo_file_path": "/var/folders/3d/1nhgvqps0y96vkby6tmvzb6r0000gn/T/tmpuwsmwth7/main.tf",
+          "resource": "aws_s3_bucket.data",
+          "resource_address": null,
+          "severity": null,
+          "short_description": null,
+          "vulnerability_details": null
+        },
+        "resource_id": "aws_s3_bucket.data",
+        "resource_type": "aws_s3_bucket",
+        "rule_id": "CKV_AWS_144",
+        "scan_timestamp": "2026-09-06T06:49:37.026587+00:00",
+        "scanner_name": "checkov",
+        "scanner_version": "3.3.16",
+        "severity": null
+      },
+      {
+        "description": "Ensure all data stored in the S3 bucket have versioning enabled",
+        "file_path": "/main.tf",
+        "line_end": 5,
+        "line_start": 3,
+        "outcome": "failed",
+        "raw_evidence": {
+          "bc_category": null,
+          "bc_check_id": null,
+          "benchmarks": {},
+          "caller_file_line_range": null,
+          "caller_file_path": null,
+          "check_class": "checkov.common.graph.checks_infra.base_check",
+          "check_id": "CKV_AWS_21",
+          "check_len": null,
+          "check_name": "Ensure all data stored in the S3 bucket have versioning enabled",
+          "check_result": {
+            "entity": {
+              "aws_s3_bucket": {
+                "data": {
+                  "__address__": "aws_s3_bucket.data",
+                  "__end_line__": 5,
+                  "__start_line__": 3,
+                  "bucket": [
+                    "terraveritas-phase2e-bucket"
+                  ]
+                }
+              }
+            },
+            "evaluated_keys": [
+              "versioning/enabled",
+              "resource_type",
+              "versioning_configuration/status"
+            ],
+            "result": "FAILED"
+          },
+          "code_block": null,
+          "connected_node": null,
+          "definition_context_file_path": "/var/folders/3d/1nhgvqps0y96vkby6tmvzb6r0000gn/T/tmpuwsmwth7/main.tf",
+          "description": null,
+          "details": [],
+          "entity_tags": null,
+          "evaluations": null,
+          "file_abs_path": "/var/folders/3d/1nhgvqps0y96vkby6tmvzb6r0000gn/T/tmpuwsmwth7/main.tf",
+          "file_line_range": [
+            3,
+            5
+          ],
+          "file_path": "/main.tf",
+          "fixed_definition": null,
+          "guideline": null,
+          "repo_file_path": "/var/folders/3d/1nhgvqps0y96vkby6tmvzb6r0000gn/T/tmpuwsmwth7/main.tf",
+          "resource": "aws_s3_bucket.data",
+          "resource_address": null,
+          "severity": null,
+          "short_description": null,
+          "vulnerability_details": null
+        },
+        "resource_id": "aws_s3_bucket.data",
+        "resource_type": "aws_s3_bucket",
+        "rule_id": "CKV_AWS_21",
+        "scan_timestamp": "2026-09-06T06:49:37.026587+00:00",
+        "scanner_name": "checkov",
+        "scanner_version": "3.3.16",
+        "severity": null
+      }
+    ],
+    "finished_at": "2026-09-06T06:49:37.026587+00:00",
+    "scanner_name": "checkov",
+    "scanner_version": "3.3.16",
+    "started_at": "2026-09-06T06:49:35.197534+00:00",
+    "status": "success",
+    "target_path": "/var/folders/3d/1nhgvqps0y96vkby6tmvzb6r0000gn/T/tmpuwsmwth7",
+    "unparseable_files": []
+  },
+  "ai_model": "gemini-3.6-flash (Google, direct API call) -- genuinely independent vendor",
+  "before_invariant": {
+    "evidence": {},
+    "invariant_id": "S3_PUBLIC_ACCESS_EXPOSURE",
+    "reason": "bucket policy content could not be evaluated at plan time (known after apply), and no independent violation was found on the resolvable side(s)",
+    "related_resource_addresses": [
+      "aws_s3_bucket.data",
+      "aws_s3_bucket_policy.data"
+    ],
+    "resource_address": "aws_s3_bucket.data",
+    "status": "unknown",
+    "violated_conditions": []
+  },
+  "before_plan": {
+    "commands_run": [
+      [
+        "terraform",
+        "init",
+        "-input=false",
+        "-no-color"
+      ],
+      [
+        "terraform",
+        "validate",
+        "-no-color",
+        "-json"
+      ],
+      [
+        "terraform",
+        "plan",
+        "-input=false",
+        "-no-color",
+        "-json",
+        "-out=tfplan"
+      ],
+      [
+        "terraform",
+        "show",
+        "-json",
+        "tfplan"
+      ]
+    ],
+    "error_message": null,
+    "finished_at": "2026-09-06T06:49:45.233520+00:00",
+    "raw_plan_json": {
+      "applyable": true,
+      "complete": true,
+      "configuration": {
+        "provider_config": {
+          "aws": {
+            "expressions": {
+              "access_key": "[REDACTED]",
+              "region": {
+                "constant_value": "us-east-1"
+              },
+              "secret_key": "[REDACTED]",
+              "skip_credentials_validation": {
+                "constant_value": true
+              },
+              "skip_metadata_api_check": {
+                "constant_value": true
+              },
+              "skip_requesting_account_id": {
+                "constant_value": true
+              }
+            },
+            "full_name": "registry.terraform.io/hashicorp/aws",
+            "name": "aws",
+            "version_constraint": "5.100.0"
+          }
+        },
+        "root_module": {
+          "resources": [
+            {
+              "address": "aws_s3_bucket.data",
+              "expressions": {
+                "bucket": {
+                  "constant_value": "terraveritas-phase2e-bucket"
+                }
+              },
+              "mode": "managed",
+              "name": "data",
+              "provider_config_key": "aws",
+              "schema_version": 0,
+              "type": "aws_s3_bucket"
+            },
+            {
+              "address": "aws_s3_bucket_policy.data",
+              "expressions": {
+                "bucket": {
+                  "references": [
+                    "aws_s3_bucket.data.id",
+                    "aws_s3_bucket.data"
+                  ]
+                },
+                "policy": {
+                  "references": [
+                    "aws_s3_bucket.data.arn",
+                    "aws_s3_bucket.data"
+                  ]
+                }
+              },
+              "mode": "managed",
+              "name": "data",
+              "provider_config_key": "aws",
+              "schema_version": 0,
+              "type": "aws_s3_bucket_policy"
+            }
+          ]
+        }
+      },
+      "errored": false,
+      "format_version": "1.2",
+      "planned_values": {
+        "root_module": {
+          "resources": [
+            {
+              "address": "aws_s3_bucket.data",
+              "mode": "managed",
+              "name": "data",
+              "provider_name": "registry.terraform.io/hashicorp/aws",
+              "schema_version": 0,
+              "sensitive_values": {
+                "cors_rule": [],
+                "grant": [],
+                "lifecycle_rule": [],
+                "logging": [],
+                "object_lock_configuration": [],
+                "replication_configuration": [],
+                "server_side_encryption_configuration": [],
+                "tags_all": {},
+                "versioning": [],
+                "website": []
+              },
+              "type": "aws_s3_bucket",
+              "values": {
+                "bucket": "terraveritas-phase2e-bucket",
+                "force_destroy": false,
+                "tags": null,
+                "timeouts": null
+              }
+            },
+            {
+              "address": "aws_s3_bucket_policy.data",
+              "mode": "managed",
+              "name": "data",
+              "provider_name": "registry.terraform.io/hashicorp/aws",
+              "schema_version": 0,
+              "sensitive_values": {},
+              "type": "aws_s3_bucket_policy"
+            }
+          ]
+        }
+      },
+      "relevant_attributes": [
+        {
+          "attribute": [
+            "arn"
+          ],
+          "resource": "aws_s3_bucket.data"
+        },
+        {
+          "attribute": [
+            "id"
+          ],
+          "resource": "aws_s3_bucket.data"
+        }
+      ],
+      "resource_changes": [
+        {
+          "address": "aws_s3_bucket.data",
+          "change": {
+            "actions": [
+              "create"
+            ],
+            "after": {
+              "bucket": "terraveritas-phase2e-bucket",
+              "force_destroy": false,
+              "tags": null,
+              "timeouts": null
+            },
+            "after_sensitive": {
+              "cors_rule": [],
+              "grant": [],
+              "lifecycle_rule": [],
+              "logging": [],
+              "object_lock_configuration": [],
+              "replication_configuration": [],
+              "server_side_encryption_configuration": [],
+              "tags_all": {},
+              "versioning": [],
+              "website": []
+            },
+            "after_unknown": {
+              "acceleration_status": true,
+              "acl": true,
+              "arn": true,
+              "bucket_domain_name": true,
+              "bucket_prefix": true,
+              "bucket_regional_domain_name": true,
+              "cors_rule": true,
+              "grant": true,
+              "hosted_zone_id": true,
+              "id": true,
+              "lifecycle_rule": true,
+              "logging": true,
+              "object_lock_configuration": true,
+              "object_lock_enabled": true,
+              "policy": true,
+              "region": true,
+              "replication_configuration": true,
+              "request_payer": true,
+              "server_side_encryption_configuration": true,
+              "tags_all": true,
+              "versioning": true,
+              "website": true,
+              "website_domain": true,
+              "website_endpoint": true
+            },
+            "before": null,
+            "before_sensitive": false
+          },
+          "mode": "managed",
+          "name": "data",
+          "provider_name": "registry.terraform.io/hashicorp/aws",
+          "type": "aws_s3_bucket"
+        },
+        {
+          "address": "aws_s3_bucket_policy.data",
+          "change": {
+            "actions": [
+              "create"
+            ],
+            "after": {},
+            "after_sensitive": {},
+            "after_unknown": {
+              "bucket": true,
+              "id": true,
+              "policy": true
+            },
+            "before": null,
+            "before_sensitive": false
+          },
+          "mode": "managed",
+          "name": "data",
+          "provider_name": "registry.terraform.io/hashicorp/aws",
+          "type": "aws_s3_bucket_policy"
+        }
+      ],
+      "terraform_version": "1.14.3",
+      "timestamp": "2026-09-06T06:49:43Z"
+    },
+    "resource_changes": [
+      {
+        "actions": [
+          "create"
+        ],
+        "address": "aws_s3_bucket.data",
+        "after": {
+          "bucket": "terraveritas-phase2e-bucket",
+          "force_destroy": false,
+          "tags": null,
+          "timeouts": null
+        },
+        "after_unknown_keys": [
+          "acceleration_status",
+          "acl",
+          "arn",
+          "bucket_domain_name",
+          "bucket_prefix",
+          "bucket_regional_domain_name",
+          "cors_rule",
+          "grant",
+          "hosted_zone_id",
+          "id",
+          "lifecycle_rule",
+          "logging",
+          "object_lock_configuration",
+          "object_lock_enabled",
+          "policy",
+          "region",
+          "replication_configuration",
+          "request_payer",
+          "server_side_encryption_configuration",
+          "tags_all",
+          "versioning",
+          "website",
+          "website_domain",
+          "website_endpoint"
+        ],
+        "provider_name": "registry.terraform.io/hashicorp/aws",
+        "resource_name": "data",
+        "resource_type": "aws_s3_bucket"
+      },
+      {
+        "actions": [
+          "create"
+        ],
+        "address": "aws_s3_bucket_policy.data",
+        "after": {},
+        "after_unknown_keys": [
+          "bucket",
+          "id",
+          "policy"
+        ],
+        "provider_name": "registry.terraform.io/hashicorp/aws",
+        "resource_name": "data",
+        "resource_type": "aws_s3_bucket_policy"
+      }
+    ],
+    "started_at": "2026-09-06T06:49:38.711628+00:00",
+    "status": "plan_success",
+    "target_path": "/var/folders/3d/1nhgvqps0y96vkby6tmvzb6r0000gn/T/tmpca50ons_",
+    "terraform_version": "1.14.3"
+  },
+  "before_plan_status": "plan_success",
+  "before_scan": {
+    "command": [
+      "checkov",
+      "-d",
+      "/var/folders/3d/1nhgvqps0y96vkby6tmvzb6r0000gn/T/tmp9a817o77",
+      "-o",
+      "json",
+      "--compact",
+      "--framework",
+      "terraform",
+      "--skip-download"
+    ],
+    "error_message": null,
+    "exit_code": 1,
+    "findings": [
+      {
+        "description": "Ensure S3 bucket policy does not lockout all but root user. (Prevent lockouts needing root account fixes)",
+        "file_path": "/main.tf",
+        "line_end": 3,
+        "line_start": 1,
+        "outcome": "passed",
+        "raw_evidence": {
+          "bc_category": null,
+          "bc_check_id": null,
+          "benchmarks": {},
+          "caller_file_line_range": null,
+          "caller_file_path": null,
+          "check_class": "checkov.terraform.checks.resource.aws.S3ProtectAgainstPolicyLockout",
+          "check_id": "CKV_AWS_93",
+          "check_len": null,
+          "check_name": "Ensure S3 bucket policy does not lockout all but root user. (Prevent lockouts needing root account fixes)",
+          "check_result": {
+            "evaluated_keys": [
+              "policy"
+            ],
+            "result": "PASSED"
+          },
+          "code_block": null,
+          "connected_node": null,
+          "definition_context_file_path": "/var/folders/3d/1nhgvqps0y96vkby6tmvzb6r0000gn/T/tmp9a817o77/main.tf",
+          "description": null,
+          "details": [],
+          "entity_tags": null,
+          "evaluations": null,
+          "file_abs_path": "/var/folders/3d/1nhgvqps0y96vkby6tmvzb6r0000gn/T/tmp9a817o77/main.tf",
+          "file_line_range": [
+            1,
+            3
+          ],
+          "file_path": "/main.tf",
+          "fixed_definition": null,
+          "guideline": null,
+          "repo_file_path": "/var/folders/3d/1nhgvqps0y96vkby6tmvzb6r0000gn/T/tmp9a817o77/main.tf",
+          "resource": "aws_s3_bucket.data",
+          "resource_address": null,
+          "severity": null,
+          "short_description": null,
+          "vulnerability_details": null
+        },
+        "resource_id": "aws_s3_bucket.data",
+        "resource_type": "aws_s3_bucket",
+        "rule_id": "CKV_AWS_93",
+        "scan_timestamp": "2026-09-06T06:49:33.501083+00:00",
+        "scanner_name": "checkov",
+        "scanner_version": "3.3.16",
+        "severity": null
+      },
+      {
+        "description": "Ensure S3 bucket policy does not lockout all but root user. (Prevent lockouts needing root account fixes)",
+        "file_path": "/main.tf",
+        "line_end": 18,
+        "line_start": 5,
+        "outcome": "passed",
+        "raw_evidence": {
+          "bc_category": null,
+          "bc_check_id": null,
+          "benchmarks": {},
+          "caller_file_line_range": null,
+          "caller_file_path": null,
+          "check_class": "checkov.terraform.checks.resource.aws.S3ProtectAgainstPolicyLockout",
+          "check_id": "CKV_AWS_93",
+          "check_len": null,
+          "check_name": "Ensure S3 bucket policy does not lockout all but root user. (Prevent lockouts needing root account fixes)",
+          "check_result": {
+            "evaluated_keys": [
+              "policy"
+            ],
+            "result": "PASSED"
+          },
+          "code_block": null,
+          "connected_node": null,
+          "definition_context_file_path": "/var/folders/3d/1nhgvqps0y96vkby6tmvzb6r0000gn/T/tmp9a817o77/main.tf",
+          "description": null,
+          "details": [],
+          "entity_tags": null,
+          "evaluations": null,
+          "file_abs_path": "/var/folders/3d/1nhgvqps0y96vkby6tmvzb6r0000gn/T/tmp9a817o77/main.tf",
+          "file_line_range": [
+            5,
+            18
+          ],
+          "file_path": "/main.tf",
+          "fixed_definition": null,
+          "guideline": null,
+          "repo_file_path": "/var/folders/3d/1nhgvqps0y96vkby6tmvzb6r0000gn/T/tmp9a817o77/main.tf",
+          "resource": "aws_s3_bucket_policy.data",
+          "resource_address": null,
+          "severity": null,
+          "short_description": null,
+          "vulnerability_details": null
+        },
+        "resource_id": "aws_s3_bucket_policy.data",
+        "resource_type": "aws_s3_bucket_policy",
+        "rule_id": "CKV_AWS_93",
+        "scan_timestamp": "2026-09-06T06:49:33.501083+00:00",
+        "scanner_name": "checkov",
+        "scanner_version": "3.3.16",
+        "severity": null
+      },
+      {
+        "description": "S3 Bucket has an ACL defined which allows public READ access.",
+        "file_path": "/main.tf",
+        "line_end": 3,
+        "line_start": 1,
+        "outcome": "passed",
+        "raw_evidence": {
+          "bc_category": null,
+          "bc_check_id": null,
+          "benchmarks": {},
+          "caller_file_line_range": null,
+          "caller_file_path": null,
+          "check_class": "checkov.common.graph.checks_infra.base_check",
+          "check_id": "CKV_AWS_20",
+          "check_len": null,
+          "check_name": "S3 Bucket has an ACL defined which allows public READ access.",
+          "check_result": {
+            "entity": {
+              "aws_s3_bucket": {
+                "data": {
+                  "__address__": "aws_s3_bucket.data",
+                  "__end_line__": 3,
+                  "__start_line__": 1,
+                  "bucket": [
+                    "terraveritas-phase2e-bucket"
+                  ]
+                }
+              }
+            },
+            "evaluated_keys": [
+              "access_control_policy/grant/*/grantee/uri",
+              "access_control_policy",
+              "acl",
+              "resource_type",
+              "access_control_policy/grant"
+            ],
+            "result": "PASSED"
+          },
+          "code_block": null,
+          "connected_node": null,
+          "definition_context_file_path": "/var/folders/3d/1nhgvqps0y96vkby6tmvzb6r0000gn/T/tmp9a817o77/main.tf",
+          "description": null,
+          "details": [],
+          "entity_tags": null,
+          "evaluations": null,
+          "file_abs_path": "/var/folders/3d/1nhgvqps0y96vkby6tmvzb6r0000gn/T/tmp9a817o77/main.tf",
+          "file_line_range": [
+            1,
+            3
+          ],
+          "file_path": "/main.tf",
+          "fixed_definition": null,
+          "guideline": null,
+          "repo_file_path": "/var/folders/3d/1nhgvqps0y96vkby6tmvzb6r0000gn/T/tmp9a817o77/main.tf",
+          "resource": "aws_s3_bucket.data",
+          "resource_address": null,
+          "severity": null,
+          "short_description": null,
+          "vulnerability_details": null
+        },
+        "resource_id": "aws_s3_bucket.data",
+        "resource_type": "aws_s3_bucket",
+        "rule_id": "CKV_AWS_20",
+        "scan_timestamp": "2026-09-06T06:49:33.501083+00:00",
+        "scanner_name": "checkov",
+        "scanner_version": "3.3.16",
+        "severity": null
+      },
+      {
+        "description": "S3 Bucket has an ACL defined which allows public WRITE access.",
+        "file_path": "/main.tf",
+        "line_end": 3,
+        "line_start": 1,
+        "outcome": "passed",
+        "raw_evidence": {
+          "bc_category": null,
+          "bc_check_id": null,
+          "benchmarks": {},
+          "caller_file_line_range": null,
+          "caller_file_path": null,
+          "check_class": "checkov.common.graph.checks_infra.base_check",
+          "check_id": "CKV_AWS_57",
+          "check_len": null,
+          "check_name": "S3 Bucket has an ACL defined which allows public WRITE access.",
+          "check_result": {
+            "entity": {
+              "aws_s3_bucket": {
+                "data": {
+                  "__address__": "aws_s3_bucket.data",
+                  "__end_line__": 3,
+                  "__start_line__": 1,
+                  "bucket": [
+                    "terraveritas-phase2e-bucket"
+                  ]
+                }
+              }
+            },
+            "evaluated_keys": [
+              "access_control_policy/grant/*/grantee/uri",
+              "access_control_policy",
+              "acl",
+              "resource_type",
+              "access_control_policy/grant",
+              "access_control_policy/grant/*/permission"
+            ],
+            "result": "PASSED"
+          },
+          "code_block": null,
+          "connected_node": null,
+          "definition_context_file_path": "/var/folders/3d/1nhgvqps0y96vkby6tmvzb6r0000gn/T/tmp9a817o77/main.tf",
+          "description": null,
+          "details": [],
+          "entity_tags": null,
+          "evaluations": null,
+          "file_abs_path": "/var/folders/3d/1nhgvqps0y96vkby6tmvzb6r0000gn/T/tmp9a817o77/main.tf",
+          "file_line_range": [
+            1,
+            3
+          ],
+          "file_path": "/main.tf",
+          "fixed_definition": null,
+          "guideline": null,
+          "repo_file_path": "/var/folders/3d/1nhgvqps0y96vkby6tmvzb6r0000gn/T/tmp9a817o77/main.tf",
+          "resource": "aws_s3_bucket.data",
+          "resource_address": null,
+          "severity": null,
+          "short_description": null,
+          "vulnerability_details": null
+        },
+        "resource_id": "aws_s3_bucket.data",
+        "resource_type": "aws_s3_bucket",
+        "rule_id": "CKV_AWS_57",
+        "scan_timestamp": "2026-09-06T06:49:33.501083+00:00",
+        "scanner_name": "checkov",
+        "scanner_version": "3.3.16",
+        "severity": null
+      },
+      {
+        "description": "Ensure all data stored in the S3 bucket is securely encrypted at rest",
+        "file_path": "/main.tf",
+        "line_end": 3,
+        "line_start": 1,
+        "outcome": "passed",
+        "raw_evidence": {
+          "bc_category": null,
+          "bc_check_id": null,
+          "benchmarks": {},
+          "caller_file_line_range": null,
+          "caller_file_path": null,
+          "check_class": "checkov.common.graph.checks_infra.base_check",
+          "check_id": "CKV_AWS_19",
+          "check_len": null,
+          "check_name": "Ensure all data stored in the S3 bucket is securely encrypted at rest",
+          "check_result": {
+            "entity": {
+              "aws_s3_bucket": {
+                "data": {
+                  "__address__": "aws_s3_bucket.data",
+                  "__end_line__": 3,
+                  "__start_line__": 1,
+                  "bucket": [
+                    "terraveritas-phase2e-bucket"
+                  ]
+                }
+              }
+            },
+            "evaluated_keys": [
+              "resource_type",
+              "server_side_encryption_configuration/rule/apply_server_side_encryption_by_default/sse_algorithm",
+              "rule/apply_server_side_encryption_by_default/sse_algorithm"
+            ],
+            "result": "PASSED"
+          },
+          "code_block": null,
+          "connected_node": null,
+          "definition_context_file_path": "/var/folders/3d/1nhgvqps0y96vkby6tmvzb6r0000gn/T/tmp9a817o77/main.tf",
+          "description": null,
+          "details": [],
+          "entity_tags": null,
+          "evaluations": null,
+          "file_abs_path": "/var/folders/3d/1nhgvqps0y96vkby6tmvzb6r0000gn/T/tmp9a817o77/main.tf",
+          "file_line_range": [
+            1,
+            3
+          ],
+          "file_path": "/main.tf",
+          "fixed_definition": null,
+          "guideline": null,
+          "repo_file_path": "/var/folders/3d/1nhgvqps0y96vkby6tmvzb6r0000gn/T/tmp9a817o77/main.tf",
+          "resource": "aws_s3_bucket.data",
+          "resource_address": null,
+          "severity": null,
+          "short_description": null,
+          "vulnerability_details": null
+        },
+        "resource_id": "aws_s3_bucket.data",
+        "resource_type": "aws_s3_bucket",
+        "rule_id": "CKV_AWS_19",
+        "scan_timestamp": "2026-09-06T06:49:33.501083+00:00",
+        "scanner_name": "checkov",
+        "scanner_version": "3.3.16",
+        "severity": null
+      },
+      {
+        "description": "Ensure S3 bucket does not allow an action with any Principal",
+        "file_path": "/main.tf",
+        "line_end": 18,
+        "line_start": 5,
+        "outcome": "failed",
+        "raw_evidence": {
+          "bc_category": null,
+          "bc_check_id": null,
+          "benchmarks": {},
+          "caller_file_line_range": null,
+          "caller_file_path": null,
+          "check_class": "checkov.terraform.checks.resource.aws.S3AllowsAnyPrincipal",
+          "check_id": "CKV_AWS_70",
+          "check_len": null,
+          "check_name": "Ensure S3 bucket does not allow an action with any Principal",
+          "check_result": {
+            "evaluated_keys": [
+              "policy"
+            ],
+            "result": "FAILED"
+          },
+          "code_block": null,
+          "connected_node": null,
+          "definition_context_file_path": "/var/folders/3d/1nhgvqps0y96vkby6tmvzb6r0000gn/T/tmp9a817o77/main.tf",
+          "description": null,
+          "details": [],
+          "entity_tags": null,
+          "evaluations": null,
+          "file_abs_path": "/var/folders/3d/1nhgvqps0y96vkby6tmvzb6r0000gn/T/tmp9a817o77/main.tf",
+          "file_line_range": [
+            5,
+            18
+          ],
+          "file_path": "/main.tf",
+          "fixed_definition": null,
+          "guideline": null,
+          "repo_file_path": "/var/folders/3d/1nhgvqps0y96vkby6tmvzb6r0000gn/T/tmp9a817o77/main.tf",
+          "resource": "aws_s3_bucket_policy.data",
+          "resource_address": null,
+          "severity": null,
+          "short_description": null,
+          "vulnerability_details": null
+        },
+        "resource_id": "aws_s3_bucket_policy.data",
+        "resource_type": "aws_s3_bucket_policy",
+        "rule_id": "CKV_AWS_70",
+        "scan_timestamp": "2026-09-06T06:49:33.501083+00:00",
+        "scanner_name": "checkov",
+        "scanner_version": "3.3.16",
+        "severity": null
+      },
+      {
+        "description": "Ensure S3 buckets should have event notifications enabled",
+        "file_path": "/main.tf",
+        "line_end": 3,
+        "line_start": 1,
+        "outcome": "failed",
+        "raw_evidence": {
+          "bc_category": null,
+          "bc_check_id": null,
+          "benchmarks": {},
+          "caller_file_line_range": null,
+          "caller_file_path": null,
+          "check_class": "checkov.common.graph.checks_infra.base_check",
+          "check_id": "CKV2_AWS_62",
+          "check_len": null,
+          "check_name": "Ensure S3 buckets should have event notifications enabled",
+          "check_result": {
+            "entity": {
+              "aws_s3_bucket": {
+                "data": {
+                  "__address__": "aws_s3_bucket.data",
+                  "__end_line__": 3,
+                  "__start_line__": 1,
+                  "bucket": [
+                    "terraveritas-phase2e-bucket"
+                  ]
+                }
+              }
+            },
+            "evaluated_keys": [
+              "resource_type"
+            ],
+            "result": "FAILED"
+          },
+          "code_block": null,
+          "connected_node": null,
+          "definition_context_file_path": "/var/folders/3d/1nhgvqps0y96vkby6tmvzb6r0000gn/T/tmp9a817o77/main.tf",
+          "description": null,
+          "details": [],
+          "entity_tags": null,
+          "evaluations": null,
+          "file_abs_path": "/var/folders/3d/1nhgvqps0y96vkby6tmvzb6r0000gn/T/tmp9a817o77/main.tf",
+          "file_line_range": [
+            1,
+            3
+          ],
+          "file_path": "/main.tf",
+          "fixed_definition": null,
+          "guideline": null,
+          "repo_file_path": "/var/folders/3d/1nhgvqps0y96vkby6tmvzb6r0000gn/T/tmp9a817o77/main.tf",
+          "resource": "aws_s3_bucket.data",
+          "resource_address": null,
+          "severity": null,
+          "short_description": null,
+          "vulnerability_details": null
+        },
+        "resource_id": "aws_s3_bucket.data",
+        "resource_type": "aws_s3_bucket",
+        "rule_id": "CKV2_AWS_62",
+        "scan_timestamp": "2026-09-06T06:49:33.501083+00:00",
+        "scanner_name": "checkov",
+        "scanner_version": "3.3.16",
+        "severity": null
+      },
+      {
+        "description": "Ensure that S3 bucket has a Public Access block",
+        "file_path": "/main.tf",
+        "line_end": 3,
+        "line_start": 1,
+        "outcome": "failed",
+        "raw_evidence": {
+          "bc_category": null,
+          "bc_check_id": null,
+          "benchmarks": {},
+          "caller_file_line_range": null,
+          "caller_file_path": null,
+          "check_class": "checkov.common.graph.checks_infra.base_check",
+          "check_id": "CKV2_AWS_6",
+          "check_len": null,
+          "check_name": "Ensure that S3 bucket has a Public Access block",
+          "check_result": {
+            "entity": {
+              "aws_s3_bucket": {
+                "data": {
+                  "__address__": "aws_s3_bucket.data",
+                  "__end_line__": 3,
+                  "__start_line__": 1,
+                  "bucket": [
+                    "terraveritas-phase2e-bucket"
+                  ]
+                }
+              }
+            },
+            "evaluated_keys": [
+              "resource_type",
+              "block_public_policy",
+              "block_public_acls"
+            ],
+            "result": "FAILED"
+          },
+          "code_block": null,
+          "connected_node": null,
+          "definition_context_file_path": "/var/folders/3d/1nhgvqps0y96vkby6tmvzb6r0000gn/T/tmp9a817o77/main.tf",
+          "description": null,
+          "details": [],
+          "entity_tags": null,
+          "evaluations": null,
+          "file_abs_path": "/var/folders/3d/1nhgvqps0y96vkby6tmvzb6r0000gn/T/tmp9a817o77/main.tf",
+          "file_line_range": [
+            1,
+            3
+          ],
+          "file_path": "/main.tf",
+          "fixed_definition": null,
+          "guideline": null,
+          "repo_file_path": "/var/folders/3d/1nhgvqps0y96vkby6tmvzb6r0000gn/T/tmp9a817o77/main.tf",
+          "resource": "aws_s3_bucket.data",
+          "resource_address": null,
+          "severity": null,
+          "short_description": null,
+          "vulnerability_details": null
+        },
+        "resource_id": "aws_s3_bucket.data",
+        "resource_type": "aws_s3_bucket",
+        "rule_id": "CKV2_AWS_6",
+        "scan_timestamp": "2026-09-06T06:49:33.501083+00:00",
+        "scanner_name": "checkov",
+        "scanner_version": "3.3.16",
+        "severity": null
+      },
+      {
+        "description": "Ensure that an S3 bucket has a lifecycle configuration",
+        "file_path": "/main.tf",
+        "line_end": 3,
+        "line_start": 1,
+        "outcome": "failed",
+        "raw_evidence": {
+          "bc_category": null,
+          "bc_check_id": null,
+          "benchmarks": {},
+          "caller_file_line_range": null,
+          "caller_file_path": null,
+          "check_class": "checkov.common.graph.checks_infra.base_check",
+          "check_id": "CKV2_AWS_61",
+          "check_len": null,
+          "check_name": "Ensure that an S3 bucket has a lifecycle configuration",
+          "check_result": {
+            "entity": {
+              "aws_s3_bucket": {
+                "data": {
+                  "__address__": "aws_s3_bucket.data",
+                  "__end_line__": 3,
+                  "__start_line__": 1,
+                  "bucket": [
+                    "terraveritas-phase2e-bucket"
+                  ]
+                }
+              }
+            },
+            "evaluated_keys": [
+              "resource_type",
+              "lifecycle_rule"
+            ],
+            "result": "FAILED"
+          },
+          "code_block": null,
+          "connected_node": null,
+          "definition_context_file_path": "/var/folders/3d/1nhgvqps0y96vkby6tmvzb6r0000gn/T/tmp9a817o77/main.tf",
+          "description": null,
+          "details": [],
+          "entity_tags": null,
+          "evaluations": null,
+          "file_abs_path": "/var/folders/3d/1nhgvqps0y96vkby6tmvzb6r0000gn/T/tmp9a817o77/main.tf",
+          "file_line_range": [
+            1,
+            3
+          ],
+          "file_path": "/main.tf",
+          "fixed_definition": null,
+          "guideline": null,
+          "repo_file_path": "/var/folders/3d/1nhgvqps0y96vkby6tmvzb6r0000gn/T/tmp9a817o77/main.tf",
+          "resource": "aws_s3_bucket.data",
+          "resource_address": null,
+          "severity": null,
+          "short_description": null,
+          "vulnerability_details": null
+        },
+        "resource_id": "aws_s3_bucket.data",
+        "resource_type": "aws_s3_bucket",
+        "rule_id": "CKV2_AWS_61",
+        "scan_timestamp": "2026-09-06T06:49:33.501083+00:00",
+        "scanner_name": "checkov",
+        "scanner_version": "3.3.16",
+        "severity": null
+      },
+      {
+        "description": "Ensure the S3 bucket has access logging enabled",
+        "file_path": "/main.tf",
+        "line_end": 3,
+        "line_start": 1,
+        "outcome": "failed",
+        "raw_evidence": {
+          "bc_category": null,
+          "bc_check_id": null,
+          "benchmarks": {},
+          "caller_file_line_range": null,
+          "caller_file_path": null,
+          "check_class": "checkov.common.graph.checks_infra.base_check",
+          "check_id": "CKV_AWS_18",
+          "check_len": null,
+          "check_name": "Ensure the S3 bucket has access logging enabled",
+          "check_result": {
+            "entity": {
+              "aws_s3_bucket": {
+                "data": {
+                  "__address__": "aws_s3_bucket.data",
+                  "__end_line__": 3,
+                  "__start_line__": 1,
+                  "bucket": [
+                    "terraveritas-phase2e-bucket"
+                  ]
+                }
+              }
+            },
+            "evaluated_keys": [
+              "logging",
+              "resource_type"
+            ],
+            "result": "FAILED"
+          },
+          "code_block": null,
+          "connected_node": null,
+          "definition_context_file_path": "/var/folders/3d/1nhgvqps0y96vkby6tmvzb6r0000gn/T/tmp9a817o77/main.tf",
+          "description": null,
+          "details": [],
+          "entity_tags": null,
+          "evaluations": null,
+          "file_abs_path": "/var/folders/3d/1nhgvqps0y96vkby6tmvzb6r0000gn/T/tmp9a817o77/main.tf",
+          "file_line_range": [
+            1,
+            3
+          ],
+          "file_path": "/main.tf",
+          "fixed_definition": null,
+          "guideline": null,
+          "repo_file_path": "/var/folders/3d/1nhgvqps0y96vkby6tmvzb6r0000gn/T/tmp9a817o77/main.tf",
+          "resource": "aws_s3_bucket.data",
+          "resource_address": null,
+          "severity": null,
+          "short_description": null,
+          "vulnerability_details": null
+        },
+        "resource_id": "aws_s3_bucket.data",
+        "resource_type": "aws_s3_bucket",
+        "rule_id": "CKV_AWS_18",
+        "scan_timestamp": "2026-09-06T06:49:33.501083+00:00",
+        "scanner_name": "checkov",
+        "scanner_version": "3.3.16",
+        "severity": null
+      },
+      {
+        "description": "Ensure that S3 buckets are encrypted with KMS by default",
+        "file_path": "/main.tf",
+        "line_end": 3,
+        "line_start": 1,
+        "outcome": "failed",
+        "raw_evidence": {
+          "bc_category": null,
+          "bc_check_id": null,
+          "benchmarks": {},
+          "caller_file_line_range": null,
+          "caller_file_path": null,
+          "check_class": "checkov.common.graph.checks_infra.base_check",
+          "check_id": "CKV_AWS_145",
+          "check_len": null,
+          "check_name": "Ensure that S3 buckets are encrypted with KMS by default",
+          "check_result": {
+            "entity": {
+              "aws_s3_bucket": {
+                "data": {
+                  "__address__": "aws_s3_bucket.data",
+                  "__end_line__": 3,
+                  "__start_line__": 1,
+                  "bucket": [
+                    "terraveritas-phase2e-bucket"
+                  ]
+                }
+              }
+            },
+            "evaluated_keys": [
+              "resource_type",
+              "server_side_encryption_configuration/rule/apply_server_side_encryption_by_default/sse_algorithm",
+              "rule/apply_server_side_encryption_by_default/sse_algorithm"
+            ],
+            "result": "FAILED"
+          },
+          "code_block": null,
+          "connected_node": null,
+          "definition_context_file_path": "/var/folders/3d/1nhgvqps0y96vkby6tmvzb6r0000gn/T/tmp9a817o77/main.tf",
+          "description": null,
+          "details": [],
+          "entity_tags": null,
+          "evaluations": null,
+          "file_abs_path": "/var/folders/3d/1nhgvqps0y96vkby6tmvzb6r0000gn/T/tmp9a817o77/main.tf",
+          "file_line_range": [
+            1,
+            3
+          ],
+          "file_path": "/main.tf",
+          "fixed_definition": null,
+          "guideline": null,
+          "repo_file_path": "/var/folders/3d/1nhgvqps0y96vkby6tmvzb6r0000gn/T/tmp9a817o77/main.tf",
+          "resource": "aws_s3_bucket.data",
+          "resource_address": null,
+          "severity": null,
+          "short_description": null,
+          "vulnerability_details": null
+        },
+        "resource_id": "aws_s3_bucket.data",
+        "resource_type": "aws_s3_bucket",
+        "rule_id": "CKV_AWS_145",
+        "scan_timestamp": "2026-09-06T06:49:33.501083+00:00",
+        "scanner_name": "checkov",
+        "scanner_version": "3.3.16",
+        "severity": null
+      },
+      {
+        "description": "Ensure that S3 bucket has cross-region replication enabled",
+        "file_path": "/main.tf",
+        "line_end": 3,
+        "line_start": 1,
+        "outcome": "failed",
+        "raw_evidence": {
+          "bc_category": null,
+          "bc_check_id": null,
+          "benchmarks": {},
+          "caller_file_line_range": null,
+          "caller_file_path": null,
+          "check_class": "checkov.common.graph.checks_infra.base_check",
+          "check_id": "CKV_AWS_144",
+          "check_len": null,
+          "check_name": "Ensure that S3 bucket has cross-region replication enabled",
+          "check_result": {
+            "entity": {
+              "aws_s3_bucket": {
+                "data": {
+                  "__address__": "aws_s3_bucket.data",
+                  "__end_line__": 3,
+                  "__start_line__": 1,
+                  "bucket": [
+                    "terraveritas-phase2e-bucket"
+                  ]
+                }
+              }
+            },
+            "evaluated_keys": [
+              "resource_type",
+              "rule/*/status",
+              "replication_configuration/rules/*/status"
+            ],
+            "result": "FAILED"
+          },
+          "code_block": null,
+          "connected_node": null,
+          "definition_context_file_path": "/var/folders/3d/1nhgvqps0y96vkby6tmvzb6r0000gn/T/tmp9a817o77/main.tf",
+          "description": null,
+          "details": [],
+          "entity_tags": null,
+          "evaluations": null,
+          "file_abs_path": "/var/folders/3d/1nhgvqps0y96vkby6tmvzb6r0000gn/T/tmp9a817o77/main.tf",
+          "file_line_range": [
+            1,
+            3
+          ],
+          "file_path": "/main.tf",
+          "fixed_definition": null,
+          "guideline": null,
+          "repo_file_path": "/var/folders/3d/1nhgvqps0y96vkby6tmvzb6r0000gn/T/tmp9a817o77/main.tf",
+          "resource": "aws_s3_bucket.data",
+          "resource_address": null,
+          "severity": null,
+          "short_description": null,
+          "vulnerability_details": null
+        },
+        "resource_id": "aws_s3_bucket.data",
+        "resource_type": "aws_s3_bucket",
+        "rule_id": "CKV_AWS_144",
+        "scan_timestamp": "2026-09-06T06:49:33.501083+00:00",
+        "scanner_name": "checkov",
+        "scanner_version": "3.3.16",
+        "severity": null
+      },
+      {
+        "description": "Ensure all data stored in the S3 bucket have versioning enabled",
+        "file_path": "/main.tf",
+        "line_end": 3,
+        "line_start": 1,
+        "outcome": "failed",
+        "raw_evidence": {
+          "bc_category": null,
+          "bc_check_id": null,
+          "benchmarks": {},
+          "caller_file_line_range": null,
+          "caller_file_path": null,
+          "check_class": "checkov.common.graph.checks_infra.base_check",
+          "check_id": "CKV_AWS_21",
+          "check_len": null,
+          "check_name": "Ensure all data stored in the S3 bucket have versioning enabled",
+          "check_result": {
+            "entity": {
+              "aws_s3_bucket": {
+                "data": {
+                  "__address__": "aws_s3_bucket.data",
+                  "__end_line__": 3,
+                  "__start_line__": 1,
+                  "bucket": [
+                    "terraveritas-phase2e-bucket"
+                  ]
+                }
+              }
+            },
+            "evaluated_keys": [
+              "resource_type",
+              "versioning_configuration/status",
+              "versioning/enabled"
+            ],
+            "result": "FAILED"
+          },
+          "code_block": null,
+          "connected_node": null,
+          "definition_context_file_path": "/var/folders/3d/1nhgvqps0y96vkby6tmvzb6r0000gn/T/tmp9a817o77/main.tf",
+          "description": null,
+          "details": [],
+          "entity_tags": null,
+          "evaluations": null,
+          "file_abs_path": "/var/folders/3d/1nhgvqps0y96vkby6tmvzb6r0000gn/T/tmp9a817o77/main.tf",
+          "file_line_range": [
+            1,
+            3
+          ],
+          "file_path": "/main.tf",
+          "fixed_definition": null,
+          "guideline": null,
+          "repo_file_path": "/var/folders/3d/1nhgvqps0y96vkby6tmvzb6r0000gn/T/tmp9a817o77/main.tf",
+          "resource": "aws_s3_bucket.data",
+          "resource_address": null,
+          "severity": null,
+          "short_description": null,
+          "vulnerability_details": null
+        },
+        "resource_id": "aws_s3_bucket.data",
+        "resource_type": "aws_s3_bucket",
+        "rule_id": "CKV_AWS_21",
+        "scan_timestamp": "2026-09-06T06:49:33.501083+00:00",
+        "scanner_name": "checkov",
+        "scanner_version": "3.3.16",
+        "severity": null
+      }
+    ],
+    "finished_at": "2026-09-06T06:49:33.501083+00:00",
+    "scanner_name": "checkov",
+    "scanner_version": "3.3.16",
+    "started_at": "2026-09-06T06:49:31.259610+00:00",
+    "status": "success",
+    "target_path": "/var/folders/3d/1nhgvqps0y96vkby6tmvzb6r0000gn/T/tmp9a817o77",
+    "unparseable_files": []
+  },
+  "case_id": "cross_vendor_case_e_inconclusive-000",
+  "differential": {
+    "new": [],
+    "persistent": [
+      {
+        "after": {
+          "description": "Ensure that an S3 bucket has a lifecycle configuration",
+          "file_path": "/main.tf",
+          "line_end": 5,
+          "line_start": 3,
+          "outcome": "failed",
+          "raw_evidence": {
+            "bc_category": null,
+            "bc_check_id": null,
+            "benchmarks": {},
+            "caller_file_line_range": null,
+            "caller_file_path": null,
+            "check_class": "checkov.common.graph.checks_infra.base_check",
+            "check_id": "CKV2_AWS_61",
+            "check_len": null,
+            "check_name": "Ensure that an S3 bucket has a lifecycle configuration",
+            "check_result": {
+              "entity": {
+                "aws_s3_bucket": {
+                  "data": {
+                    "__address__": "aws_s3_bucket.data",
+                    "__end_line__": 5,
+                    "__start_line__": 3,
+                    "bucket": [
+                      "terraveritas-phase2e-bucket"
+                    ]
+                  }
+                }
+              },
+              "evaluated_keys": [
+                "lifecycle_rule",
+                "resource_type"
+              ],
+              "result": "FAILED"
+            },
+            "code_block": null,
+            "connected_node": null,
+            "definition_context_file_path": "/var/folders/3d/1nhgvqps0y96vkby6tmvzb6r0000gn/T/tmpuwsmwth7/main.tf",
+            "description": null,
+            "details": [],
+            "entity_tags": null,
+            "evaluations": null,
+            "file_abs_path": "/var/folders/3d/1nhgvqps0y96vkby6tmvzb6r0000gn/T/tmpuwsmwth7/main.tf",
+            "file_line_range": [
+              3,
+              5
+            ],
+            "file_path": "/main.tf",
+            "fixed_definition": null,
+            "guideline": null,
+            "repo_file_path": "/var/folders/3d/1nhgvqps0y96vkby6tmvzb6r0000gn/T/tmpuwsmwth7/main.tf",
+            "resource": "aws_s3_bucket.data",
+            "resource_address": null,
+            "severity": null,
+            "short_description": null,
+            "vulnerability_details": null
+          },
+          "resource_id": "aws_s3_bucket.data",
+          "resource_type": "aws_s3_bucket",
+          "rule_id": "CKV2_AWS_61",
+          "scan_timestamp": "2026-09-06T06:49:37.026587+00:00",
+          "scanner_name": "checkov",
+          "scanner_version": "3.3.16",
+          "severity": null
+        },
+        "before": {
+          "description": "Ensure that an S3 bucket has a lifecycle configuration",
+          "file_path": "/main.tf",
+          "line_end": 3,
+          "line_start": 1,
+          "outcome": "failed",
+          "raw_evidence": {
+            "bc_category": null,
+            "bc_check_id": null,
+            "benchmarks": {},
+            "caller_file_line_range": null,
+            "caller_file_path": null,
+            "check_class": "checkov.common.graph.checks_infra.base_check",
+            "check_id": "CKV2_AWS_61",
+            "check_len": null,
+            "check_name": "Ensure that an S3 bucket has a lifecycle configuration",
+            "check_result": {
+              "entity": {
+                "aws_s3_bucket": {
+                  "data": {
+                    "__address__": "aws_s3_bucket.data",
+                    "__end_line__": 3,
+                    "__start_line__": 1,
+                    "bucket": [
+                      "terraveritas-phase2e-bucket"
+                    ]
+                  }
+                }
+              },
+              "evaluated_keys": [
+                "resource_type",
+                "lifecycle_rule"
+              ],
+              "result": "FAILED"
+            },
+            "code_block": null,
+            "connected_node": null,
+            "definition_context_file_path": "/var/folders/3d/1nhgvqps0y96vkby6tmvzb6r0000gn/T/tmp9a817o77/main.tf",
+            "description": null,
+            "details": [],
+            "entity_tags": null,
+            "evaluations": null,
+            "file_abs_path": "/var/folders/3d/1nhgvqps0y96vkby6tmvzb6r0000gn/T/tmp9a817o77/main.tf",
+            "file_line_range": [
+              1,
+              3
+            ],
+            "file_path": "/main.tf",
+            "fixed_definition": null,
+            "guideline": null,
+            "repo_file_path": "/var/folders/3d/1nhgvqps0y96vkby6tmvzb6r0000gn/T/tmp9a817o77/main.tf",
+            "resource": "aws_s3_bucket.data",
+            "resource_address": null,
+            "severity": null,
+            "short_description": null,
+            "vulnerability_details": null
+          },
+          "resource_id": "aws_s3_bucket.data",
+          "resource_type": "aws_s3_bucket",
+          "rule_id": "CKV2_AWS_61",
+          "scan_timestamp": "2026-09-06T06:49:33.501083+00:00",
+          "scanner_name": "checkov",
+          "scanner_version": "3.3.16",
+          "severity": null
+        }
+      },
+      {
+        "after": {
+          "description": "Ensure the S3 bucket has access logging enabled",
+          "file_path": "/main.tf",
+          "line_end": 5,
+          "line_start": 3,
+          "outcome": "failed",
+          "raw_evidence": {
+            "bc_category": null,
+            "bc_check_id": null,
+            "benchmarks": {},
+            "caller_file_line_range": null,
+            "caller_file_path": null,
+            "check_class": "checkov.common.graph.checks_infra.base_check",
+            "check_id": "CKV_AWS_18",
+            "check_len": null,
+            "check_name": "Ensure the S3 bucket has access logging enabled",
+            "check_result": {
+              "entity": {
+                "aws_s3_bucket": {
+                  "data": {
+                    "__address__": "aws_s3_bucket.data",
+                    "__end_line__": 5,
+                    "__start_line__": 3,
+                    "bucket": [
+                      "terraveritas-phase2e-bucket"
+                    ]
+                  }
+                }
+              },
+              "evaluated_keys": [
+                "logging",
+                "resource_type"
+              ],
+              "result": "FAILED"
+            },
+            "code_block": null,
+            "connected_node": null,
+            "definition_context_file_path": "/var/folders/3d/1nhgvqps0y96vkby6tmvzb6r0000gn/T/tmpuwsmwth7/main.tf",
+            "description": null,
+            "details": [],
+            "entity_tags": null,
+            "evaluations": null,
+            "file_abs_path": "/var/folders/3d/1nhgvqps0y96vkby6tmvzb6r0000gn/T/tmpuwsmwth7/main.tf",
+            "file_line_range": [
+              3,
+              5
+            ],
+            "file_path": "/main.tf",
+            "fixed_definition": null,
+            "guideline": null,
+            "repo_file_path": "/var/folders/3d/1nhgvqps0y96vkby6tmvzb6r0000gn/T/tmpuwsmwth7/main.tf",
+            "resource": "aws_s3_bucket.data",
+            "resource_address": null,
+            "severity": null,
+            "short_description": null,
+            "vulnerability_details": null
+          },
+          "resource_id": "aws_s3_bucket.data",
+          "resource_type": "aws_s3_bucket",
+          "rule_id": "CKV_AWS_18",
+          "scan_timestamp": "2026-09-06T06:49:37.026587+00:00",
+          "scanner_name": "checkov",
+          "scanner_version": "3.3.16",
+          "severity": null
+        },
+        "before": {
+          "description": "Ensure the S3 bucket has access logging enabled",
+          "file_path": "/main.tf",
+          "line_end": 3,
+          "line_start": 1,
+          "outcome": "failed",
+          "raw_evidence": {
+            "bc_category": null,
+            "bc_check_id": null,
+            "benchmarks": {},
+            "caller_file_line_range": null,
+            "caller_file_path": null,
+            "check_class": "checkov.common.graph.checks_infra.base_check",
+            "check_id": "CKV_AWS_18",
+            "check_len": null,
+            "check_name": "Ensure the S3 bucket has access logging enabled",
+            "check_result": {
+              "entity": {
+                "aws_s3_bucket": {
+                  "data": {
+                    "__address__": "aws_s3_bucket.data",
+                    "__end_line__": 3,
+                    "__start_line__": 1,
+                    "bucket": [
+                      "terraveritas-phase2e-bucket"
+                    ]
+                  }
+                }
+              },
+              "evaluated_keys": [
+                "logging",
+                "resource_type"
+              ],
+              "result": "FAILED"
+            },
+            "code_block": null,
+            "connected_node": null,
+            "definition_context_file_path": "/var/folders/3d/1nhgvqps0y96vkby6tmvzb6r0000gn/T/tmp9a817o77/main.tf",
+            "description": null,
+            "details": [],
+            "entity_tags": null,
+            "evaluations": null,
+            "file_abs_path": "/var/folders/3d/1nhgvqps0y96vkby6tmvzb6r0000gn/T/tmp9a817o77/main.tf",
+            "file_line_range": [
+              1,
+              3
+            ],
+            "file_path": "/main.tf",
+            "fixed_definition": null,
+            "guideline": null,
+            "repo_file_path": "/var/folders/3d/1nhgvqps0y96vkby6tmvzb6r0000gn/T/tmp9a817o77/main.tf",
+            "resource": "aws_s3_bucket.data",
+            "resource_address": null,
+            "severity": null,
+            "short_description": null,
+            "vulnerability_details": null
+          },
+          "resource_id": "aws_s3_bucket.data",
+          "resource_type": "aws_s3_bucket",
+          "rule_id": "CKV_AWS_18",
+          "scan_timestamp": "2026-09-06T06:49:33.501083+00:00",
+          "scanner_name": "checkov",
+          "scanner_version": "3.3.16",
+          "severity": null
+        }
+      },
+      {
+        "after": {
+          "description": "Ensure that S3 bucket has cross-region replication enabled",
+          "file_path": "/main.tf",
+          "line_end": 5,
+          "line_start": 3,
+          "outcome": "failed",
+          "raw_evidence": {
+            "bc_category": null,
+            "bc_check_id": null,
+            "benchmarks": {},
+            "caller_file_line_range": null,
+            "caller_file_path": null,
+            "check_class": "checkov.common.graph.checks_infra.base_check",
+            "check_id": "CKV_AWS_144",
+            "check_len": null,
+            "check_name": "Ensure that S3 bucket has cross-region replication enabled",
+            "check_result": {
+              "entity": {
+                "aws_s3_bucket": {
+                  "data": {
+                    "__address__": "aws_s3_bucket.data",
+                    "__end_line__": 5,
+                    "__start_line__": 3,
+                    "bucket": [
+                      "terraveritas-phase2e-bucket"
+                    ]
+                  }
+                }
+              },
+              "evaluated_keys": [
+                "resource_type",
+                "replication_configuration/rules/*/status",
+                "rule/*/status"
+              ],
+              "result": "FAILED"
+            },
+            "code_block": null,
+            "connected_node": null,
+            "definition_context_file_path": "/var/folders/3d/1nhgvqps0y96vkby6tmvzb6r0000gn/T/tmpuwsmwth7/main.tf",
+            "description": null,
+            "details": [],
+            "entity_tags": null,
+            "evaluations": null,
+            "file_abs_path": "/var/folders/3d/1nhgvqps0y96vkby6tmvzb6r0000gn/T/tmpuwsmwth7/main.tf",
+            "file_line_range": [
+              3,
+              5
+            ],
+            "file_path": "/main.tf",
+            "fixed_definition": null,
+            "guideline": null,
+            "repo_file_path": "/var/folders/3d/1nhgvqps0y96vkby6tmvzb6r0000gn/T/tmpuwsmwth7/main.tf",
+            "resource": "aws_s3_bucket.data",
+            "resource_address": null,
+            "severity": null,
+            "short_description": null,
+            "vulnerability_details": null
+          },
+          "resource_id": "aws_s3_bucket.data",
+          "resource_type": "aws_s3_bucket",
+          "rule_id": "CKV_AWS_144",
+          "scan_timestamp": "2026-09-06T06:49:37.026587+00:00",
+          "scanner_name": "checkov",
+          "scanner_version": "3.3.16",
+          "severity": null
+        },
+        "before": {
+          "description": "Ensure that S3 bucket has cross-region replication enabled",
+          "file_path": "/main.tf",
+          "line_end": 3,
+          "line_start": 1,
+          "outcome": "failed",
+          "raw_evidence": {
+            "bc_category": null,
+            "bc_check_id": null,
+            "benchmarks": {},
+            "caller_file_line_range": null,
+            "caller_file_path": null,
+            "check_class": "checkov.common.graph.checks_infra.base_check",
+            "check_id": "CKV_AWS_144",
+            "check_len": null,
+            "check_name": "Ensure that S3 bucket has cross-region replication enabled",
+            "check_result": {
+              "entity": {
+                "aws_s3_bucket": {
+                  "data": {
+                    "__address__": "aws_s3_bucket.data",
+                    "__end_line__": 3,
+                    "__start_line__": 1,
+                    "bucket": [
+                      "terraveritas-phase2e-bucket"
+                    ]
+                  }
+                }
+              },
+              "evaluated_keys": [
+                "resource_type",
+                "rule/*/status",
+                "replication_configuration/rules/*/status"
+              ],
+              "result": "FAILED"
+            },
+            "code_block": null,
+            "connected_node": null,
+            "definition_context_file_path": "/var/folders/3d/1nhgvqps0y96vkby6tmvzb6r0000gn/T/tmp9a817o77/main.tf",
+            "description": null,
+            "details": [],
+            "entity_tags": null,
+            "evaluations": null,
+            "file_abs_path": "/var/folders/3d/1nhgvqps0y96vkby6tmvzb6r0000gn/T/tmp9a817o77/main.tf",
+            "file_line_range": [
+              1,
+              3
+            ],
+            "file_path": "/main.tf",
+            "fixed_definition": null,
+            "guideline": null,
+            "repo_file_path": "/var/folders/3d/1nhgvqps0y96vkby6tmvzb6r0000gn/T/tmp9a817o77/main.tf",
+            "resource": "aws_s3_bucket.data",
+            "resource_address": null,
+            "severity": null,
+            "short_description": null,
+            "vulnerability_details": null
+          },
+          "resource_id": "aws_s3_bucket.data",
+          "resource_type": "aws_s3_bucket",
+          "rule_id": "CKV_AWS_144",
+          "scan_timestamp": "2026-09-06T06:49:33.501083+00:00",
+          "scanner_name": "checkov",
+          "scanner_version": "3.3.16",
+          "severity": null
+        }
+      },
+      {
+        "after": {
+          "description": "Ensure S3 buckets should have event notifications enabled",
+          "file_path": "/main.tf",
+          "line_end": 5,
+          "line_start": 3,
+          "outcome": "failed",
+          "raw_evidence": {
+            "bc_category": null,
+            "bc_check_id": null,
+            "benchmarks": {},
+            "caller_file_line_range": null,
+            "caller_file_path": null,
+            "check_class": "checkov.common.graph.checks_infra.base_check",
+            "check_id": "CKV2_AWS_62",
+            "check_len": null,
+            "check_name": "Ensure S3 buckets should have event notifications enabled",
+            "check_result": {
+              "entity": {
+                "aws_s3_bucket": {
+                  "data": {
+                    "__address__": "aws_s3_bucket.data",
+                    "__end_line__": 5,
+                    "__start_line__": 3,
+                    "bucket": [
+                      "terraveritas-phase2e-bucket"
+                    ]
+                  }
+                }
+              },
+              "evaluated_keys": [
+                "resource_type"
+              ],
+              "result": "FAILED"
+            },
+            "code_block": null,
+            "connected_node": null,
+            "definition_context_file_path": "/var/folders/3d/1nhgvqps0y96vkby6tmvzb6r0000gn/T/tmpuwsmwth7/main.tf",
+            "description": null,
+            "details": [],
+            "entity_tags": null,
+            "evaluations": null,
+            "file_abs_path": "/var/folders/3d/1nhgvqps0y96vkby6tmvzb6r0000gn/T/tmpuwsmwth7/main.tf",
+            "file_line_range": [
+              3,
+              5
+            ],
+            "file_path": "/main.tf",
+            "fixed_definition": null,
+            "guideline": null,
+            "repo_file_path": "/var/folders/3d/1nhgvqps0y96vkby6tmvzb6r0000gn/T/tmpuwsmwth7/main.tf",
+            "resource": "aws_s3_bucket.data",
+            "resource_address": null,
+            "severity": null,
+            "short_description": null,
+            "vulnerability_details": null
+          },
+          "resource_id": "aws_s3_bucket.data",
+          "resource_type": "aws_s3_bucket",
+          "rule_id": "CKV2_AWS_62",
+          "scan_timestamp": "2026-09-06T06:49:37.026587+00:00",
+          "scanner_name": "checkov",
+          "scanner_version": "3.3.16",
+          "severity": null
+        },
+        "before": {
+          "description": "Ensure S3 buckets should have event notifications enabled",
+          "file_path": "/main.tf",
+          "line_end": 3,
+          "line_start": 1,
+          "outcome": "failed",
+          "raw_evidence": {
+            "bc_category": null,
+            "bc_check_id": null,
+            "benchmarks": {},
+            "caller_file_line_range": null,
+            "caller_file_path": null,
+            "check_class": "checkov.common.graph.checks_infra.base_check",
+            "check_id": "CKV2_AWS_62",
+            "check_len": null,
+            "check_name": "Ensure S3 buckets should have event notifications enabled",
+            "check_result": {
+              "entity": {
+                "aws_s3_bucket": {
+                  "data": {
+                    "__address__": "aws_s3_bucket.data",
+                    "__end_line__": 3,
+                    "__start_line__": 1,
+                    "bucket": [
+                      "terraveritas-phase2e-bucket"
+                    ]
+                  }
+                }
+              },
+              "evaluated_keys": [
+                "resource_type"
+              ],
+              "result": "FAILED"
+            },
+            "code_block": null,
+            "connected_node": null,
+            "definition_context_file_path": "/var/folders/3d/1nhgvqps0y96vkby6tmvzb6r0000gn/T/tmp9a817o77/main.tf",
+            "description": null,
+            "details": [],
+            "entity_tags": null,
+            "evaluations": null,
+            "file_abs_path": "/var/folders/3d/1nhgvqps0y96vkby6tmvzb6r0000gn/T/tmp9a817o77/main.tf",
+            "file_line_range": [
+              1,
+              3
+            ],
+            "file_path": "/main.tf",
+            "fixed_definition": null,
+            "guideline": null,
+            "repo_file_path": "/var/folders/3d/1nhgvqps0y96vkby6tmvzb6r0000gn/T/tmp9a817o77/main.tf",
+            "resource": "aws_s3_bucket.data",
+            "resource_address": null,
+            "severity": null,
+            "short_description": null,
+            "vulnerability_details": null
+          },
+          "resource_id": "aws_s3_bucket.data",
+          "resource_type": "aws_s3_bucket",
+          "rule_id": "CKV2_AWS_62",
+          "scan_timestamp": "2026-09-06T06:49:33.501083+00:00",
+          "scanner_name": "checkov",
+          "scanner_version": "3.3.16",
+          "severity": null
+        }
+      },
+      {
+        "after": {
+          "description": "Ensure all data stored in the S3 bucket have versioning enabled",
+          "file_path": "/main.tf",
+          "line_end": 5,
+          "line_start": 3,
+          "outcome": "failed",
+          "raw_evidence": {
+            "bc_category": null,
+            "bc_check_id": null,
+            "benchmarks": {},
+            "caller_file_line_range": null,
+            "caller_file_path": null,
+            "check_class": "checkov.common.graph.checks_infra.base_check",
+            "check_id": "CKV_AWS_21",
+            "check_len": null,
+            "check_name": "Ensure all data stored in the S3 bucket have versioning enabled",
+            "check_result": {
+              "entity": {
+                "aws_s3_bucket": {
+                  "data": {
+                    "__address__": "aws_s3_bucket.data",
+                    "__end_line__": 5,
+                    "__start_line__": 3,
+                    "bucket": [
+                      "terraveritas-phase2e-bucket"
+                    ]
+                  }
+                }
+              },
+              "evaluated_keys": [
+                "versioning/enabled",
+                "resource_type",
+                "versioning_configuration/status"
+              ],
+              "result": "FAILED"
+            },
+            "code_block": null,
+            "connected_node": null,
+            "definition_context_file_path": "/var/folders/3d/1nhgvqps0y96vkby6tmvzb6r0000gn/T/tmpuwsmwth7/main.tf",
+            "description": null,
+            "details": [],
+            "entity_tags": null,
+            "evaluations": null,
+            "file_abs_path": "/var/folders/3d/1nhgvqps0y96vkby6tmvzb6r0000gn/T/tmpuwsmwth7/main.tf",
+            "file_line_range": [
+              3,
+              5
+            ],
+            "file_path": "/main.tf",
+            "fixed_definition": null,
+            "guideline": null,
+            "repo_file_path": "/var/folders/3d/1nhgvqps0y96vkby6tmvzb6r0000gn/T/tmpuwsmwth7/main.tf",
+            "resource": "aws_s3_bucket.data",
+            "resource_address": null,
+            "severity": null,
+            "short_description": null,
+            "vulnerability_details": null
+          },
+          "resource_id": "aws_s3_bucket.data",
+          "resource_type": "aws_s3_bucket",
+          "rule_id": "CKV_AWS_21",
+          "scan_timestamp": "2026-09-06T06:49:37.026587+00:00",
+          "scanner_name": "checkov",
+          "scanner_version": "3.3.16",
+          "severity": null
+        },
+        "before": {
+          "description": "Ensure all data stored in the S3 bucket have versioning enabled",
+          "file_path": "/main.tf",
+          "line_end": 3,
+          "line_start": 1,
+          "outcome": "failed",
+          "raw_evidence": {
+            "bc_category": null,
+            "bc_check_id": null,
+            "benchmarks": {},
+            "caller_file_line_range": null,
+            "caller_file_path": null,
+            "check_class": "checkov.common.graph.checks_infra.base_check",
+            "check_id": "CKV_AWS_21",
+            "check_len": null,
+            "check_name": "Ensure all data stored in the S3 bucket have versioning enabled",
+            "check_result": {
+              "entity": {
+                "aws_s3_bucket": {
+                  "data": {
+                    "__address__": "aws_s3_bucket.data",
+                    "__end_line__": 3,
+                    "__start_line__": 1,
+                    "bucket": [
+                      "terraveritas-phase2e-bucket"
+                    ]
+                  }
+                }
+              },
+              "evaluated_keys": [
+                "resource_type",
+                "versioning_configuration/status",
+                "versioning/enabled"
+              ],
+              "result": "FAILED"
+            },
+            "code_block": null,
+            "connected_node": null,
+            "definition_context_file_path": "/var/folders/3d/1nhgvqps0y96vkby6tmvzb6r0000gn/T/tmp9a817o77/main.tf",
+            "description": null,
+            "details": [],
+            "entity_tags": null,
+            "evaluations": null,
+            "file_abs_path": "/var/folders/3d/1nhgvqps0y96vkby6tmvzb6r0000gn/T/tmp9a817o77/main.tf",
+            "file_line_range": [
+              1,
+              3
+            ],
+            "file_path": "/main.tf",
+            "fixed_definition": null,
+            "guideline": null,
+            "repo_file_path": "/var/folders/3d/1nhgvqps0y96vkby6tmvzb6r0000gn/T/tmp9a817o77/main.tf",
+            "resource": "aws_s3_bucket.data",
+            "resource_address": null,
+            "severity": null,
+            "short_description": null,
+            "vulnerability_details": null
+          },
+          "resource_id": "aws_s3_bucket.data",
+          "resource_type": "aws_s3_bucket",
+          "rule_id": "CKV_AWS_21",
+          "scan_timestamp": "2026-09-06T06:49:33.501083+00:00",
+          "scanner_name": "checkov",
+          "scanner_version": "3.3.16",
+          "severity": null
+        }
+      },
+      {
+        "after": {
+          "description": "Ensure that S3 buckets are encrypted with KMS by default",
+          "file_path": "/main.tf",
+          "line_end": 5,
+          "line_start": 3,
+          "outcome": "failed",
+          "raw_evidence": {
+            "bc_category": null,
+            "bc_check_id": null,
+            "benchmarks": {},
+            "caller_file_line_range": null,
+            "caller_file_path": null,
+            "check_class": "checkov.common.graph.checks_infra.base_check",
+            "check_id": "CKV_AWS_145",
+            "check_len": null,
+            "check_name": "Ensure that S3 buckets are encrypted with KMS by default",
+            "check_result": {
+              "entity": {
+                "aws_s3_bucket": {
+                  "data": {
+                    "__address__": "aws_s3_bucket.data",
+                    "__end_line__": 5,
+                    "__start_line__": 3,
+                    "bucket": [
+                      "terraveritas-phase2e-bucket"
+                    ]
+                  }
+                }
+              },
+              "evaluated_keys": [
+                "server_side_encryption_configuration/rule/apply_server_side_encryption_by_default/sse_algorithm",
+                "resource_type",
+                "rule/apply_server_side_encryption_by_default/sse_algorithm"
+              ],
+              "result": "FAILED"
+            },
+            "code_block": null,
+            "connected_node": null,
+            "definition_context_file_path": "/var/folders/3d/1nhgvqps0y96vkby6tmvzb6r0000gn/T/tmpuwsmwth7/main.tf",
+            "description": null,
+            "details": [],
+            "entity_tags": null,
+            "evaluations": null,
+            "file_abs_path": "/var/folders/3d/1nhgvqps0y96vkby6tmvzb6r0000gn/T/tmpuwsmwth7/main.tf",
+            "file_line_range": [
+              3,
+              5
+            ],
+            "file_path": "/main.tf",
+            "fixed_definition": null,
+            "guideline": null,
+            "repo_file_path": "/var/folders/3d/1nhgvqps0y96vkby6tmvzb6r0000gn/T/tmpuwsmwth7/main.tf",
+            "resource": "aws_s3_bucket.data",
+            "resource_address": null,
+            "severity": null,
+            "short_description": null,
+            "vulnerability_details": null
+          },
+          "resource_id": "aws_s3_bucket.data",
+          "resource_type": "aws_s3_bucket",
+          "rule_id": "CKV_AWS_145",
+          "scan_timestamp": "2026-09-06T06:49:37.026587+00:00",
+          "scanner_name": "checkov",
+          "scanner_version": "3.3.16",
+          "severity": null
+        },
+        "before": {
+          "description": "Ensure that S3 buckets are encrypted with KMS by default",
+          "file_path": "/main.tf",
+          "line_end": 3,
+          "line_start": 1,
+          "outcome": "failed",
+          "raw_evidence": {
+            "bc_category": null,
+            "bc_check_id": null,
+            "benchmarks": {},
+            "caller_file_line_range": null,
+            "caller_file_path": null,
+            "check_class": "checkov.common.graph.checks_infra.base_check",
+            "check_id": "CKV_AWS_145",
+            "check_len": null,
+            "check_name": "Ensure that S3 buckets are encrypted with KMS by default",
+            "check_result": {
+              "entity": {
+                "aws_s3_bucket": {
+                  "data": {
+                    "__address__": "aws_s3_bucket.data",
+                    "__end_line__": 3,
+                    "__start_line__": 1,
+                    "bucket": [
+                      "terraveritas-phase2e-bucket"
+                    ]
+                  }
+                }
+              },
+              "evaluated_keys": [
+                "resource_type",
+                "server_side_encryption_configuration/rule/apply_server_side_encryption_by_default/sse_algorithm",
+                "rule/apply_server_side_encryption_by_default/sse_algorithm"
+              ],
+              "result": "FAILED"
+            },
+            "code_block": null,
+            "connected_node": null,
+            "definition_context_file_path": "/var/folders/3d/1nhgvqps0y96vkby6tmvzb6r0000gn/T/tmp9a817o77/main.tf",
+            "description": null,
+            "details": [],
+            "entity_tags": null,
+            "evaluations": null,
+            "file_abs_path": "/var/folders/3d/1nhgvqps0y96vkby6tmvzb6r0000gn/T/tmp9a817o77/main.tf",
+            "file_line_range": [
+              1,
+              3
+            ],
+            "file_path": "/main.tf",
+            "fixed_definition": null,
+            "guideline": null,
+            "repo_file_path": "/var/folders/3d/1nhgvqps0y96vkby6tmvzb6r0000gn/T/tmp9a817o77/main.tf",
+            "resource": "aws_s3_bucket.data",
+            "resource_address": null,
+            "severity": null,
+            "short_description": null,
+            "vulnerability_details": null
+          },
+          "resource_id": "aws_s3_bucket.data",
+          "resource_type": "aws_s3_bucket",
+          "rule_id": "CKV_AWS_145",
+          "scan_timestamp": "2026-09-06T06:49:33.501083+00:00",
+          "scanner_name": "checkov",
+          "scanner_version": "3.3.16",
+          "severity": null
+        }
+      },
+      {
+        "after": {
+          "description": "Ensure that S3 bucket has a Public Access block",
+          "file_path": "/main.tf",
+          "line_end": 5,
+          "line_start": 3,
+          "outcome": "failed",
+          "raw_evidence": {
+            "bc_category": null,
+            "bc_check_id": null,
+            "benchmarks": {},
+            "caller_file_line_range": null,
+            "caller_file_path": null,
+            "check_class": "checkov.common.graph.checks_infra.base_check",
+            "check_id": "CKV2_AWS_6",
+            "check_len": null,
+            "check_name": "Ensure that S3 bucket has a Public Access block",
+            "check_result": {
+              "entity": {
+                "aws_s3_bucket": {
+                  "data": {
+                    "__address__": "aws_s3_bucket.data",
+                    "__end_line__": 5,
+                    "__start_line__": 3,
+                    "bucket": [
+                      "terraveritas-phase2e-bucket"
+                    ]
+                  }
+                }
+              },
+              "evaluated_keys": [
+                "block_public_acls",
+                "resource_type",
+                "block_public_policy"
+              ],
+              "result": "FAILED"
+            },
+            "code_block": null,
+            "connected_node": null,
+            "definition_context_file_path": "/var/folders/3d/1nhgvqps0y96vkby6tmvzb6r0000gn/T/tmpuwsmwth7/main.tf",
+            "description": null,
+            "details": [],
+            "entity_tags": null,
+            "evaluations": null,
+            "file_abs_path": "/var/folders/3d/1nhgvqps0y96vkby6tmvzb6r0000gn/T/tmpuwsmwth7/main.tf",
+            "file_line_range": [
+              3,
+              5
+            ],
+            "file_path": "/main.tf",
+            "fixed_definition": null,
+            "guideline": null,
+            "repo_file_path": "/var/folders/3d/1nhgvqps0y96vkby6tmvzb6r0000gn/T/tmpuwsmwth7/main.tf",
+            "resource": "aws_s3_bucket.data",
+            "resource_address": null,
+            "severity": null,
+            "short_description": null,
+            "vulnerability_details": null
+          },
+          "resource_id": "aws_s3_bucket.data",
+          "resource_type": "aws_s3_bucket",
+          "rule_id": "CKV2_AWS_6",
+          "scan_timestamp": "2026-09-06T06:49:37.026587+00:00",
+          "scanner_name": "checkov",
+          "scanner_version": "3.3.16",
+          "severity": null
+        },
+        "before": {
+          "description": "Ensure that S3 bucket has a Public Access block",
+          "file_path": "/main.tf",
+          "line_end": 3,
+          "line_start": 1,
+          "outcome": "failed",
+          "raw_evidence": {
+            "bc_category": null,
+            "bc_check_id": null,
+            "benchmarks": {},
+            "caller_file_line_range": null,
+            "caller_file_path": null,
+            "check_class": "checkov.common.graph.checks_infra.base_check",
+            "check_id": "CKV2_AWS_6",
+            "check_len": null,
+            "check_name": "Ensure that S3 bucket has a Public Access block",
+            "check_result": {
+              "entity": {
+                "aws_s3_bucket": {
+                  "data": {
+                    "__address__": "aws_s3_bucket.data",
+                    "__end_line__": 3,
+                    "__start_line__": 1,
+                    "bucket": [
+                      "terraveritas-phase2e-bucket"
+                    ]
+                  }
+                }
+              },
+              "evaluated_keys": [
+                "resource_type",
+                "block_public_policy",
+                "block_public_acls"
+              ],
+              "result": "FAILED"
+            },
+            "code_block": null,
+            "connected_node": null,
+            "definition_context_file_path": "/var/folders/3d/1nhgvqps0y96vkby6tmvzb6r0000gn/T/tmp9a817o77/main.tf",
+            "description": null,
+            "details": [],
+            "entity_tags": null,
+            "evaluations": null,
+            "file_abs_path": "/var/folders/3d/1nhgvqps0y96vkby6tmvzb6r0000gn/T/tmp9a817o77/main.tf",
+            "file_line_range": [
+              1,
+              3
+            ],
+            "file_path": "/main.tf",
+            "fixed_definition": null,
+            "guideline": null,
+            "repo_file_path": "/var/folders/3d/1nhgvqps0y96vkby6tmvzb6r0000gn/T/tmp9a817o77/main.tf",
+            "resource": "aws_s3_bucket.data",
+            "resource_address": null,
+            "severity": null,
+            "short_description": null,
+            "vulnerability_details": null
+          },
+          "resource_id": "aws_s3_bucket.data",
+          "resource_type": "aws_s3_bucket",
+          "rule_id": "CKV2_AWS_6",
+          "scan_timestamp": "2026-09-06T06:49:33.501083+00:00",
+          "scanner_name": "checkov",
+          "scanner_version": "3.3.16",
+          "severity": null
+        }
+      }
+    ],
+    "relocated": [],
+    "removed": [
+      {
+        "before": {
+          "description": "Ensure S3 bucket does not allow an action with any Principal",
+          "file_path": "/main.tf",
+          "line_end": 18,
+          "line_start": 5,
+          "outcome": "failed",
+          "raw_evidence": {
+            "bc_category": null,
+            "bc_check_id": null,
+            "benchmarks": {},
+            "caller_file_line_range": null,
+            "caller_file_path": null,
+            "check_class": "checkov.terraform.checks.resource.aws.S3AllowsAnyPrincipal",
+            "check_id": "CKV_AWS_70",
+            "check_len": null,
+            "check_name": "Ensure S3 bucket does not allow an action with any Principal",
+            "check_result": {
+              "evaluated_keys": [
+                "policy"
+              ],
+              "result": "FAILED"
+            },
+            "code_block": null,
+            "connected_node": null,
+            "definition_context_file_path": "/var/folders/3d/1nhgvqps0y96vkby6tmvzb6r0000gn/T/tmp9a817o77/main.tf",
+            "description": null,
+            "details": [],
+            "entity_tags": null,
+            "evaluations": null,
+            "file_abs_path": "/var/folders/3d/1nhgvqps0y96vkby6tmvzb6r0000gn/T/tmp9a817o77/main.tf",
+            "file_line_range": [
+              5,
+              18
+            ],
+            "file_path": "/main.tf",
+            "fixed_definition": null,
+            "guideline": null,
+            "repo_file_path": "/var/folders/3d/1nhgvqps0y96vkby6tmvzb6r0000gn/T/tmp9a817o77/main.tf",
+            "resource": "aws_s3_bucket_policy.data",
+            "resource_address": null,
+            "severity": null,
+            "short_description": null,
+            "vulnerability_details": null
+          },
+          "resource_id": "aws_s3_bucket_policy.data",
+          "resource_type": "aws_s3_bucket_policy",
+          "rule_id": "CKV_AWS_70",
+          "scan_timestamp": "2026-09-06T06:49:33.501083+00:00",
+          "scanner_name": "checkov",
+          "scanner_version": "3.3.16",
+          "severity": null
+        },
+        "resource_still_present_in_after": true,
+        "same_identity_now_passes": true
+      }
+    ],
+    "scanner_name": "checkov"
+  },
+  "environment": {
+    "checkov_version": "3.3.16",
+    "git_commit": "7ee2ff7f25db438a3322063007f4e336543ed256",
+    "platform": "macOS-26.5.2-arm64-arm-64bit-Mach-O",
+    "python_version": "3.13.0",
+    "terraform_version": "1.14.3"
+  },
+  "environment_anomalies": [],
+  "experiment_id": "2026-09-06-cross-vendor-pilot-gemini",
+  "extracted_terraform": "data \"aws_caller_identity\" \"current\" {}\n\nresource \"aws_s3_bucket\" \"data\" {\n  bucket = \"terraveritas-phase2e-bucket\"\n}\n\nresource \"aws_s3_bucket_policy\" \"data\" {\n  bucket = aws_s3_bucket.data.id\n  policy = jsonencode({\n    Version = \"2012-10-17\"\n    Statement = [\n      {\n        Effect = \"Allow\"\n        Principal = {\n          AWS = \"arn:aws:iam::${data.aws_caller_identity.current.account_id}:root\"\n        }\n        Action   = \"s3:GetObject\"\n        Resource = \"${aws_s3_bucket.data.arn}/*\"\n      }\n    ]\n  })\n}",
+  "generated_at": "2026-09-06T06:49:31.258891+00:00",
+  "human_label": null,
+  "model_version": "gemini-3.6-flash",
+  "oracle_verdict": {
+    "classification": "inconclusive",
+    "confidence": "low",
+    "evidence_used": [
+      "before plan (plan_success)",
+      "after plan (plan_provider_failure)",
+      "before invariant evaluation (unknown)",
+      "after invariant evaluation (unknown)",
+      "checkov differential"
+    ],
+    "invariant_id": "S3_PUBLIC_ACCESS_EXPOSURE",
+    "reasons": [
+      "before-state evaluation inconclusive: bucket policy content could not be evaluated at plan time (known after apply), and no independent violation was found on the resolvable side(s)",
+      "after-state evaluation inconclusive: plan did not succeed (status=plan_provider_failure)"
+    ],
+    "remaining_uncertainty": [
+      "insufficient evidence to determine whether the security property holds"
+    ],
+    "resource_address": "aws_s3_bucket.data"
+  },
+  "original_security_issue_description": "Ensure S3 bucket does not allow an action with any Principal",
+  "original_security_issue_rule_id": "CKV_AWS_70",
+  "original_terraform": "resource \"aws_s3_bucket\" \"data\" {\n  bucket = \"terraveritas-phase2e-bucket\"\n}\n\nresource \"aws_s3_bucket_policy\" \"data\" {\n  bucket = aws_s3_bucket.data.id\n  policy = jsonencode({\n    Version = \"2012-10-17\"\n    Statement = [\n      {\n        Effect    = \"Allow\"\n        Principal = \"*\"\n        Action    = \"s3:GetObject\"\n        Resource  = \"${aws_s3_bucket.data.arn}/*\"\n      }\n    ]\n  })\n}\n",
+  "original_terraform_sha256": "704299bd2610b228ebf8cf9d3306db7427469d56996424f0fe5f874b1fddf386",
+  "prompt_template_id": "phase2_negative_case_v1",
+  "raw_ai_output": "To fix the `CKV_AWS_70` finding, the wildcard `Principal = \"*\"` was replaced with a specific AWS account principal using the `aws_caller_identity` data source, restricting bucket access to the current AWS account instead of allowing public/anonymous access.\n\n```hcl\ndata \"aws_caller_identity\" \"current\" {}\n\nresource \"aws_s3_bucket\" \"data\" {\n  bucket = \"terraveritas-phase2e-bucket\"\n}\n\nresource \"aws_s3_bucket_policy\" \"data\" {\n  bucket = aws_s3_bucket.data.id\n  policy = jsonencode({\n    Version = \"2012-10-17\"\n    Statement = [\n      {\n        Effect = \"Allow\"\n        Principal = {\n          AWS = \"arn:aws:iam::${data.aws_caller_identity.current.account_id}:root\"\n        }\n        Action   = \"s3:GetObject\"\n        Resource = \"${aws_s3_bucket.data.arn}/*\"\n      }\n    ]\n  })\n}\n```\n",
+  "rendered_prompt": "check: CKV_AWS_70 (Ensure S3 bucket does not allow an action with any Principal)\n[see fixtures/terraform/phase2_case_e_inconclusive/main.tf for full prompt content -- identical prompt text to the corresponding Phase 2/3 case]",
+  "scanner_baseline": {
+    "broad_conclusion": "fix_accepted",
+    "broad_reason": "no public-access-relevant rule fails in the after-scan",
+    "narrow_conclusion": "fix_accepted",
+    "narrow_reason": "CKV_AWS_70 no longer fails in the after-scan; nothing new appeared"
+  },
+  "system_configuration": {
+    "max_output_tokens": null,
+    "other_parameters": {
+      "invocation": "direct REST API call to generativelanguage.googleapis.com, no tools, no system prompt beyond the rendered prompt itself, blind to this project's research purpose, oracle, or evaluation criteria",
+      "multi_vendor": true,
+      "note": "Google (Gemini), not Anthropic -- the first genuinely independent-vendor repair source in this project's dataset."
+    },
+    "temperature": null
+  },
+  "vulnerability_class": "S3_PUBLIC_ACCESS_EXPOSURE"
+}

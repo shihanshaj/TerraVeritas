@@ -1,0 +1,9 @@
+{
+  "experiment_id": "2026-09-06-cross-vendor-pilot-gemini",
+  "matrix_cells": [
+    "cross_vendor_case_a_genuine_fix-000",
+    "cross_vendor_case_b_partial_fix-000",
+    "cross_vendor_case_e_inconclusive-000"
+  ],
+  "record_count": 3
+}
