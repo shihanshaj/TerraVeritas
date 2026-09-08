@@ -1,0 +1,2814 @@
+{
+  "after_invariant": {
+    "evidence": {},
+    "invariant_id": "IAM_EXCESSIVE_PRIVILEGE_EXPOSURE",
+    "reason": "inline policy content could not be evaluated at plan time for: ['aws_iam_role_policy.data'], and no independent violation was found on the resolvable policies",
+    "related_resource_addresses": [
+      "aws_iam_role.data",
+      "aws_iam_role_policy.data"
+    ],
+    "resource_address": "aws_iam_role.data",
+    "status": "unknown",
+    "violated_conditions": []
+  },
+  "after_plan": {
+    "commands_run": [
+      [
+        "terraform",
+        "init",
+        "-input=false",
+        "-no-color"
+      ],
+      [
+        "terraform",
+        "validate",
+        "-no-color",
+        "-json"
+      ],
+      [
+        "terraform",
+        "plan",
+        "-input=false",
+        "-no-color",
+        "-json",
+        "-out=tfplan"
+      ],
+      [
+        "terraform",
+        "show",
+        "-json",
+        "tfplan"
+      ]
+    ],
+    "error_message": null,
+    "finished_at": "2026-09-07T05:16:05.342830+00:00",
+    "raw_plan_json": {
+      "applyable": true,
+      "complete": true,
+      "configuration": {
+        "provider_config": {
+          "aws": {
+            "expressions": {
+              "access_key": "[REDACTED]",
+              "region": {
+                "constant_value": "us-east-1"
+              },
+              "secret_key": "[REDACTED]",
+              "skip_credentials_validation": {
+                "constant_value": true
+              },
+              "skip_metadata_api_check": {
+                "constant_value": true
+              },
+              "skip_requesting_account_id": {
+                "constant_value": true
+              }
+            },
+            "full_name": "registry.terraform.io/hashicorp/aws",
+            "name": "aws",
+            "version_constraint": "5.100.0"
+          }
+        },
+        "root_module": {
+          "resources": [
+            {
+              "address": "aws_iam_role.data",
+              "expressions": {
+                "assume_role_policy": {},
+                "name": {
+                  "constant_value": "terraveritas-iam-d-role"
+                }
+              },
+              "mode": "managed",
+              "name": "data",
+              "provider_config_key": "aws",
+              "schema_version": 0,
+              "type": "aws_iam_role"
+            },
+            {
+              "address": "aws_iam_role_policy.data",
+              "expressions": {
+                "name": {
+                  "constant_value": "terraveritas-iam-d-policy"
+                },
+                "policy": {
+                  "references": [
+                    "aws_iam_role.data.unique_id",
+                    "aws_iam_role.data"
+                  ]
+                },
+                "role": {
+                  "references": [
+                    "aws_iam_role.data.id",
+                    "aws_iam_role.data"
+                  ]
+                }
+              },
+              "mode": "managed",
+              "name": "data",
+              "provider_config_key": "aws",
+              "schema_version": 0,
+              "type": "aws_iam_role_policy"
+            }
+          ]
+        }
+      },
+      "errored": false,
+      "format_version": "1.2",
+      "planned_values": {
+        "root_module": {
+          "resources": [
+            {
+              "address": "aws_iam_role.data",
+              "mode": "managed",
+              "name": "data",
+              "provider_name": "registry.terraform.io/hashicorp/aws",
+              "schema_version": 0,
+              "sensitive_values": {
+                "inline_policy": [],
+                "managed_policy_arns": [],
+                "tags_all": {}
+              },
+              "type": "aws_iam_role",
+              "values": {
+                "assume_role_policy": "{\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Effect\":\"Allow\",\"Principal\":{\"Service\":\"lambda.amazonaws.com\"}}],\"Version\":\"2012-10-17\"}",
+                "description": null,
+                "force_detach_policies": false,
+                "max_session_duration": 3600,
+                "name": "terraveritas-iam-d-role",
+                "path": "/",
+                "permissions_boundary": null,
+                "tags": null
+              }
+            },
+            {
+              "address": "aws_iam_role_policy.data",
+              "mode": "managed",
+              "name": "data",
+              "provider_name": "registry.terraform.io/hashicorp/aws",
+              "schema_version": 0,
+              "sensitive_values": {},
+              "type": "aws_iam_role_policy",
+              "values": {
+                "name": "terraveritas-iam-d-policy"
+              }
+            }
+          ]
+        }
+      },
+      "relevant_attributes": [
+        {
+          "attribute": [
+            "id"
+          ],
+          "resource": "aws_iam_role.data"
+        },
+        {
+          "attribute": [
+            "unique_id"
+          ],
+          "resource": "aws_iam_role.data"
+        }
+      ],
+      "resource_changes": [
+        {
+          "address": "aws_iam_role.data",
+          "change": {
+            "actions": [
+              "create"
+            ],
+            "after": {
+              "assume_role_policy": "{\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Effect\":\"Allow\",\"Principal\":{\"Service\":\"lambda.amazonaws.com\"}}],\"Version\":\"2012-10-17\"}",
+              "description": null,
+              "force_detach_policies": false,
+              "max_session_duration": 3600,
+              "name": "terraveritas-iam-d-role",
+              "path": "/",
+              "permissions_boundary": null,
+              "tags": null
+            },
+            "after_sensitive": {
+              "inline_policy": [],
+              "managed_policy_arns": [],
+              "tags_all": {}
+            },
+            "after_unknown": {
+              "arn": true,
+              "create_date": true,
+              "id": true,
+              "inline_policy": true,
+              "managed_policy_arns": true,
+              "name_prefix": true,
+              "tags_all": true,
+              "unique_id": true
+            },
+            "before": null,
+            "before_sensitive": false
+          },
+          "mode": "managed",
+          "name": "data",
+          "provider_name": "registry.terraform.io/hashicorp/aws",
+          "type": "aws_iam_role"
+        },
+        {
+          "address": "aws_iam_role_policy.data",
+          "change": {
+            "actions": [
+              "create"
+            ],
+            "after": {
+              "name": "terraveritas-iam-d-policy"
+            },
+            "after_sensitive": {},
+            "after_unknown": {
+              "id": true,
+              "name_prefix": true,
+              "policy": true,
+              "role": true
+            },
+            "before": null,
+            "before_sensitive": false
+          },
+          "mode": "managed",
+          "name": "data",
+          "provider_name": "registry.terraform.io/hashicorp/aws",
+          "type": "aws_iam_role_policy"
+        }
+      ],
+      "terraform_version": "1.14.3",
+      "timestamp": "2026-09-07T05:16:03Z"
+    },
+    "resource_changes": [
+      {
+        "actions": [
+          "create"
+        ],
+        "address": "aws_iam_role.data",
+        "after": {
+          "assume_role_policy": "{\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Effect\":\"Allow\",\"Principal\":{\"Service\":\"lambda.amazonaws.com\"}}],\"Version\":\"2012-10-17\"}",
+          "description": null,
+          "force_detach_policies": false,
+          "max_session_duration": 3600,
+          "name": "terraveritas-iam-d-role",
+          "path": "/",
+          "permissions_boundary": null,
+          "tags": null
+        },
+        "after_unknown_keys": [
+          "arn",
+          "create_date",
+          "id",
+          "inline_policy",
+          "managed_policy_arns",
+          "name_prefix",
+          "tags_all",
+          "unique_id"
+        ],
+        "provider_name": "registry.terraform.io/hashicorp/aws",
+        "resource_name": "data",
+        "resource_type": "aws_iam_role"
+      },
+      {
+        "actions": [
+          "create"
+        ],
+        "address": "aws_iam_role_policy.data",
+        "after": {
+          "name": "terraveritas-iam-d-policy"
+        },
+        "after_unknown_keys": [
+          "id",
+          "name_prefix",
+          "policy",
+          "role"
+        ],
+        "provider_name": "registry.terraform.io/hashicorp/aws",
+        "resource_name": "data",
+        "resource_type": "aws_iam_role_policy"
+      }
+    ],
+    "started_at": "2026-09-07T05:15:58.826078+00:00",
+    "status": "plan_success",
+    "target_path": "/var/folders/3d/1nhgvqps0y96vkby6tmvzb6r0000gn/T/tmpco13l1xe",
+    "terraform_version": "1.14.3"
+  },
+  "after_plan_status": "plan_success",
+  "after_scan": {
+    "command": [
+      "checkov",
+      "-d",
+      "/var/folders/3d/1nhgvqps0y96vkby6tmvzb6r0000gn/T/tmpe9csez24",
+      "-o",
+      "json",
+      "--compact",
+      "--framework",
+      "terraform",
+      "--skip-download"
+    ],
+    "error_message": null,
+    "exit_code": 0,
+    "findings": [
+      {
+        "description": "Disallow IAM roles, users, and groups from using the AWS AdministratorAccess policy",
+        "file_path": "/main.tf",
+        "line_end": 16,
+        "line_start": 1,
+        "outcome": "passed",
+        "raw_evidence": {
+          "bc_category": null,
+          "bc_check_id": null,
+          "benchmarks": {},
+          "caller_file_line_range": null,
+          "caller_file_path": null,
+          "check_class": "checkov.terraform.checks.resource.aws.IAMManagedAdminPolicy",
+          "check_id": "CKV_AWS_274",
+          "check_len": null,
+          "check_name": "Disallow IAM roles, users, and groups from using the AWS AdministratorAccess policy",
+          "check_result": {
+            "evaluated_keys": [],
+            "result": "PASSED"
+          },
+          "code_block": null,
+          "connected_node": null,
+          "definition_context_file_path": "/var/folders/3d/1nhgvqps0y96vkby6tmvzb6r0000gn/T/tmpe9csez24/main.tf",
+          "description": null,
+          "details": [],
+          "entity_tags": null,
+          "evaluations": null,
+          "file_abs_path": "/var/folders/3d/1nhgvqps0y96vkby6tmvzb6r0000gn/T/tmpe9csez24/main.tf",
+          "file_line_range": [
+            1,
+            16
+          ],
+          "file_path": "/main.tf",
+          "fixed_definition": null,
+          "guideline": null,
+          "repo_file_path": "/var/folders/3d/1nhgvqps0y96vkby6tmvzb6r0000gn/T/tmpe9csez24/main.tf",
+          "resource": "aws_iam_role.data",
+          "resource_address": null,
+          "severity": null,
+          "short_description": null,
+          "vulnerability_details": null
+        },
+        "resource_id": "aws_iam_role.data",
+        "resource_type": "aws_iam_role",
+        "rule_id": "CKV_AWS_274",
+        "scan_timestamp": "2026-09-07T05:15:49.903399+00:00",
+        "scanner_name": "checkov",
+        "scanner_version": "3.3.16",
+        "severity": null
+      },
+      {
+        "description": "Ensure AWS GitHub Actions OIDC authorization policies only allow safe claims and claim order on IAM role",
+        "file_path": "/main.tf",
+        "line_end": 16,
+        "line_start": 1,
+        "outcome": "passed",
+        "raw_evidence": {
+          "bc_category": null,
+          "bc_check_id": null,
+          "benchmarks": {},
+          "caller_file_line_range": null,
+          "caller_file_path": null,
+          "check_class": "checkov.terraform.checks.resource.aws.GithubActionsOIDCTrustPolicyOnRole",
+          "check_id": "CKV_AWS_393",
+          "check_len": null,
+          "check_name": "Ensure AWS GitHub Actions OIDC authorization policies only allow safe claims and claim order on IAM role",
+          "check_result": {
+            "evaluated_keys": [
+              "assume_role_policy"
+            ],
+            "result": "PASSED"
+          },
+          "code_block": null,
+          "connected_node": null,
+          "definition_context_file_path": "/var/folders/3d/1nhgvqps0y96vkby6tmvzb6r0000gn/T/tmpe9csez24/main.tf",
+          "description": null,
+          "details": [],
+          "entity_tags": null,
+          "evaluations": null,
+          "file_abs_path": "/var/folders/3d/1nhgvqps0y96vkby6tmvzb6r0000gn/T/tmpe9csez24/main.tf",
+          "file_line_range": [
+            1,
+            16
+          ],
+          "file_path": "/main.tf",
+          "fixed_definition": null,
+          "guideline": null,
+          "repo_file_path": "/var/folders/3d/1nhgvqps0y96vkby6tmvzb6r0000gn/T/tmpe9csez24/main.tf",
+          "resource": "aws_iam_role.data",
+          "resource_address": null,
+          "severity": null,
+          "short_description": null,
+          "vulnerability_details": null
+        },
+        "resource_id": "aws_iam_role.data",
+        "resource_type": "aws_iam_role",
+        "rule_id": "CKV_AWS_393",
+        "scan_timestamp": "2026-09-07T05:15:49.903399+00:00",
+        "scanner_name": "checkov",
+        "scanner_version": "3.3.16",
+        "severity": null
+      },
+      {
+        "description": "Ensure AWS IAM policy does not allow assume role permission across all services",
+        "file_path": "/main.tf",
+        "line_end": 16,
+        "line_start": 1,
+        "outcome": "passed",
+        "raw_evidence": {
+          "bc_category": null,
+          "bc_check_id": null,
+          "benchmarks": {},
+          "caller_file_line_range": null,
+          "caller_file_path": null,
+          "check_class": "checkov.terraform.checks.resource.aws.IAMRoleAllowAssumeFromAccount",
+          "check_id": "CKV_AWS_61",
+          "check_len": null,
+          "check_name": "Ensure AWS IAM policy does not allow assume role permission across all services",
+          "check_result": {
+            "evaluated_keys": [
+              "assume_role_policy"
+            ],
+            "result": "PASSED"
+          },
+          "code_block": null,
+          "connected_node": null,
+          "definition_context_file_path": "/var/folders/3d/1nhgvqps0y96vkby6tmvzb6r0000gn/T/tmpe9csez24/main.tf",
+          "description": null,
+          "details": [],
+          "entity_tags": null,
+          "evaluations": null,
+          "file_abs_path": "/var/folders/3d/1nhgvqps0y96vkby6tmvzb6r0000gn/T/tmpe9csez24/main.tf",
+          "file_line_range": [
+            1,
+            16
+          ],
+          "file_path": "/main.tf",
+          "fixed_definition": null,
+          "guideline": null,
+          "repo_file_path": "/var/folders/3d/1nhgvqps0y96vkby6tmvzb6r0000gn/T/tmpe9csez24/main.tf",
+          "resource": "aws_iam_role.data",
+          "resource_address": null,
+          "severity": null,
+          "short_description": null,
+          "vulnerability_details": null
+        },
+        "resource_id": "aws_iam_role.data",
+        "resource_type": "aws_iam_role",
+        "rule_id": "CKV_AWS_61",
+        "scan_timestamp": "2026-09-07T05:15:49.903399+00:00",
+        "scanner_name": "checkov",
+        "scanner_version": "3.3.16",
+        "severity": null
+      },
+      {
+        "description": "Ensure IAM role allows only specific services or principals to assume it",
+        "file_path": "/main.tf",
+        "line_end": 16,
+        "line_start": 1,
+        "outcome": "passed",
+        "raw_evidence": {
+          "bc_category": null,
+          "bc_check_id": null,
+          "benchmarks": {},
+          "caller_file_line_range": null,
+          "caller_file_path": null,
+          "check_class": "checkov.terraform.checks.resource.aws.IAMRoleAllowsPublicAssume",
+          "check_id": "CKV_AWS_60",
+          "check_len": null,
+          "check_name": "Ensure IAM role allows only specific services or principals to assume it",
+          "check_result": {
+            "evaluated_keys": [
+              "assume_role_policy"
+            ],
+            "result": "PASSED"
+          },
+          "code_block": null,
+          "connected_node": null,
+          "definition_context_file_path": "/var/folders/3d/1nhgvqps0y96vkby6tmvzb6r0000gn/T/tmpe9csez24/main.tf",
+          "description": null,
+          "details": [],
+          "entity_tags": null,
+          "evaluations": null,
+          "file_abs_path": "/var/folders/3d/1nhgvqps0y96vkby6tmvzb6r0000gn/T/tmpe9csez24/main.tf",
+          "file_line_range": [
+            1,
+            16
+          ],
+          "file_path": "/main.tf",
+          "fixed_definition": null,
+          "guideline": null,
+          "repo_file_path": "/var/folders/3d/1nhgvqps0y96vkby6tmvzb6r0000gn/T/tmpe9csez24/main.tf",
+          "resource": "aws_iam_role.data",
+          "resource_address": null,
+          "severity": null,
+          "short_description": null,
+          "vulnerability_details": null
+        },
+        "resource_id": "aws_iam_role.data",
+        "resource_type": "aws_iam_role",
+        "rule_id": "CKV_AWS_60",
+        "scan_timestamp": "2026-09-07T05:15:49.903399+00:00",
+        "scanner_name": "checkov",
+        "scanner_version": "3.3.16",
+        "severity": null
+      },
+      {
+        "description": "Ensure IAM policies does not allow data exfiltration",
+        "file_path": "/main.tf",
+        "line_end": 44,
+        "line_start": 18,
+        "outcome": "passed",
+        "raw_evidence": {
+          "bc_category": null,
+          "bc_check_id": null,
+          "benchmarks": {},
+          "caller_file_line_range": null,
+          "caller_file_path": null,
+          "check_class": "checkov.terraform.checks.resource.aws.IAMDataExfiltration",
+          "check_id": "CKV_AWS_288",
+          "check_len": null,
+          "check_name": "Ensure IAM policies does not allow data exfiltration",
+          "check_result": {
+            "evaluated_keys": [],
+            "result": "PASSED"
+          },
+          "code_block": null,
+          "connected_node": null,
+          "definition_context_file_path": "/var/folders/3d/1nhgvqps0y96vkby6tmvzb6r0000gn/T/tmpe9csez24/main.tf",
+          "description": null,
+          "details": [],
+          "entity_tags": null,
+          "evaluations": null,
+          "file_abs_path": "/var/folders/3d/1nhgvqps0y96vkby6tmvzb6r0000gn/T/tmpe9csez24/main.tf",
+          "file_line_range": [
+            18,
+            44
+          ],
+          "file_path": "/main.tf",
+          "fixed_definition": null,
+          "guideline": null,
+          "repo_file_path": "/var/folders/3d/1nhgvqps0y96vkby6tmvzb6r0000gn/T/tmpe9csez24/main.tf",
+          "resource": "aws_iam_role_policy.data",
+          "resource_address": null,
+          "severity": null,
+          "short_description": null,
+          "vulnerability_details": null
+        },
+        "resource_id": "aws_iam_role_policy.data",
+        "resource_type": "aws_iam_role_policy",
+        "rule_id": "CKV_AWS_288",
+        "scan_timestamp": "2026-09-07T05:15:49.903399+00:00",
+        "scanner_name": "checkov",
+        "scanner_version": "3.3.16",
+        "severity": null
+      },
+      {
+        "description": "Ensure IAM policies does not allow write access without constraints",
+        "file_path": "/main.tf",
+        "line_end": 44,
+        "line_start": 18,
+        "outcome": "passed",
+        "raw_evidence": {
+          "bc_category": null,
+          "bc_check_id": null,
+          "benchmarks": {},
+          "caller_file_line_range": null,
+          "caller_file_path": null,
+          "check_class": "checkov.terraform.checks.resource.aws.IAMWriteAccess",
+          "check_id": "CKV_AWS_290",
+          "check_len": null,
+          "check_name": "Ensure IAM policies does not allow write access without constraints",
+          "check_result": {
+            "evaluated_keys": [],
+            "result": "PASSED"
+          },
+          "code_block": null,
+          "connected_node": null,
+          "definition_context_file_path": "/var/folders/3d/1nhgvqps0y96vkby6tmvzb6r0000gn/T/tmpe9csez24/main.tf",
+          "description": null,
+          "details": [],
+          "entity_tags": null,
+          "evaluations": null,
+          "file_abs_path": "/var/folders/3d/1nhgvqps0y96vkby6tmvzb6r0000gn/T/tmpe9csez24/main.tf",
+          "file_line_range": [
+            18,
+            44
+          ],
+          "file_path": "/main.tf",
+          "fixed_definition": null,
+          "guideline": null,
+          "repo_file_path": "/var/folders/3d/1nhgvqps0y96vkby6tmvzb6r0000gn/T/tmpe9csez24/main.tf",
+          "resource": "aws_iam_role_policy.data",
+          "resource_address": null,
+          "severity": null,
+          "short_description": null,
+          "vulnerability_details": null
+        },
+        "resource_id": "aws_iam_role_policy.data",
+        "resource_type": "aws_iam_role_policy",
+        "rule_id": "CKV_AWS_290",
+        "scan_timestamp": "2026-09-07T05:15:49.903399+00:00",
+        "scanner_name": "checkov",
+        "scanner_version": "3.3.16",
+        "severity": null
+      },
+      {
+        "description": "Ensure IAM policies does not allow credentials exposure",
+        "file_path": "/main.tf",
+        "line_end": 44,
+        "line_start": 18,
+        "outcome": "passed",
+        "raw_evidence": {
+          "bc_category": null,
+          "bc_check_id": null,
+          "benchmarks": {},
+          "caller_file_line_range": null,
+          "caller_file_path": null,
+          "check_class": "checkov.terraform.checks.resource.aws.IAMCredentialsExposure",
+          "check_id": "CKV_AWS_287",
+          "check_len": null,
+          "check_name": "Ensure IAM policies does not allow credentials exposure",
+          "check_result": {
+            "evaluated_keys": [],
+            "result": "PASSED"
+          },
+          "code_block": null,
+          "connected_node": null,
+          "definition_context_file_path": "/var/folders/3d/1nhgvqps0y96vkby6tmvzb6r0000gn/T/tmpe9csez24/main.tf",
+          "description": null,
+          "details": [],
+          "entity_tags": null,
+          "evaluations": null,
+          "file_abs_path": "/var/folders/3d/1nhgvqps0y96vkby6tmvzb6r0000gn/T/tmpe9csez24/main.tf",
+          "file_line_range": [
+            18,
+            44
+          ],
+          "file_path": "/main.tf",
+          "fixed_definition": null,
+          "guideline": null,
+          "repo_file_path": "/var/folders/3d/1nhgvqps0y96vkby6tmvzb6r0000gn/T/tmpe9csez24/main.tf",
+          "resource": "aws_iam_role_policy.data",
+          "resource_address": null,
+          "severity": null,
+          "short_description": null,
+          "vulnerability_details": null
+        },
+        "resource_id": "aws_iam_role_policy.data",
+        "resource_type": "aws_iam_role_policy",
+        "rule_id": "CKV_AWS_287",
+        "scan_timestamp": "2026-09-07T05:15:49.903399+00:00",
+        "scanner_name": "checkov",
+        "scanner_version": "3.3.16",
+        "severity": null
+      },
+      {
+        "description": "Ensure no IAM policies documents allow \"*\" as a statement's actions",
+        "file_path": "/main.tf",
+        "line_end": 44,
+        "line_start": 18,
+        "outcome": "passed",
+        "raw_evidence": {
+          "bc_category": null,
+          "bc_check_id": null,
+          "benchmarks": {},
+          "caller_file_line_range": null,
+          "caller_file_path": null,
+          "check_class": "checkov.terraform.checks.resource.aws.IAMStarActionPolicyDocument",
+          "check_id": "CKV_AWS_63",
+          "check_len": null,
+          "check_name": "Ensure no IAM policies documents allow \"*\" as a statement's actions",
+          "check_result": {
+            "evaluated_keys": [
+              "policy",
+              "inline_policy"
+            ],
+            "result": "PASSED"
+          },
+          "code_block": null,
+          "connected_node": null,
+          "definition_context_file_path": "/var/folders/3d/1nhgvqps0y96vkby6tmvzb6r0000gn/T/tmpe9csez24/main.tf",
+          "description": null,
+          "details": [],
+          "entity_tags": null,
+          "evaluations": null,
+          "file_abs_path": "/var/folders/3d/1nhgvqps0y96vkby6tmvzb6r0000gn/T/tmpe9csez24/main.tf",
+          "file_line_range": [
+            18,
+            44
+          ],
+          "file_path": "/main.tf",
+          "fixed_definition": null,
+          "guideline": null,
+          "repo_file_path": "/var/folders/3d/1nhgvqps0y96vkby6tmvzb6r0000gn/T/tmpe9csez24/main.tf",
+          "resource": "aws_iam_role_policy.data",
+          "resource_address": null,
+          "severity": null,
+          "short_description": null,
+          "vulnerability_details": null
+        },
+        "resource_id": "aws_iam_role_policy.data",
+        "resource_type": "aws_iam_role_policy",
+        "rule_id": "CKV_AWS_63",
+        "scan_timestamp": "2026-09-07T05:15:49.903399+00:00",
+        "scanner_name": "checkov",
+        "scanner_version": "3.3.16",
+        "severity": null
+      },
+      {
+        "description": "Ensure IAM policies does not allow permissions management / resource exposure without constraints",
+        "file_path": "/main.tf",
+        "line_end": 44,
+        "line_start": 18,
+        "outcome": "passed",
+        "raw_evidence": {
+          "bc_category": null,
+          "bc_check_id": null,
+          "benchmarks": {},
+          "caller_file_line_range": null,
+          "caller_file_path": null,
+          "check_class": "checkov.terraform.checks.resource.aws.IAMPermissionsManagement",
+          "check_id": "CKV_AWS_289",
+          "check_len": null,
+          "check_name": "Ensure IAM policies does not allow permissions management / resource exposure without constraints",
+          "check_result": {
+            "evaluated_keys": [],
+            "result": "PASSED"
+          },
+          "code_block": null,
+          "connected_node": null,
+          "definition_context_file_path": "/var/folders/3d/1nhgvqps0y96vkby6tmvzb6r0000gn/T/tmpe9csez24/main.tf",
+          "description": null,
+          "details": [],
+          "entity_tags": null,
+          "evaluations": null,
+          "file_abs_path": "/var/folders/3d/1nhgvqps0y96vkby6tmvzb6r0000gn/T/tmpe9csez24/main.tf",
+          "file_line_range": [
+            18,
+            44
+          ],
+          "file_path": "/main.tf",
+          "fixed_definition": null,
+          "guideline": null,
+          "repo_file_path": "/var/folders/3d/1nhgvqps0y96vkby6tmvzb6r0000gn/T/tmpe9csez24/main.tf",
+          "resource": "aws_iam_role_policy.data",
+          "resource_address": null,
+          "severity": null,
+          "short_description": null,
+          "vulnerability_details": null
+        },
+        "resource_id": "aws_iam_role_policy.data",
+        "resource_type": "aws_iam_role_policy",
+        "rule_id": "CKV_AWS_289",
+        "scan_timestamp": "2026-09-07T05:15:49.903399+00:00",
+        "scanner_name": "checkov",
+        "scanner_version": "3.3.16",
+        "severity": null
+      },
+      {
+        "description": "Ensure IAM policies that allow full \"*-*\" administrative privileges are not created",
+        "file_path": "/main.tf",
+        "line_end": 44,
+        "line_start": 18,
+        "outcome": "passed",
+        "raw_evidence": {
+          "bc_category": null,
+          "bc_check_id": null,
+          "benchmarks": {},
+          "caller_file_line_range": null,
+          "caller_file_path": null,
+          "check_class": "checkov.terraform.checks.resource.aws.IAMAdminPolicyDocument",
+          "check_id": "CKV_AWS_62",
+          "check_len": null,
+          "check_name": "Ensure IAM policies that allow full \"*-*\" administrative privileges are not created",
+          "check_result": {
+            "evaluated_keys": [
+              "policy",
+              "inline_policy"
+            ],
+            "result": "PASSED"
+          },
+          "code_block": null,
+          "connected_node": null,
+          "definition_context_file_path": "/var/folders/3d/1nhgvqps0y96vkby6tmvzb6r0000gn/T/tmpe9csez24/main.tf",
+          "description": null,
+          "details": [],
+          "entity_tags": null,
+          "evaluations": null,
+          "file_abs_path": "/var/folders/3d/1nhgvqps0y96vkby6tmvzb6r0000gn/T/tmpe9csez24/main.tf",
+          "file_line_range": [
+            18,
+            44
+          ],
+          "file_path": "/main.tf",
+          "fixed_definition": null,
+          "guideline": null,
+          "repo_file_path": "/var/folders/3d/1nhgvqps0y96vkby6tmvzb6r0000gn/T/tmpe9csez24/main.tf",
+          "resource": "aws_iam_role_policy.data",
+          "resource_address": null,
+          "severity": null,
+          "short_description": null,
+          "vulnerability_details": null
+        },
+        "resource_id": "aws_iam_role_policy.data",
+        "resource_type": "aws_iam_role_policy",
+        "rule_id": "CKV_AWS_62",
+        "scan_timestamp": "2026-09-07T05:15:49.903399+00:00",
+        "scanner_name": "checkov",
+        "scanner_version": "3.3.16",
+        "severity": null
+      },
+      {
+        "description": "Ensure no IAM policies documents allow \"*\" as a statement's resource for restrictable actions",
+        "file_path": "/main.tf",
+        "line_end": 44,
+        "line_start": 18,
+        "outcome": "passed",
+        "raw_evidence": {
+          "bc_category": null,
+          "bc_check_id": null,
+          "benchmarks": {},
+          "caller_file_line_range": null,
+          "caller_file_path": null,
+          "check_class": "checkov.terraform.checks.resource.aws.IAMStarResourcePolicyDocument",
+          "check_id": "CKV_AWS_355",
+          "check_len": null,
+          "check_name": "Ensure no IAM policies documents allow \"*\" as a statement's resource for restrictable actions",
+          "check_result": {
+            "evaluated_keys": [],
+            "result": "PASSED"
+          },
+          "code_block": null,
+          "connected_node": null,
+          "definition_context_file_path": "/var/folders/3d/1nhgvqps0y96vkby6tmvzb6r0000gn/T/tmpe9csez24/main.tf",
+          "description": null,
+          "details": [],
+          "entity_tags": null,
+          "evaluations": null,
+          "file_abs_path": "/var/folders/3d/1nhgvqps0y96vkby6tmvzb6r0000gn/T/tmpe9csez24/main.tf",
+          "file_line_range": [
+            18,
+            44
+          ],
+          "file_path": "/main.tf",
+          "fixed_definition": null,
+          "guideline": null,
+          "repo_file_path": "/var/folders/3d/1nhgvqps0y96vkby6tmvzb6r0000gn/T/tmpe9csez24/main.tf",
+          "resource": "aws_iam_role_policy.data",
+          "resource_address": null,
+          "severity": null,
+          "short_description": null,
+          "vulnerability_details": null
+        },
+        "resource_id": "aws_iam_role_policy.data",
+        "resource_type": "aws_iam_role_policy",
+        "rule_id": "CKV_AWS_355",
+        "scan_timestamp": "2026-09-07T05:15:49.903399+00:00",
+        "scanner_name": "checkov",
+        "scanner_version": "3.3.16",
+        "severity": null
+      },
+      {
+        "description": "Ensure IAM policies does not allow privilege escalation",
+        "file_path": "/main.tf",
+        "line_end": 44,
+        "line_start": 18,
+        "outcome": "passed",
+        "raw_evidence": {
+          "bc_category": null,
+          "bc_check_id": null,
+          "benchmarks": {},
+          "caller_file_line_range": null,
+          "caller_file_path": null,
+          "check_class": "checkov.terraform.checks.resource.aws.IAMPrivilegeEscalation",
+          "check_id": "CKV_AWS_286",
+          "check_len": null,
+          "check_name": "Ensure IAM policies does not allow privilege escalation",
+          "check_result": {
+            "evaluated_keys": [],
+            "result": "PASSED"
+          },
+          "code_block": null,
+          "connected_node": null,
+          "definition_context_file_path": "/var/folders/3d/1nhgvqps0y96vkby6tmvzb6r0000gn/T/tmpe9csez24/main.tf",
+          "description": null,
+          "details": [],
+          "entity_tags": null,
+          "evaluations": null,
+          "file_abs_path": "/var/folders/3d/1nhgvqps0y96vkby6tmvzb6r0000gn/T/tmpe9csez24/main.tf",
+          "file_line_range": [
+            18,
+            44
+          ],
+          "file_path": "/main.tf",
+          "fixed_definition": null,
+          "guideline": null,
+          "repo_file_path": "/var/folders/3d/1nhgvqps0y96vkby6tmvzb6r0000gn/T/tmpe9csez24/main.tf",
+          "resource": "aws_iam_role_policy.data",
+          "resource_address": null,
+          "severity": null,
+          "short_description": null,
+          "vulnerability_details": null
+        },
+        "resource_id": "aws_iam_role_policy.data",
+        "resource_type": "aws_iam_role_policy",
+        "rule_id": "CKV_AWS_286",
+        "scan_timestamp": "2026-09-07T05:15:49.903399+00:00",
+        "scanner_name": "checkov",
+        "scanner_version": "3.3.16",
+        "severity": null
+      },
+      {
+        "description": "Ensure AWS Managed IAMFullAccess IAM policy is not used.",
+        "file_path": "/main.tf",
+        "line_end": 16,
+        "line_start": 1,
+        "outcome": "passed",
+        "raw_evidence": {
+          "bc_category": null,
+          "bc_check_id": null,
+          "benchmarks": {},
+          "caller_file_line_range": null,
+          "caller_file_path": null,
+          "check_class": "checkov.common.graph.checks_infra.base_check",
+          "check_id": "CKV2_AWS_56",
+          "check_len": null,
+          "check_name": "Ensure AWS Managed IAMFullAccess IAM policy is not used.",
+          "check_result": {
+            "entity": {
+              "aws_iam_role": {
+                "data": {
+                  "__address__": "aws_iam_role.data",
+                  "__end_line__": 16,
+                  "__start_line__": 1,
+                  "assume_role_policy": [
+                    {
+                      "Statement": [
+                        {
+                          "Action": "sts:AssumeRole",
+                          "Effect": "Allow",
+                          "Principal": {
+                            "Service": "lambda.amazonaws.com"
+                          }
+                        }
+                      ],
+                      "Version": "2012-10-17"
+                    }
+                  ],
+                  "name": [
+                    "terraveritas-iam-d-role"
+                  ]
+                }
+              }
+            },
+            "evaluated_keys": [
+              "name",
+              "managed_policy_arn",
+              "managed_policy_arns/*",
+              "arn",
+              "policy_arn"
+            ],
+            "result": "PASSED"
+          },
+          "code_block": null,
+          "connected_node": null,
+          "definition_context_file_path": "/var/folders/3d/1nhgvqps0y96vkby6tmvzb6r0000gn/T/tmpe9csez24/main.tf",
+          "description": null,
+          "details": [],
+          "entity_tags": null,
+          "evaluations": null,
+          "file_abs_path": "/var/folders/3d/1nhgvqps0y96vkby6tmvzb6r0000gn/T/tmpe9csez24/main.tf",
+          "file_line_range": [
+            1,
+            16
+          ],
+          "file_path": "/main.tf",
+          "fixed_definition": null,
+          "guideline": null,
+          "repo_file_path": "/var/folders/3d/1nhgvqps0y96vkby6tmvzb6r0000gn/T/tmpe9csez24/main.tf",
+          "resource": "aws_iam_role.data",
+          "resource_address": null,
+          "severity": null,
+          "short_description": null,
+          "vulnerability_details": null
+        },
+        "resource_id": "aws_iam_role.data",
+        "resource_type": "aws_iam_role",
+        "rule_id": "CKV2_AWS_56",
+        "scan_timestamp": "2026-09-07T05:15:49.903399+00:00",
+        "scanner_name": "checkov",
+        "scanner_version": "3.3.16",
+        "severity": null
+      },
+      {
+        "description": "Ensure AWS IAM policy does not allow full IAM privileges",
+        "file_path": "/main.tf",
+        "line_end": 44,
+        "line_start": 18,
+        "outcome": "passed",
+        "raw_evidence": {
+          "bc_category": null,
+          "bc_check_id": null,
+          "benchmarks": {},
+          "caller_file_line_range": null,
+          "caller_file_path": null,
+          "check_class": "checkov.common.graph.checks_infra.base_check",
+          "check_id": "CKV2_AWS_40",
+          "check_len": null,
+          "check_name": "Ensure AWS IAM policy does not allow full IAM privileges",
+          "check_result": {
+            "entity": {
+              "aws_iam_role_policy": {
+                "data": {
+                  "__address__": "aws_iam_role_policy.data",
+                  "__end_line__": 44,
+                  "__start_line__": 18,
+                  "name": [
+                    "terraveritas-iam-d-policy"
+                  ],
+                  "policy": [
+                    {
+                      "Statement": [
+                        {
+                          "Action": [
+                            "dynamodb:GetItem",
+                            "dynamodb:PutItem",
+                            "dynamodb:UpdateItem",
+                            "dynamodb:Query",
+                            "logs:CreateLogGroup",
+                            "logs:CreateLogStream",
+                            "logs:PutLogEvents"
+                          ],
+                          "Effect": "Allow",
+                          "Resource": [
+                            "arn:aws:dynamodb:*:*:table/terraveritas-data-*",
+                            "arn:aws:logs:*:*:log-group:/aws/lambda/terraveritas-iam-d-*"
+                          ],
+                          "Sid": "ScopedAccess-aws_iam_role.data.unique_id"
+                        }
+                      ],
+                      "Version": "2012-10-17"
+                    }
+                  ],
+                  "role": [
+                    "aws_iam_role.data.id"
+                  ]
+                }
+              }
+            },
+            "evaluated_keys": [
+              "statement[?(@/effect == Allow)]/actions[*]",
+              "inline_policy/Statement[?(@/Effect == Allow)]/Action[*]",
+              "policy/Statement[?(@/Effect == Allow)]/Action[*]"
+            ],
+            "result": "PASSED"
+          },
+          "code_block": null,
+          "connected_node": null,
+          "definition_context_file_path": "/var/folders/3d/1nhgvqps0y96vkby6tmvzb6r0000gn/T/tmpe9csez24/main.tf",
+          "description": null,
+          "details": [],
+          "entity_tags": null,
+          "evaluations": null,
+          "file_abs_path": "/var/folders/3d/1nhgvqps0y96vkby6tmvzb6r0000gn/T/tmpe9csez24/main.tf",
+          "file_line_range": [
+            18,
+            44
+          ],
+          "file_path": "/main.tf",
+          "fixed_definition": null,
+          "guideline": null,
+          "repo_file_path": "/var/folders/3d/1nhgvqps0y96vkby6tmvzb6r0000gn/T/tmpe9csez24/main.tf",
+          "resource": "aws_iam_role_policy.data",
+          "resource_address": null,
+          "severity": null,
+          "short_description": null,
+          "vulnerability_details": null
+        },
+        "resource_id": "aws_iam_role_policy.data",
+        "resource_type": "aws_iam_role_policy",
+        "rule_id": "CKV2_AWS_40",
+        "scan_timestamp": "2026-09-07T05:15:49.903399+00:00",
+        "scanner_name": "checkov",
+        "scanner_version": "3.3.16",
+        "severity": null
+      }
+    ],
+    "finished_at": "2026-09-07T05:15:49.903399+00:00",
+    "scanner_name": "checkov",
+    "scanner_version": "3.3.16",
+    "started_at": "2026-09-07T05:15:48.074168+00:00",
+    "status": "success",
+    "target_path": "/var/folders/3d/1nhgvqps0y96vkby6tmvzb6r0000gn/T/tmpe9csez24",
+    "unparseable_files": []
+  },
+  "ai_model": "claude (blind subagent invocation, tool use disallowed by instruction)",
+  "before_invariant": {
+    "evidence": {},
+    "invariant_id": "IAM_EXCESSIVE_PRIVILEGE_EXPOSURE",
+    "reason": "inline policy content could not be evaluated at plan time for: ['aws_iam_role_policy.data'], and no independent violation was found on the resolvable policies",
+    "related_resource_addresses": [
+      "aws_iam_role.data",
+      "aws_iam_role_policy.data"
+    ],
+    "resource_address": "aws_iam_role.data",
+    "status": "unknown",
+    "violated_conditions": []
+  },
+  "before_plan": {
+    "commands_run": [
+      [
+        "terraform",
+        "init",
+        "-input=false",
+        "-no-color"
+      ],
+      [
+        "terraform",
+        "validate",
+        "-no-color",
+        "-json"
+      ],
+      [
+        "terraform",
+        "plan",
+        "-input=false",
+        "-no-color",
+        "-json",
+        "-out=tfplan"
+      ],
+      [
+        "terraform",
+        "show",
+        "-json",
+        "tfplan"
+      ]
+    ],
+    "error_message": null,
+    "finished_at": "2026-09-07T05:15:58.821772+00:00",
+    "raw_plan_json": {
+      "applyable": true,
+      "complete": true,
+      "configuration": {
+        "provider_config": {
+          "aws": {
+            "expressions": {
+              "access_key": "[REDACTED]",
+              "region": {
+                "constant_value": "us-east-1"
+              },
+              "secret_key": "[REDACTED]",
+              "skip_credentials_validation": {
+                "constant_value": true
+              },
+              "skip_metadata_api_check": {
+                "constant_value": true
+              },
+              "skip_requesting_account_id": {
+                "constant_value": true
+              }
+            },
+            "full_name": "registry.terraform.io/hashicorp/aws",
+            "name": "aws",
+            "version_constraint": "5.100.0"
+          }
+        },
+        "root_module": {
+          "resources": [
+            {
+              "address": "aws_iam_role.data",
+              "expressions": {
+                "assume_role_policy": {},
+                "name": {
+                  "constant_value": "terraveritas-iam-d-role"
+                }
+              },
+              "mode": "managed",
+              "name": "data",
+              "provider_config_key": "aws",
+              "schema_version": 0,
+              "type": "aws_iam_role"
+            },
+            {
+              "address": "aws_iam_role_policy.data",
+              "expressions": {
+                "name": {
+                  "constant_value": "terraveritas-iam-d-policy"
+                },
+                "policy": {
+                  "references": [
+                    "aws_iam_role.data.unique_id",
+                    "aws_iam_role.data"
+                  ]
+                },
+                "role": {
+                  "references": [
+                    "aws_iam_role.data.id",
+                    "aws_iam_role.data"
+                  ]
+                }
+              },
+              "mode": "managed",
+              "name": "data",
+              "provider_config_key": "aws",
+              "schema_version": 0,
+              "type": "aws_iam_role_policy"
+            }
+          ]
+        }
+      },
+      "errored": false,
+      "format_version": "1.2",
+      "planned_values": {
+        "root_module": {
+          "resources": [
+            {
+              "address": "aws_iam_role.data",
+              "mode": "managed",
+              "name": "data",
+              "provider_name": "registry.terraform.io/hashicorp/aws",
+              "schema_version": 0,
+              "sensitive_values": {
+                "inline_policy": [],
+                "managed_policy_arns": [],
+                "tags_all": {}
+              },
+              "type": "aws_iam_role",
+              "values": {
+                "assume_role_policy": "{\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Effect\":\"Allow\",\"Principal\":{\"Service\":\"lambda.amazonaws.com\"}}],\"Version\":\"2012-10-17\"}",
+                "description": null,
+                "force_detach_policies": false,
+                "max_session_duration": 3600,
+                "name": "terraveritas-iam-d-role",
+                "path": "/",
+                "permissions_boundary": null,
+                "tags": null
+              }
+            },
+            {
+              "address": "aws_iam_role_policy.data",
+              "mode": "managed",
+              "name": "data",
+              "provider_name": "registry.terraform.io/hashicorp/aws",
+              "schema_version": 0,
+              "sensitive_values": {},
+              "type": "aws_iam_role_policy",
+              "values": {
+                "name": "terraveritas-iam-d-policy"
+              }
+            }
+          ]
+        }
+      },
+      "relevant_attributes": [
+        {
+          "attribute": [
+            "id"
+          ],
+          "resource": "aws_iam_role.data"
+        },
+        {
+          "attribute": [
+            "unique_id"
+          ],
+          "resource": "aws_iam_role.data"
+        }
+      ],
+      "resource_changes": [
+        {
+          "address": "aws_iam_role.data",
+          "change": {
+            "actions": [
+              "create"
+            ],
+            "after": {
+              "assume_role_policy": "{\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Effect\":\"Allow\",\"Principal\":{\"Service\":\"lambda.amazonaws.com\"}}],\"Version\":\"2012-10-17\"}",
+              "description": null,
+              "force_detach_policies": false,
+              "max_session_duration": 3600,
+              "name": "terraveritas-iam-d-role",
+              "path": "/",
+              "permissions_boundary": null,
+              "tags": null
+            },
+            "after_sensitive": {
+              "inline_policy": [],
+              "managed_policy_arns": [],
+              "tags_all": {}
+            },
+            "after_unknown": {
+              "arn": true,
+              "create_date": true,
+              "id": true,
+              "inline_policy": true,
+              "managed_policy_arns": true,
+              "name_prefix": true,
+              "tags_all": true,
+              "unique_id": true
+            },
+            "before": null,
+            "before_sensitive": false
+          },
+          "mode": "managed",
+          "name": "data",
+          "provider_name": "registry.terraform.io/hashicorp/aws",
+          "type": "aws_iam_role"
+        },
+        {
+          "address": "aws_iam_role_policy.data",
+          "change": {
+            "actions": [
+              "create"
+            ],
+            "after": {
+              "name": "terraveritas-iam-d-policy"
+            },
+            "after_sensitive": {},
+            "after_unknown": {
+              "id": true,
+              "name_prefix": true,
+              "policy": true,
+              "role": true
+            },
+            "before": null,
+            "before_sensitive": false
+          },
+          "mode": "managed",
+          "name": "data",
+          "provider_name": "registry.terraform.io/hashicorp/aws",
+          "type": "aws_iam_role_policy"
+        }
+      ],
+      "terraform_version": "1.14.3",
+      "timestamp": "2026-09-07T05:15:56Z"
+    },
+    "resource_changes": [
+      {
+        "actions": [
+          "create"
+        ],
+        "address": "aws_iam_role.data",
+        "after": {
+          "assume_role_policy": "{\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Effect\":\"Allow\",\"Principal\":{\"Service\":\"lambda.amazonaws.com\"}}],\"Version\":\"2012-10-17\"}",
+          "description": null,
+          "force_detach_policies": false,
+          "max_session_duration": 3600,
+          "name": "terraveritas-iam-d-role",
+          "path": "/",
+          "permissions_boundary": null,
+          "tags": null
+        },
+        "after_unknown_keys": [
+          "arn",
+          "create_date",
+          "id",
+          "inline_policy",
+          "managed_policy_arns",
+          "name_prefix",
+          "tags_all",
+          "unique_id"
+        ],
+        "provider_name": "registry.terraform.io/hashicorp/aws",
+        "resource_name": "data",
+        "resource_type": "aws_iam_role"
+      },
+      {
+        "actions": [
+          "create"
+        ],
+        "address": "aws_iam_role_policy.data",
+        "after": {
+          "name": "terraveritas-iam-d-policy"
+        },
+        "after_unknown_keys": [
+          "id",
+          "name_prefix",
+          "policy",
+          "role"
+        ],
+        "provider_name": "registry.terraform.io/hashicorp/aws",
+        "resource_name": "data",
+        "resource_type": "aws_iam_role_policy"
+      }
+    ],
+    "started_at": "2026-09-07T05:15:51.651870+00:00",
+    "status": "plan_success",
+    "target_path": "/var/folders/3d/1nhgvqps0y96vkby6tmvzb6r0000gn/T/tmpkz4q2w8o",
+    "terraform_version": "1.14.3"
+  },
+  "before_plan_status": "plan_success",
+  "before_scan": {
+    "command": [
+      "checkov",
+      "-d",
+      "/var/folders/3d/1nhgvqps0y96vkby6tmvzb6r0000gn/T/tmpda17r136",
+      "-o",
+      "json",
+      "--compact",
+      "--framework",
+      "terraform",
+      "--skip-download"
+    ],
+    "error_message": null,
+    "exit_code": 1,
+    "findings": [
+      {
+        "description": "Disallow IAM roles, users, and groups from using the AWS AdministratorAccess policy",
+        "file_path": "/main.tf",
+        "line_end": 16,
+        "line_start": 1,
+        "outcome": "passed",
+        "raw_evidence": {
+          "bc_category": null,
+          "bc_check_id": null,
+          "benchmarks": {},
+          "caller_file_line_range": null,
+          "caller_file_path": null,
+          "check_class": "checkov.terraform.checks.resource.aws.IAMManagedAdminPolicy",
+          "check_id": "CKV_AWS_274",
+          "check_len": null,
+          "check_name": "Disallow IAM roles, users, and groups from using the AWS AdministratorAccess policy",
+          "check_result": {
+            "evaluated_keys": [],
+            "result": "PASSED"
+          },
+          "code_block": null,
+          "connected_node": null,
+          "definition_context_file_path": "/var/folders/3d/1nhgvqps0y96vkby6tmvzb6r0000gn/T/tmpda17r136/main.tf",
+          "description": null,
+          "details": [],
+          "entity_tags": null,
+          "evaluations": null,
+          "file_abs_path": "/var/folders/3d/1nhgvqps0y96vkby6tmvzb6r0000gn/T/tmpda17r136/main.tf",
+          "file_line_range": [
+            1,
+            16
+          ],
+          "file_path": "/main.tf",
+          "fixed_definition": null,
+          "guideline": null,
+          "repo_file_path": "/var/folders/3d/1nhgvqps0y96vkby6tmvzb6r0000gn/T/tmpda17r136/main.tf",
+          "resource": "aws_iam_role.data",
+          "resource_address": null,
+          "severity": null,
+          "short_description": null,
+          "vulnerability_details": null
+        },
+        "resource_id": "aws_iam_role.data",
+        "resource_type": "aws_iam_role",
+        "rule_id": "CKV_AWS_274",
+        "scan_timestamp": "2026-09-07T05:15:46.133879+00:00",
+        "scanner_name": "checkov",
+        "scanner_version": "3.3.16",
+        "severity": null
+      },
+      {
+        "description": "Ensure AWS GitHub Actions OIDC authorization policies only allow safe claims and claim order on IAM role",
+        "file_path": "/main.tf",
+        "line_end": 16,
+        "line_start": 1,
+        "outcome": "passed",
+        "raw_evidence": {
+          "bc_category": null,
+          "bc_check_id": null,
+          "benchmarks": {},
+          "caller_file_line_range": null,
+          "caller_file_path": null,
+          "check_class": "checkov.terraform.checks.resource.aws.GithubActionsOIDCTrustPolicyOnRole",
+          "check_id": "CKV_AWS_393",
+          "check_len": null,
+          "check_name": "Ensure AWS GitHub Actions OIDC authorization policies only allow safe claims and claim order on IAM role",
+          "check_result": {
+            "evaluated_keys": [
+              "assume_role_policy"
+            ],
+            "result": "PASSED"
+          },
+          "code_block": null,
+          "connected_node": null,
+          "definition_context_file_path": "/var/folders/3d/1nhgvqps0y96vkby6tmvzb6r0000gn/T/tmpda17r136/main.tf",
+          "description": null,
+          "details": [],
+          "entity_tags": null,
+          "evaluations": null,
+          "file_abs_path": "/var/folders/3d/1nhgvqps0y96vkby6tmvzb6r0000gn/T/tmpda17r136/main.tf",
+          "file_line_range": [
+            1,
+            16
+          ],
+          "file_path": "/main.tf",
+          "fixed_definition": null,
+          "guideline": null,
+          "repo_file_path": "/var/folders/3d/1nhgvqps0y96vkby6tmvzb6r0000gn/T/tmpda17r136/main.tf",
+          "resource": "aws_iam_role.data",
+          "resource_address": null,
+          "severity": null,
+          "short_description": null,
+          "vulnerability_details": null
+        },
+        "resource_id": "aws_iam_role.data",
+        "resource_type": "aws_iam_role",
+        "rule_id": "CKV_AWS_393",
+        "scan_timestamp": "2026-09-07T05:15:46.133879+00:00",
+        "scanner_name": "checkov",
+        "scanner_version": "3.3.16",
+        "severity": null
+      },
+      {
+        "description": "Ensure AWS IAM policy does not allow assume role permission across all services",
+        "file_path": "/main.tf",
+        "line_end": 16,
+        "line_start": 1,
+        "outcome": "passed",
+        "raw_evidence": {
+          "bc_category": null,
+          "bc_check_id": null,
+          "benchmarks": {},
+          "caller_file_line_range": null,
+          "caller_file_path": null,
+          "check_class": "checkov.terraform.checks.resource.aws.IAMRoleAllowAssumeFromAccount",
+          "check_id": "CKV_AWS_61",
+          "check_len": null,
+          "check_name": "Ensure AWS IAM policy does not allow assume role permission across all services",
+          "check_result": {
+            "evaluated_keys": [
+              "assume_role_policy"
+            ],
+            "result": "PASSED"
+          },
+          "code_block": null,
+          "connected_node": null,
+          "definition_context_file_path": "/var/folders/3d/1nhgvqps0y96vkby6tmvzb6r0000gn/T/tmpda17r136/main.tf",
+          "description": null,
+          "details": [],
+          "entity_tags": null,
+          "evaluations": null,
+          "file_abs_path": "/var/folders/3d/1nhgvqps0y96vkby6tmvzb6r0000gn/T/tmpda17r136/main.tf",
+          "file_line_range": [
+            1,
+            16
+          ],
+          "file_path": "/main.tf",
+          "fixed_definition": null,
+          "guideline": null,
+          "repo_file_path": "/var/folders/3d/1nhgvqps0y96vkby6tmvzb6r0000gn/T/tmpda17r136/main.tf",
+          "resource": "aws_iam_role.data",
+          "resource_address": null,
+          "severity": null,
+          "short_description": null,
+          "vulnerability_details": null
+        },
+        "resource_id": "aws_iam_role.data",
+        "resource_type": "aws_iam_role",
+        "rule_id": "CKV_AWS_61",
+        "scan_timestamp": "2026-09-07T05:15:46.133879+00:00",
+        "scanner_name": "checkov",
+        "scanner_version": "3.3.16",
+        "severity": null
+      },
+      {
+        "description": "Ensure IAM role allows only specific services or principals to assume it",
+        "file_path": "/main.tf",
+        "line_end": 16,
+        "line_start": 1,
+        "outcome": "passed",
+        "raw_evidence": {
+          "bc_category": null,
+          "bc_check_id": null,
+          "benchmarks": {},
+          "caller_file_line_range": null,
+          "caller_file_path": null,
+          "check_class": "checkov.terraform.checks.resource.aws.IAMRoleAllowsPublicAssume",
+          "check_id": "CKV_AWS_60",
+          "check_len": null,
+          "check_name": "Ensure IAM role allows only specific services or principals to assume it",
+          "check_result": {
+            "evaluated_keys": [
+              "assume_role_policy"
+            ],
+            "result": "PASSED"
+          },
+          "code_block": null,
+          "connected_node": null,
+          "definition_context_file_path": "/var/folders/3d/1nhgvqps0y96vkby6tmvzb6r0000gn/T/tmpda17r136/main.tf",
+          "description": null,
+          "details": [],
+          "entity_tags": null,
+          "evaluations": null,
+          "file_abs_path": "/var/folders/3d/1nhgvqps0y96vkby6tmvzb6r0000gn/T/tmpda17r136/main.tf",
+          "file_line_range": [
+            1,
+            16
+          ],
+          "file_path": "/main.tf",
+          "fixed_definition": null,
+          "guideline": null,
+          "repo_file_path": "/var/folders/3d/1nhgvqps0y96vkby6tmvzb6r0000gn/T/tmpda17r136/main.tf",
+          "resource": "aws_iam_role.data",
+          "resource_address": null,
+          "severity": null,
+          "short_description": null,
+          "vulnerability_details": null
+        },
+        "resource_id": "aws_iam_role.data",
+        "resource_type": "aws_iam_role",
+        "rule_id": "CKV_AWS_60",
+        "scan_timestamp": "2026-09-07T05:15:46.133879+00:00",
+        "scanner_name": "checkov",
+        "scanner_version": "3.3.16",
+        "severity": null
+      },
+      {
+        "description": "Ensure AWS Managed IAMFullAccess IAM policy is not used.",
+        "file_path": "/main.tf",
+        "line_end": 16,
+        "line_start": 1,
+        "outcome": "passed",
+        "raw_evidence": {
+          "bc_category": null,
+          "bc_check_id": null,
+          "benchmarks": {},
+          "caller_file_line_range": null,
+          "caller_file_path": null,
+          "check_class": "checkov.common.graph.checks_infra.base_check",
+          "check_id": "CKV2_AWS_56",
+          "check_len": null,
+          "check_name": "Ensure AWS Managed IAMFullAccess IAM policy is not used.",
+          "check_result": {
+            "entity": {
+              "aws_iam_role": {
+                "data": {
+                  "__address__": "aws_iam_role.data",
+                  "__end_line__": 16,
+                  "__start_line__": 1,
+                  "assume_role_policy": [
+                    {
+                      "Statement": [
+                        {
+                          "Action": "sts:AssumeRole",
+                          "Effect": "Allow",
+                          "Principal": {
+                            "Service": "lambda.amazonaws.com"
+                          }
+                        }
+                      ],
+                      "Version": "2012-10-17"
+                    }
+                  ],
+                  "name": [
+                    "terraveritas-iam-d-role"
+                  ]
+                }
+              }
+            },
+            "evaluated_keys": [
+              "name",
+              "policy_arn",
+              "managed_policy_arn",
+              "managed_policy_arns/*",
+              "arn"
+            ],
+            "result": "PASSED"
+          },
+          "code_block": null,
+          "connected_node": null,
+          "definition_context_file_path": "/var/folders/3d/1nhgvqps0y96vkby6tmvzb6r0000gn/T/tmpda17r136/main.tf",
+          "description": null,
+          "details": [],
+          "entity_tags": null,
+          "evaluations": null,
+          "file_abs_path": "/var/folders/3d/1nhgvqps0y96vkby6tmvzb6r0000gn/T/tmpda17r136/main.tf",
+          "file_line_range": [
+            1,
+            16
+          ],
+          "file_path": "/main.tf",
+          "fixed_definition": null,
+          "guideline": null,
+          "repo_file_path": "/var/folders/3d/1nhgvqps0y96vkby6tmvzb6r0000gn/T/tmpda17r136/main.tf",
+          "resource": "aws_iam_role.data",
+          "resource_address": null,
+          "severity": null,
+          "short_description": null,
+          "vulnerability_details": null
+        },
+        "resource_id": "aws_iam_role.data",
+        "resource_type": "aws_iam_role",
+        "rule_id": "CKV2_AWS_56",
+        "scan_timestamp": "2026-09-07T05:15:46.133879+00:00",
+        "scanner_name": "checkov",
+        "scanner_version": "3.3.16",
+        "severity": null
+      },
+      {
+        "description": "Ensure IAM policies does not allow data exfiltration",
+        "file_path": "/main.tf",
+        "line_end": 33,
+        "line_start": 18,
+        "outcome": "failed",
+        "raw_evidence": {
+          "bc_category": null,
+          "bc_check_id": null,
+          "benchmarks": {},
+          "caller_file_line_range": null,
+          "caller_file_path": null,
+          "check_class": "checkov.terraform.checks.resource.aws.IAMDataExfiltration",
+          "check_id": "CKV_AWS_288",
+          "check_len": null,
+          "check_name": "Ensure IAM policies does not allow data exfiltration",
+          "check_result": {
+            "evaluated_keys": [
+              "policy/Statement/[0]/Action"
+            ],
+            "result": "FAILED"
+          },
+          "code_block": null,
+          "connected_node": null,
+          "definition_context_file_path": "/var/folders/3d/1nhgvqps0y96vkby6tmvzb6r0000gn/T/tmpda17r136/main.tf",
+          "description": null,
+          "details": [],
+          "entity_tags": null,
+          "evaluations": null,
+          "file_abs_path": "/var/folders/3d/1nhgvqps0y96vkby6tmvzb6r0000gn/T/tmpda17r136/main.tf",
+          "file_line_range": [
+            18,
+            33
+          ],
+          "file_path": "/main.tf",
+          "fixed_definition": null,
+          "guideline": null,
+          "repo_file_path": "/var/folders/3d/1nhgvqps0y96vkby6tmvzb6r0000gn/T/tmpda17r136/main.tf",
+          "resource": "aws_iam_role_policy.data",
+          "resource_address": null,
+          "severity": null,
+          "short_description": null,
+          "vulnerability_details": null
+        },
+        "resource_id": "aws_iam_role_policy.data",
+        "resource_type": "aws_iam_role_policy",
+        "rule_id": "CKV_AWS_288",
+        "scan_timestamp": "2026-09-07T05:15:46.133879+00:00",
+        "scanner_name": "checkov",
+        "scanner_version": "3.3.16",
+        "severity": null
+      },
+      {
+        "description": "Ensure IAM policies does not allow write access without constraints",
+        "file_path": "/main.tf",
+        "line_end": 33,
+        "line_start": 18,
+        "outcome": "failed",
+        "raw_evidence": {
+          "bc_category": null,
+          "bc_check_id": null,
+          "benchmarks": {},
+          "caller_file_line_range": null,
+          "caller_file_path": null,
+          "check_class": "checkov.terraform.checks.resource.aws.IAMWriteAccess",
+          "check_id": "CKV_AWS_290",
+          "check_len": null,
+          "check_name": "Ensure IAM policies does not allow write access without constraints",
+          "check_result": {
+            "evaluated_keys": [
+              "policy/Statement/[0]/Action"
+            ],
+            "result": "FAILED"
+          },
+          "code_block": null,
+          "connected_node": null,
+          "definition_context_file_path": "/var/folders/3d/1nhgvqps0y96vkby6tmvzb6r0000gn/T/tmpda17r136/main.tf",
+          "description": null,
+          "details": [],
+          "entity_tags": null,
+          "evaluations": null,
+          "file_abs_path": "/var/folders/3d/1nhgvqps0y96vkby6tmvzb6r0000gn/T/tmpda17r136/main.tf",
+          "file_line_range": [
+            18,
+            33
+          ],
+          "file_path": "/main.tf",
+          "fixed_definition": null,
+          "guideline": null,
+          "repo_file_path": "/var/folders/3d/1nhgvqps0y96vkby6tmvzb6r0000gn/T/tmpda17r136/main.tf",
+          "resource": "aws_iam_role_policy.data",
+          "resource_address": null,
+          "severity": null,
+          "short_description": null,
+          "vulnerability_details": null
+        },
+        "resource_id": "aws_iam_role_policy.data",
+        "resource_type": "aws_iam_role_policy",
+        "rule_id": "CKV_AWS_290",
+        "scan_timestamp": "2026-09-07T05:15:46.133879+00:00",
+        "scanner_name": "checkov",
+        "scanner_version": "3.3.16",
+        "severity": null
+      },
+      {
+        "description": "Ensure IAM policies does not allow credentials exposure",
+        "file_path": "/main.tf",
+        "line_end": 33,
+        "line_start": 18,
+        "outcome": "failed",
+        "raw_evidence": {
+          "bc_category": null,
+          "bc_check_id": null,
+          "benchmarks": {},
+          "caller_file_line_range": null,
+          "caller_file_path": null,
+          "check_class": "checkov.terraform.checks.resource.aws.IAMCredentialsExposure",
+          "check_id": "CKV_AWS_287",
+          "check_len": null,
+          "check_name": "Ensure IAM policies does not allow credentials exposure",
+          "check_result": {
+            "evaluated_keys": [
+              "policy/Statement/[0]/Action"
+            ],
+            "result": "FAILED"
+          },
+          "code_block": null,
+          "connected_node": null,
+          "definition_context_file_path": "/var/folders/3d/1nhgvqps0y96vkby6tmvzb6r0000gn/T/tmpda17r136/main.tf",
+          "description": null,
+          "details": [],
+          "entity_tags": null,
+          "evaluations": null,
+          "file_abs_path": "/var/folders/3d/1nhgvqps0y96vkby6tmvzb6r0000gn/T/tmpda17r136/main.tf",
+          "file_line_range": [
+            18,
+            33
+          ],
+          "file_path": "/main.tf",
+          "fixed_definition": null,
+          "guideline": null,
+          "repo_file_path": "/var/folders/3d/1nhgvqps0y96vkby6tmvzb6r0000gn/T/tmpda17r136/main.tf",
+          "resource": "aws_iam_role_policy.data",
+          "resource_address": null,
+          "severity": null,
+          "short_description": null,
+          "vulnerability_details": null
+        },
+        "resource_id": "aws_iam_role_policy.data",
+        "resource_type": "aws_iam_role_policy",
+        "rule_id": "CKV_AWS_287",
+        "scan_timestamp": "2026-09-07T05:15:46.133879+00:00",
+        "scanner_name": "checkov",
+        "scanner_version": "3.3.16",
+        "severity": null
+      },
+      {
+        "description": "Ensure no IAM policies documents allow \"*\" as a statement's actions",
+        "file_path": "/main.tf",
+        "line_end": 33,
+        "line_start": 18,
+        "outcome": "failed",
+        "raw_evidence": {
+          "bc_category": null,
+          "bc_check_id": null,
+          "benchmarks": {},
+          "caller_file_line_range": null,
+          "caller_file_path": null,
+          "check_class": "checkov.terraform.checks.resource.aws.IAMStarActionPolicyDocument",
+          "check_id": "CKV_AWS_63",
+          "check_len": null,
+          "check_name": "Ensure no IAM policies documents allow \"*\" as a statement's actions",
+          "check_result": {
+            "evaluated_keys": [
+              "policy",
+              "inline_policy"
+            ],
+            "result": "FAILED"
+          },
+          "code_block": null,
+          "connected_node": null,
+          "definition_context_file_path": "/var/folders/3d/1nhgvqps0y96vkby6tmvzb6r0000gn/T/tmpda17r136/main.tf",
+          "description": null,
+          "details": [],
+          "entity_tags": null,
+          "evaluations": null,
+          "file_abs_path": "/var/folders/3d/1nhgvqps0y96vkby6tmvzb6r0000gn/T/tmpda17r136/main.tf",
+          "file_line_range": [
+            18,
+            33
+          ],
+          "file_path": "/main.tf",
+          "fixed_definition": null,
+          "guideline": null,
+          "repo_file_path": "/var/folders/3d/1nhgvqps0y96vkby6tmvzb6r0000gn/T/tmpda17r136/main.tf",
+          "resource": "aws_iam_role_policy.data",
+          "resource_address": null,
+          "severity": null,
+          "short_description": null,
+          "vulnerability_details": null
+        },
+        "resource_id": "aws_iam_role_policy.data",
+        "resource_type": "aws_iam_role_policy",
+        "rule_id": "CKV_AWS_63",
+        "scan_timestamp": "2026-09-07T05:15:46.133879+00:00",
+        "scanner_name": "checkov",
+        "scanner_version": "3.3.16",
+        "severity": null
+      },
+      {
+        "description": "Ensure IAM policies does not allow permissions management / resource exposure without constraints",
+        "file_path": "/main.tf",
+        "line_end": 33,
+        "line_start": 18,
+        "outcome": "failed",
+        "raw_evidence": {
+          "bc_category": null,
+          "bc_check_id": null,
+          "benchmarks": {},
+          "caller_file_line_range": null,
+          "caller_file_path": null,
+          "check_class": "checkov.terraform.checks.resource.aws.IAMPermissionsManagement",
+          "check_id": "CKV_AWS_289",
+          "check_len": null,
+          "check_name": "Ensure IAM policies does not allow permissions management / resource exposure without constraints",
+          "check_result": {
+            "evaluated_keys": [
+              "policy/Statement/[0]/Action"
+            ],
+            "result": "FAILED"
+          },
+          "code_block": null,
+          "connected_node": null,
+          "definition_context_file_path": "/var/folders/3d/1nhgvqps0y96vkby6tmvzb6r0000gn/T/tmpda17r136/main.tf",
+          "description": null,
+          "details": [],
+          "entity_tags": null,
+          "evaluations": null,
+          "file_abs_path": "/var/folders/3d/1nhgvqps0y96vkby6tmvzb6r0000gn/T/tmpda17r136/main.tf",
+          "file_line_range": [
+            18,
+            33
+          ],
+          "file_path": "/main.tf",
+          "fixed_definition": null,
+          "guideline": null,
+          "repo_file_path": "/var/folders/3d/1nhgvqps0y96vkby6tmvzb6r0000gn/T/tmpda17r136/main.tf",
+          "resource": "aws_iam_role_policy.data",
+          "resource_address": null,
+          "severity": null,
+          "short_description": null,
+          "vulnerability_details": null
+        },
+        "resource_id": "aws_iam_role_policy.data",
+        "resource_type": "aws_iam_role_policy",
+        "rule_id": "CKV_AWS_289",
+        "scan_timestamp": "2026-09-07T05:15:46.133879+00:00",
+        "scanner_name": "checkov",
+        "scanner_version": "3.3.16",
+        "severity": null
+      },
+      {
+        "description": "Ensure IAM policies that allow full \"*-*\" administrative privileges are not created",
+        "file_path": "/main.tf",
+        "line_end": 33,
+        "line_start": 18,
+        "outcome": "failed",
+        "raw_evidence": {
+          "bc_category": null,
+          "bc_check_id": null,
+          "benchmarks": {},
+          "caller_file_line_range": null,
+          "caller_file_path": null,
+          "check_class": "checkov.terraform.checks.resource.aws.IAMAdminPolicyDocument",
+          "check_id": "CKV_AWS_62",
+          "check_len": null,
+          "check_name": "Ensure IAM policies that allow full \"*-*\" administrative privileges are not created",
+          "check_result": {
+            "evaluated_keys": [
+              "policy",
+              "inline_policy"
+            ],
+            "result": "FAILED"
+          },
+          "code_block": null,
+          "connected_node": null,
+          "definition_context_file_path": "/var/folders/3d/1nhgvqps0y96vkby6tmvzb6r0000gn/T/tmpda17r136/main.tf",
+          "description": null,
+          "details": [],
+          "entity_tags": null,
+          "evaluations": null,
+          "file_abs_path": "/var/folders/3d/1nhgvqps0y96vkby6tmvzb6r0000gn/T/tmpda17r136/main.tf",
+          "file_line_range": [
+            18,
+            33
+          ],
+          "file_path": "/main.tf",
+          "fixed_definition": null,
+          "guideline": null,
+          "repo_file_path": "/var/folders/3d/1nhgvqps0y96vkby6tmvzb6r0000gn/T/tmpda17r136/main.tf",
+          "resource": "aws_iam_role_policy.data",
+          "resource_address": null,
+          "severity": null,
+          "short_description": null,
+          "vulnerability_details": null
+        },
+        "resource_id": "aws_iam_role_policy.data",
+        "resource_type": "aws_iam_role_policy",
+        "rule_id": "CKV_AWS_62",
+        "scan_timestamp": "2026-09-07T05:15:46.133879+00:00",
+        "scanner_name": "checkov",
+        "scanner_version": "3.3.16",
+        "severity": null
+      },
+      {
+        "description": "Ensure no IAM policies documents allow \"*\" as a statement's resource for restrictable actions",
+        "file_path": "/main.tf",
+        "line_end": 33,
+        "line_start": 18,
+        "outcome": "failed",
+        "raw_evidence": {
+          "bc_category": null,
+          "bc_check_id": null,
+          "benchmarks": {},
+          "caller_file_line_range": null,
+          "caller_file_path": null,
+          "check_class": "checkov.terraform.checks.resource.aws.IAMStarResourcePolicyDocument",
+          "check_id": "CKV_AWS_355",
+          "check_len": null,
+          "check_name": "Ensure no IAM policies documents allow \"*\" as a statement's resource for restrictable actions",
+          "check_result": {
+            "evaluated_keys": [
+              "policy/Statement/[0]/Action"
+            ],
+            "result": "FAILED"
+          },
+          "code_block": null,
+          "connected_node": null,
+          "definition_context_file_path": "/var/folders/3d/1nhgvqps0y96vkby6tmvzb6r0000gn/T/tmpda17r136/main.tf",
+          "description": null,
+          "details": [],
+          "entity_tags": null,
+          "evaluations": null,
+          "file_abs_path": "/var/folders/3d/1nhgvqps0y96vkby6tmvzb6r0000gn/T/tmpda17r136/main.tf",
+          "file_line_range": [
+            18,
+            33
+          ],
+          "file_path": "/main.tf",
+          "fixed_definition": null,
+          "guideline": null,
+          "repo_file_path": "/var/folders/3d/1nhgvqps0y96vkby6tmvzb6r0000gn/T/tmpda17r136/main.tf",
+          "resource": "aws_iam_role_policy.data",
+          "resource_address": null,
+          "severity": null,
+          "short_description": null,
+          "vulnerability_details": null
+        },
+        "resource_id": "aws_iam_role_policy.data",
+        "resource_type": "aws_iam_role_policy",
+        "rule_id": "CKV_AWS_355",
+        "scan_timestamp": "2026-09-07T05:15:46.133879+00:00",
+        "scanner_name": "checkov",
+        "scanner_version": "3.3.16",
+        "severity": null
+      },
+      {
+        "description": "Ensure IAM policies does not allow privilege escalation",
+        "file_path": "/main.tf",
+        "line_end": 33,
+        "line_start": 18,
+        "outcome": "failed",
+        "raw_evidence": {
+          "bc_category": null,
+          "bc_check_id": null,
+          "benchmarks": {},
+          "caller_file_line_range": null,
+          "caller_file_path": null,
+          "check_class": "checkov.terraform.checks.resource.aws.IAMPrivilegeEscalation",
+          "check_id": "CKV_AWS_286",
+          "check_len": null,
+          "check_name": "Ensure IAM policies does not allow privilege escalation",
+          "check_result": {
+            "evaluated_keys": [
+              "policy/Statement/[0]/Action"
+            ],
+            "result": "FAILED"
+          },
+          "code_block": null,
+          "connected_node": null,
+          "definition_context_file_path": "/var/folders/3d/1nhgvqps0y96vkby6tmvzb6r0000gn/T/tmpda17r136/main.tf",
+          "description": null,
+          "details": [],
+          "entity_tags": null,
+          "evaluations": null,
+          "file_abs_path": "/var/folders/3d/1nhgvqps0y96vkby6tmvzb6r0000gn/T/tmpda17r136/main.tf",
+          "file_line_range": [
+            18,
+            33
+          ],
+          "file_path": "/main.tf",
+          "fixed_definition": null,
+          "guideline": null,
+          "repo_file_path": "/var/folders/3d/1nhgvqps0y96vkby6tmvzb6r0000gn/T/tmpda17r136/main.tf",
+          "resource": "aws_iam_role_policy.data",
+          "resource_address": null,
+          "severity": null,
+          "short_description": null,
+          "vulnerability_details": null
+        },
+        "resource_id": "aws_iam_role_policy.data",
+        "resource_type": "aws_iam_role_policy",
+        "rule_id": "CKV_AWS_286",
+        "scan_timestamp": "2026-09-07T05:15:46.133879+00:00",
+        "scanner_name": "checkov",
+        "scanner_version": "3.3.16",
+        "severity": null
+      },
+      {
+        "description": "Ensure AWS IAM policy does not allow full IAM privileges",
+        "file_path": "/main.tf",
+        "line_end": 33,
+        "line_start": 18,
+        "outcome": "failed",
+        "raw_evidence": {
+          "bc_category": null,
+          "bc_check_id": null,
+          "benchmarks": {},
+          "caller_file_line_range": null,
+          "caller_file_path": null,
+          "check_class": "checkov.common.graph.checks_infra.base_check",
+          "check_id": "CKV2_AWS_40",
+          "check_len": null,
+          "check_name": "Ensure AWS IAM policy does not allow full IAM privileges",
+          "check_result": {
+            "entity": {
+              "aws_iam_role_policy": {
+                "data": {
+                  "__address__": "aws_iam_role_policy.data",
+                  "__end_line__": 33,
+                  "__start_line__": 18,
+                  "name": [
+                    "terraveritas-iam-d-policy"
+                  ],
+                  "policy": [
+                    {
+                      "Statement": [
+                        {
+                          "Action": "*",
+                          "Effect": "Allow",
+                          "Resource": "*",
+                          "Sid": "FullAccess-aws_iam_role.data.unique_id"
+                        }
+                      ],
+                      "Version": "2012-10-17"
+                    }
+                  ],
+                  "role": [
+                    "aws_iam_role.data.id"
+                  ]
+                }
+              }
+            },
+            "evaluated_keys": [
+              "statement[?(@/effect == Allow)]/actions[*]",
+              "policy/Statement[?(@/Effect == Allow)]/Action[*]",
+              "inline_policy/Statement[?(@/Effect == Allow)]/Action[*]"
+            ],
+            "result": "FAILED"
+          },
+          "code_block": null,
+          "connected_node": null,
+          "definition_context_file_path": "/var/folders/3d/1nhgvqps0y96vkby6tmvzb6r0000gn/T/tmpda17r136/main.tf",
+          "description": null,
+          "details": [],
+          "entity_tags": null,
+          "evaluations": null,
+          "file_abs_path": "/var/folders/3d/1nhgvqps0y96vkby6tmvzb6r0000gn/T/tmpda17r136/main.tf",
+          "file_line_range": [
+            18,
+            33
+          ],
+          "file_path": "/main.tf",
+          "fixed_definition": null,
+          "guideline": null,
+          "repo_file_path": "/var/folders/3d/1nhgvqps0y96vkby6tmvzb6r0000gn/T/tmpda17r136/main.tf",
+          "resource": "aws_iam_role_policy.data",
+          "resource_address": null,
+          "severity": null,
+          "short_description": null,
+          "vulnerability_details": null
+        },
+        "resource_id": "aws_iam_role_policy.data",
+        "resource_type": "aws_iam_role_policy",
+        "rule_id": "CKV2_AWS_40",
+        "scan_timestamp": "2026-09-07T05:15:46.133879+00:00",
+        "scanner_name": "checkov",
+        "scanner_version": "3.3.16",
+        "severity": null
+      }
+    ],
+    "finished_at": "2026-09-07T05:15:46.133879+00:00",
+    "scanner_name": "checkov",
+    "scanner_version": "3.3.16",
+    "started_at": "2026-09-07T05:15:43.466204+00:00",
+    "status": "success",
+    "target_path": "/var/folders/3d/1nhgvqps0y96vkby6tmvzb6r0000gn/T/tmpda17r136",
+    "unparseable_files": []
+  },
+  "case_id": "iam_exp_d_unresolved_policy_claude-000",
+  "differential": {
+    "new": [],
+    "persistent": [],
+    "relocated": [],
+    "removed": [
+      {
+        "before": {
+          "description": "Ensure IAM policies that allow full \"*-*\" administrative privileges are not created",
+          "file_path": "/main.tf",
+          "line_end": 33,
+          "line_start": 18,
+          "outcome": "failed",
+          "raw_evidence": {
+            "bc_category": null,
+            "bc_check_id": null,
+            "benchmarks": {},
+            "caller_file_line_range": null,
+            "caller_file_path": null,
+            "check_class": "checkov.terraform.checks.resource.aws.IAMAdminPolicyDocument",
+            "check_id": "CKV_AWS_62",
+            "check_len": null,
+            "check_name": "Ensure IAM policies that allow full \"*-*\" administrative privileges are not created",
+            "check_result": {
+              "evaluated_keys": [
+                "policy",
+                "inline_policy"
+              ],
+              "result": "FAILED"
+            },
+            "code_block": null,
+            "connected_node": null,
+            "definition_context_file_path": "/var/folders/3d/1nhgvqps0y96vkby6tmvzb6r0000gn/T/tmpda17r136/main.tf",
+            "description": null,
+            "details": [],
+            "entity_tags": null,
+            "evaluations": null,
+            "file_abs_path": "/var/folders/3d/1nhgvqps0y96vkby6tmvzb6r0000gn/T/tmpda17r136/main.tf",
+            "file_line_range": [
+              18,
+              33
+            ],
+            "file_path": "/main.tf",
+            "fixed_definition": null,
+            "guideline": null,
+            "repo_file_path": "/var/folders/3d/1nhgvqps0y96vkby6tmvzb6r0000gn/T/tmpda17r136/main.tf",
+            "resource": "aws_iam_role_policy.data",
+            "resource_address": null,
+            "severity": null,
+            "short_description": null,
+            "vulnerability_details": null
+          },
+          "resource_id": "aws_iam_role_policy.data",
+          "resource_type": "aws_iam_role_policy",
+          "rule_id": "CKV_AWS_62",
+          "scan_timestamp": "2026-09-07T05:15:46.133879+00:00",
+          "scanner_name": "checkov",
+          "scanner_version": "3.3.16",
+          "severity": null
+        },
+        "resource_still_present_in_after": true,
+        "same_identity_now_passes": true
+      },
+      {
+        "before": {
+          "description": "Ensure IAM policies does not allow write access without constraints",
+          "file_path": "/main.tf",
+          "line_end": 33,
+          "line_start": 18,
+          "outcome": "failed",
+          "raw_evidence": {
+            "bc_category": null,
+            "bc_check_id": null,
+            "benchmarks": {},
+            "caller_file_line_range": null,
+            "caller_file_path": null,
+            "check_class": "checkov.terraform.checks.resource.aws.IAMWriteAccess",
+            "check_id": "CKV_AWS_290",
+            "check_len": null,
+            "check_name": "Ensure IAM policies does not allow write access without constraints",
+            "check_result": {
+              "evaluated_keys": [
+                "policy/Statement/[0]/Action"
+              ],
+              "result": "FAILED"
+            },
+            "code_block": null,
+            "connected_node": null,
+            "definition_context_file_path": "/var/folders/3d/1nhgvqps0y96vkby6tmvzb6r0000gn/T/tmpda17r136/main.tf",
+            "description": null,
+            "details": [],
+            "entity_tags": null,
+            "evaluations": null,
+            "file_abs_path": "/var/folders/3d/1nhgvqps0y96vkby6tmvzb6r0000gn/T/tmpda17r136/main.tf",
+            "file_line_range": [
+              18,
+              33
+            ],
+            "file_path": "/main.tf",
+            "fixed_definition": null,
+            "guideline": null,
+            "repo_file_path": "/var/folders/3d/1nhgvqps0y96vkby6tmvzb6r0000gn/T/tmpda17r136/main.tf",
+            "resource": "aws_iam_role_policy.data",
+            "resource_address": null,
+            "severity": null,
+            "short_description": null,
+            "vulnerability_details": null
+          },
+          "resource_id": "aws_iam_role_policy.data",
+          "resource_type": "aws_iam_role_policy",
+          "rule_id": "CKV_AWS_290",
+          "scan_timestamp": "2026-09-07T05:15:46.133879+00:00",
+          "scanner_name": "checkov",
+          "scanner_version": "3.3.16",
+          "severity": null
+        },
+        "resource_still_present_in_after": true,
+        "same_identity_now_passes": true
+      },
+      {
+        "before": {
+          "description": "Ensure no IAM policies documents allow \"*\" as a statement's resource for restrictable actions",
+          "file_path": "/main.tf",
+          "line_end": 33,
+          "line_start": 18,
+          "outcome": "failed",
+          "raw_evidence": {
+            "bc_category": null,
+            "bc_check_id": null,
+            "benchmarks": {},
+            "caller_file_line_range": null,
+            "caller_file_path": null,
+            "check_class": "checkov.terraform.checks.resource.aws.IAMStarResourcePolicyDocument",
+            "check_id": "CKV_AWS_355",
+            "check_len": null,
+            "check_name": "Ensure no IAM policies documents allow \"*\" as a statement's resource for restrictable actions",
+            "check_result": {
+              "evaluated_keys": [
+                "policy/Statement/[0]/Action"
+              ],
+              "result": "FAILED"
+            },
+            "code_block": null,
+            "connected_node": null,
+            "definition_context_file_path": "/var/folders/3d/1nhgvqps0y96vkby6tmvzb6r0000gn/T/tmpda17r136/main.tf",
+            "description": null,
+            "details": [],
+            "entity_tags": null,
+            "evaluations": null,
+            "file_abs_path": "/var/folders/3d/1nhgvqps0y96vkby6tmvzb6r0000gn/T/tmpda17r136/main.tf",
+            "file_line_range": [
+              18,
+              33
+            ],
+            "file_path": "/main.tf",
+            "fixed_definition": null,
+            "guideline": null,
+            "repo_file_path": "/var/folders/3d/1nhgvqps0y96vkby6tmvzb6r0000gn/T/tmpda17r136/main.tf",
+            "resource": "aws_iam_role_policy.data",
+            "resource_address": null,
+            "severity": null,
+            "short_description": null,
+            "vulnerability_details": null
+          },
+          "resource_id": "aws_iam_role_policy.data",
+          "resource_type": "aws_iam_role_policy",
+          "rule_id": "CKV_AWS_355",
+          "scan_timestamp": "2026-09-07T05:15:46.133879+00:00",
+          "scanner_name": "checkov",
+          "scanner_version": "3.3.16",
+          "severity": null
+        },
+        "resource_still_present_in_after": true,
+        "same_identity_now_passes": true
+      },
+      {
+        "before": {
+          "description": "Ensure IAM policies does not allow privilege escalation",
+          "file_path": "/main.tf",
+          "line_end": 33,
+          "line_start": 18,
+          "outcome": "failed",
+          "raw_evidence": {
+            "bc_category": null,
+            "bc_check_id": null,
+            "benchmarks": {},
+            "caller_file_line_range": null,
+            "caller_file_path": null,
+            "check_class": "checkov.terraform.checks.resource.aws.IAMPrivilegeEscalation",
+            "check_id": "CKV_AWS_286",
+            "check_len": null,
+            "check_name": "Ensure IAM policies does not allow privilege escalation",
+            "check_result": {
+              "evaluated_keys": [
+                "policy/Statement/[0]/Action"
+              ],
+              "result": "FAILED"
+            },
+            "code_block": null,
+            "connected_node": null,
+            "definition_context_file_path": "/var/folders/3d/1nhgvqps0y96vkby6tmvzb6r0000gn/T/tmpda17r136/main.tf",
+            "description": null,
+            "details": [],
+            "entity_tags": null,
+            "evaluations": null,
+            "file_abs_path": "/var/folders/3d/1nhgvqps0y96vkby6tmvzb6r0000gn/T/tmpda17r136/main.tf",
+            "file_line_range": [
+              18,
+              33
+            ],
+            "file_path": "/main.tf",
+            "fixed_definition": null,
+            "guideline": null,
+            "repo_file_path": "/var/folders/3d/1nhgvqps0y96vkby6tmvzb6r0000gn/T/tmpda17r136/main.tf",
+            "resource": "aws_iam_role_policy.data",
+            "resource_address": null,
+            "severity": null,
+            "short_description": null,
+            "vulnerability_details": null
+          },
+          "resource_id": "aws_iam_role_policy.data",
+          "resource_type": "aws_iam_role_policy",
+          "rule_id": "CKV_AWS_286",
+          "scan_timestamp": "2026-09-07T05:15:46.133879+00:00",
+          "scanner_name": "checkov",
+          "scanner_version": "3.3.16",
+          "severity": null
+        },
+        "resource_still_present_in_after": true,
+        "same_identity_now_passes": true
+      },
+      {
+        "before": {
+          "description": "Ensure no IAM policies documents allow \"*\" as a statement's actions",
+          "file_path": "/main.tf",
+          "line_end": 33,
+          "line_start": 18,
+          "outcome": "failed",
+          "raw_evidence": {
+            "bc_category": null,
+            "bc_check_id": null,
+            "benchmarks": {},
+            "caller_file_line_range": null,
+            "caller_file_path": null,
+            "check_class": "checkov.terraform.checks.resource.aws.IAMStarActionPolicyDocument",
+            "check_id": "CKV_AWS_63",
+            "check_len": null,
+            "check_name": "Ensure no IAM policies documents allow \"*\" as a statement's actions",
+            "check_result": {
+              "evaluated_keys": [
+                "policy",
+                "inline_policy"
+              ],
+              "result": "FAILED"
+            },
+            "code_block": null,
+            "connected_node": null,
+            "definition_context_file_path": "/var/folders/3d/1nhgvqps0y96vkby6tmvzb6r0000gn/T/tmpda17r136/main.tf",
+            "description": null,
+            "details": [],
+            "entity_tags": null,
+            "evaluations": null,
+            "file_abs_path": "/var/folders/3d/1nhgvqps0y96vkby6tmvzb6r0000gn/T/tmpda17r136/main.tf",
+            "file_line_range": [
+              18,
+              33
+            ],
+            "file_path": "/main.tf",
+            "fixed_definition": null,
+            "guideline": null,
+            "repo_file_path": "/var/folders/3d/1nhgvqps0y96vkby6tmvzb6r0000gn/T/tmpda17r136/main.tf",
+            "resource": "aws_iam_role_policy.data",
+            "resource_address": null,
+            "severity": null,
+            "short_description": null,
+            "vulnerability_details": null
+          },
+          "resource_id": "aws_iam_role_policy.data",
+          "resource_type": "aws_iam_role_policy",
+          "rule_id": "CKV_AWS_63",
+          "scan_timestamp": "2026-09-07T05:15:46.133879+00:00",
+          "scanner_name": "checkov",
+          "scanner_version": "3.3.16",
+          "severity": null
+        },
+        "resource_still_present_in_after": true,
+        "same_identity_now_passes": true
+      },
+      {
+        "before": {
+          "description": "Ensure IAM policies does not allow permissions management / resource exposure without constraints",
+          "file_path": "/main.tf",
+          "line_end": 33,
+          "line_start": 18,
+          "outcome": "failed",
+          "raw_evidence": {
+            "bc_category": null,
+            "bc_check_id": null,
+            "benchmarks": {},
+            "caller_file_line_range": null,
+            "caller_file_path": null,
+            "check_class": "checkov.terraform.checks.resource.aws.IAMPermissionsManagement",
+            "check_id": "CKV_AWS_289",
+            "check_len": null,
+            "check_name": "Ensure IAM policies does not allow permissions management / resource exposure without constraints",
+            "check_result": {
+              "evaluated_keys": [
+                "policy/Statement/[0]/Action"
+              ],
+              "result": "FAILED"
+            },
+            "code_block": null,
+            "connected_node": null,
+            "definition_context_file_path": "/var/folders/3d/1nhgvqps0y96vkby6tmvzb6r0000gn/T/tmpda17r136/main.tf",
+            "description": null,
+            "details": [],
+            "entity_tags": null,
+            "evaluations": null,
+            "file_abs_path": "/var/folders/3d/1nhgvqps0y96vkby6tmvzb6r0000gn/T/tmpda17r136/main.tf",
+            "file_line_range": [
+              18,
+              33
+            ],
+            "file_path": "/main.tf",
+            "fixed_definition": null,
+            "guideline": null,
+            "repo_file_path": "/var/folders/3d/1nhgvqps0y96vkby6tmvzb6r0000gn/T/tmpda17r136/main.tf",
+            "resource": "aws_iam_role_policy.data",
+            "resource_address": null,
+            "severity": null,
+            "short_description": null,
+            "vulnerability_details": null
+          },
+          "resource_id": "aws_iam_role_policy.data",
+          "resource_type": "aws_iam_role_policy",
+          "rule_id": "CKV_AWS_289",
+          "scan_timestamp": "2026-09-07T05:15:46.133879+00:00",
+          "scanner_name": "checkov",
+          "scanner_version": "3.3.16",
+          "severity": null
+        },
+        "resource_still_present_in_after": true,
+        "same_identity_now_passes": true
+      },
+      {
+        "before": {
+          "description": "Ensure IAM policies does not allow data exfiltration",
+          "file_path": "/main.tf",
+          "line_end": 33,
+          "line_start": 18,
+          "outcome": "failed",
+          "raw_evidence": {
+            "bc_category": null,
+            "bc_check_id": null,
+            "benchmarks": {},
+            "caller_file_line_range": null,
+            "caller_file_path": null,
+            "check_class": "checkov.terraform.checks.resource.aws.IAMDataExfiltration",
+            "check_id": "CKV_AWS_288",
+            "check_len": null,
+            "check_name": "Ensure IAM policies does not allow data exfiltration",
+            "check_result": {
+              "evaluated_keys": [
+                "policy/Statement/[0]/Action"
+              ],
+              "result": "FAILED"
+            },
+            "code_block": null,
+            "connected_node": null,
+            "definition_context_file_path": "/var/folders/3d/1nhgvqps0y96vkby6tmvzb6r0000gn/T/tmpda17r136/main.tf",
+            "description": null,
+            "details": [],
+            "entity_tags": null,
+            "evaluations": null,
+            "file_abs_path": "/var/folders/3d/1nhgvqps0y96vkby6tmvzb6r0000gn/T/tmpda17r136/main.tf",
+            "file_line_range": [
+              18,
+              33
+            ],
+            "file_path": "/main.tf",
+            "fixed_definition": null,
+            "guideline": null,
+            "repo_file_path": "/var/folders/3d/1nhgvqps0y96vkby6tmvzb6r0000gn/T/tmpda17r136/main.tf",
+            "resource": "aws_iam_role_policy.data",
+            "resource_address": null,
+            "severity": null,
+            "short_description": null,
+            "vulnerability_details": null
+          },
+          "resource_id": "aws_iam_role_policy.data",
+          "resource_type": "aws_iam_role_policy",
+          "rule_id": "CKV_AWS_288",
+          "scan_timestamp": "2026-09-07T05:15:46.133879+00:00",
+          "scanner_name": "checkov",
+          "scanner_version": "3.3.16",
+          "severity": null
+        },
+        "resource_still_present_in_after": true,
+        "same_identity_now_passes": true
+      },
+      {
+        "before": {
+          "description": "Ensure AWS IAM policy does not allow full IAM privileges",
+          "file_path": "/main.tf",
+          "line_end": 33,
+          "line_start": 18,
+          "outcome": "failed",
+          "raw_evidence": {
+            "bc_category": null,
+            "bc_check_id": null,
+            "benchmarks": {},
+            "caller_file_line_range": null,
+            "caller_file_path": null,
+            "check_class": "checkov.common.graph.checks_infra.base_check",
+            "check_id": "CKV2_AWS_40",
+            "check_len": null,
+            "check_name": "Ensure AWS IAM policy does not allow full IAM privileges",
+            "check_result": {
+              "entity": {
+                "aws_iam_role_policy": {
+                  "data": {
+                    "__address__": "aws_iam_role_policy.data",
+                    "__end_line__": 33,
+                    "__start_line__": 18,
+                    "name": [
+                      "terraveritas-iam-d-policy"
+                    ],
+                    "policy": [
+                      {
+                        "Statement": [
+                          {
+                            "Action": "*",
+                            "Effect": "Allow",
+                            "Resource": "*",
+                            "Sid": "FullAccess-aws_iam_role.data.unique_id"
+                          }
+                        ],
+                        "Version": "2012-10-17"
+                      }
+                    ],
+                    "role": [
+                      "aws_iam_role.data.id"
+                    ]
+                  }
+                }
+              },
+              "evaluated_keys": [
+                "statement[?(@/effect == Allow)]/actions[*]",
+                "policy/Statement[?(@/Effect == Allow)]/Action[*]",
+                "inline_policy/Statement[?(@/Effect == Allow)]/Action[*]"
+              ],
+              "result": "FAILED"
+            },
+            "code_block": null,
+            "connected_node": null,
+            "definition_context_file_path": "/var/folders/3d/1nhgvqps0y96vkby6tmvzb6r0000gn/T/tmpda17r136/main.tf",
+            "description": null,
+            "details": [],
+            "entity_tags": null,
+            "evaluations": null,
+            "file_abs_path": "/var/folders/3d/1nhgvqps0y96vkby6tmvzb6r0000gn/T/tmpda17r136/main.tf",
+            "file_line_range": [
+              18,
+              33
+            ],
+            "file_path": "/main.tf",
+            "fixed_definition": null,
+            "guideline": null,
+            "repo_file_path": "/var/folders/3d/1nhgvqps0y96vkby6tmvzb6r0000gn/T/tmpda17r136/main.tf",
+            "resource": "aws_iam_role_policy.data",
+            "resource_address": null,
+            "severity": null,
+            "short_description": null,
+            "vulnerability_details": null
+          },
+          "resource_id": "aws_iam_role_policy.data",
+          "resource_type": "aws_iam_role_policy",
+          "rule_id": "CKV2_AWS_40",
+          "scan_timestamp": "2026-09-07T05:15:46.133879+00:00",
+          "scanner_name": "checkov",
+          "scanner_version": "3.3.16",
+          "severity": null
+        },
+        "resource_still_present_in_after": true,
+        "same_identity_now_passes": true
+      },
+      {
+        "before": {
+          "description": "Ensure IAM policies does not allow credentials exposure",
+          "file_path": "/main.tf",
+          "line_end": 33,
+          "line_start": 18,
+          "outcome": "failed",
+          "raw_evidence": {
+            "bc_category": null,
+            "bc_check_id": null,
+            "benchmarks": {},
+            "caller_file_line_range": null,
+            "caller_file_path": null,
+            "check_class": "checkov.terraform.checks.resource.aws.IAMCredentialsExposure",
+            "check_id": "CKV_AWS_287",
+            "check_len": null,
+            "check_name": "Ensure IAM policies does not allow credentials exposure",
+            "check_result": {
+              "evaluated_keys": [
+                "policy/Statement/[0]/Action"
+              ],
+              "result": "FAILED"
+            },
+            "code_block": null,
+            "connected_node": null,
+            "definition_context_file_path": "/var/folders/3d/1nhgvqps0y96vkby6tmvzb6r0000gn/T/tmpda17r136/main.tf",
+            "description": null,
+            "details": [],
+            "entity_tags": null,
+            "evaluations": null,
+            "file_abs_path": "/var/folders/3d/1nhgvqps0y96vkby6tmvzb6r0000gn/T/tmpda17r136/main.tf",
+            "file_line_range": [
+              18,
+              33
+            ],
+            "file_path": "/main.tf",
+            "fixed_definition": null,
+            "guideline": null,
+            "repo_file_path": "/var/folders/3d/1nhgvqps0y96vkby6tmvzb6r0000gn/T/tmpda17r136/main.tf",
+            "resource": "aws_iam_role_policy.data",
+            "resource_address": null,
+            "severity": null,
+            "short_description": null,
+            "vulnerability_details": null
+          },
+          "resource_id": "aws_iam_role_policy.data",
+          "resource_type": "aws_iam_role_policy",
+          "rule_id": "CKV_AWS_287",
+          "scan_timestamp": "2026-09-07T05:15:46.133879+00:00",
+          "scanner_name": "checkov",
+          "scanner_version": "3.3.16",
+          "severity": null
+        },
+        "resource_still_present_in_after": true,
+        "same_identity_now_passes": true
+      }
+    ],
+    "scanner_name": "checkov"
+  },
+  "environment": {
+    "checkov_version": "3.3.16",
+    "git_commit": "950f85a382c74f0413029bbe75f1a6ee2adf5b2b",
+    "platform": "macOS-26.5.2-arm64-arm-64bit-Mach-O",
+    "python_version": "3.13.0",
+    "terraform_version": "1.14.3"
+  },
+  "environment_anomalies": [],
+  "experiment_id": "2026-09-07-iam-network-experiment",
+  "extracted_terraform": "resource \"aws_iam_role\" \"data\" {\n  name = \"terraveritas-iam-d-role\"\n\n  assume_role_policy = jsonencode({\n    Version = \"2012-10-17\"\n    Statement = [\n      {\n        Effect = \"Allow\"\n        Principal = {\n          Service = \"lambda.amazonaws.com\"\n        }\n        Action = \"sts:AssumeRole\"\n      }\n    ]\n  })\n}\n\nresource \"aws_iam_role_policy\" \"data\" {\n  name = \"terraveritas-iam-d-policy\"\n  role = aws_iam_role.data.id\n\n  policy = jsonencode({\n    Version = \"2012-10-17\"\n    Statement = [\n      {\n        Sid    = \"ScopedAccess-${aws_iam_role.data.unique_id}\"\n        Effect = \"Allow\"\n        Action = [\n          \"dynamodb:GetItem\",\n          \"dynamodb:PutItem\",\n          \"dynamodb:UpdateItem\",\n          \"dynamodb:Query\",\n          \"logs:CreateLogGroup\",\n          \"logs:CreateLogStream\",\n          \"logs:PutLogEvents\"\n        ]\n        Resource = [\n          \"arn:aws:dynamodb:*:*:table/terraveritas-data-*\",\n          \"arn:aws:logs:*:*:log-group:/aws/lambda/terraveritas-iam-d-*\"\n        ]\n      }\n    ]\n  })\n}",
+  "generated_at": "2026-09-07T05:15:43.465235+00:00",
+  "human_label": null,
+  "model_version": "claude-sonnet-5",
+  "oracle_verdict": {
+    "classification": "inconclusive",
+    "confidence": "low",
+    "evidence_used": [
+      "before plan (plan_success)",
+      "after plan (plan_success)",
+      "before invariant evaluation (unknown)",
+      "after invariant evaluation (unknown)",
+      "checkov differential"
+    ],
+    "invariant_id": "IAM_EXCESSIVE_PRIVILEGE_EXPOSURE",
+    "reasons": [
+      "before-state evaluation inconclusive: inline policy content could not be evaluated at plan time for: ['aws_iam_role_policy.data'], and no independent violation was found on the resolvable policies",
+      "after-state evaluation inconclusive: inline policy content could not be evaluated at plan time for: ['aws_iam_role_policy.data'], and no independent violation was found on the resolvable policies"
+    ],
+    "remaining_uncertainty": [
+      "insufficient evidence to determine whether the security property holds"
+    ],
+    "resource_address": "aws_iam_role.data"
+  },
+  "original_security_issue_description": "Ensure IAM policies that allow full \"*-*\" administrative privileges are not created",
+  "original_security_issue_rule_id": "CKV_AWS_62",
+  "original_terraform": "resource \"aws_iam_role\" \"data\" {\n  name = \"terraveritas-iam-d-role\"\n\n  assume_role_policy = jsonencode({\n    Version = \"2012-10-17\"\n    Statement = [\n      {\n        Effect = \"Allow\"\n        Principal = {\n          Service = \"lambda.amazonaws.com\"\n        }\n        Action = \"sts:AssumeRole\"\n      }\n    ]\n  })\n}\n\nresource \"aws_iam_role_policy\" \"data\" {\n  name = \"terraveritas-iam-d-policy\"\n  role = aws_iam_role.data.id\n\n  policy = jsonencode({\n    Version = \"2012-10-17\"\n    Statement = [\n      {\n        Sid      = \"FullAccess-${aws_iam_role.data.unique_id}\"\n        Effect   = \"Allow\"\n        Action   = \"*\"\n        Resource = \"*\"\n      }\n    ]\n  })\n}\n",
+  "original_terraform_sha256": "fa139ef8bd66811ffd68e2241a7bf33b2658da21c8e1602aef376732584e3265",
+  "prompt_template_id": "iam_network_experiment_v1",
+  "raw_ai_output": "```hcl\nresource \"aws_iam_role\" \"data\" {\n  name = \"terraveritas-iam-d-role\"\n\n  assume_role_policy = jsonencode({\n    Version = \"2012-10-17\"\n    Statement = [\n      {\n        Effect = \"Allow\"\n        Principal = {\n          Service = \"lambda.amazonaws.com\"\n        }\n        Action = \"sts:AssumeRole\"\n      }\n    ]\n  })\n}\n\nresource \"aws_iam_role_policy\" \"data\" {\n  name = \"terraveritas-iam-d-policy\"\n  role = aws_iam_role.data.id\n\n  policy = jsonencode({\n    Version = \"2012-10-17\"\n    Statement = [\n      {\n        Sid    = \"ScopedAccess-${aws_iam_role.data.unique_id}\"\n        Effect = \"Allow\"\n        Action = [\n          \"dynamodb:GetItem\",\n          \"dynamodb:PutItem\",\n          \"dynamodb:UpdateItem\",\n          \"dynamodb:Query\",\n          \"logs:CreateLogGroup\",\n          \"logs:CreateLogStream\",\n          \"logs:PutLogEvents\"\n        ]\n        Resource = [\n          \"arn:aws:dynamodb:*:*:table/terraveritas-data-*\",\n          \"arn:aws:logs:*:*:log-group:/aws/lambda/terraveritas-iam-d-*\"\n        ]\n      }\n    ]\n  })\n}\n```\n\nExplanation: The original policy granted `Action = \"*\"` on `Resource = \"*\"`, which is exactly the full-administrative-privileges pattern CKV_AWS_62 flags \u2014 any principal assuming this role could do anything to any resource in the account. The fix replaces the wildcard grant with an explicit allow-list of only the actions the Lambda execution role actually needs (here, illustrative DynamoDB data access plus the standard CloudWatch Logs permissions every Lambda needs), and scopes `Resource` to specific ARNs/prefixes instead of `*`. You should replace the example actions/resources with whatever this role genuinely needs, following least-privilege \u2014 the key structural fix is eliminating both the `Action = \"*\"` and `Resource = \"*\"` wildcards together.\n",
+  "rendered_prompt": "check: CKV_AWS_62 (Ensure IAM policies that allow full \"*-*\" administrative privileges are not created)\n[see fixtures/terraform/iam_exp_d_unresolved_policy/main.tf for the exact Terraform configuration shown to the model]",
+  "scanner_baseline": {
+    "broad_conclusion": "fix_accepted",
+    "broad_reason": "no relevant rule fails in the after-scan",
+    "narrow_conclusion": "fix_accepted",
+    "narrow_reason": "CKV_AWS_62 no longer fails in the after-scan; nothing new appeared"
+  },
+  "system_configuration": {
+    "max_output_tokens": null,
+    "other_parameters": {
+      "hypothesis": "before=UNKNOWN (policy content unresolvable at plan time via a self-referential unique_id interpolation); after depends on whether the repair's own Sid keeps the same self-reference",
+      "invocation": "Agent tool, subagent_type=general-purpose, instructed to use no tools, blind to this project's research purpose, oracle, or evaluation criteria"
+    },
+    "temperature": null
+  },
+  "vulnerability_class": "IAM_EXCESSIVE_PRIVILEGE_EXPOSURE"
+}

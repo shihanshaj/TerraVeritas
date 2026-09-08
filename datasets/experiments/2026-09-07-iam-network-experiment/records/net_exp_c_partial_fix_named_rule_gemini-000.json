@@ -1,0 +1,2015 @@
+{
+  "after_invariant": {
+    "evidence": {
+      "ingress_entirely_unresolved": false,
+      "ingress_rule_count": 2
+    },
+    "invariant_id": "NETWORK_SENSITIVE_PORT_EXPOSURE",
+    "reason": "no ingress rule allows unrestricted access to a sensitive port",
+    "related_resource_addresses": [
+      "aws_security_group.data"
+    ],
+    "resource_address": "aws_security_group.data",
+    "status": "pass",
+    "violated_conditions": []
+  },
+  "after_plan": {
+    "commands_run": [
+      [
+        "terraform",
+        "init",
+        "-input=false",
+        "-no-color"
+      ],
+      [
+        "terraform",
+        "validate",
+        "-no-color",
+        "-json"
+      ],
+      [
+        "terraform",
+        "plan",
+        "-input=false",
+        "-no-color",
+        "-json",
+        "-out=tfplan"
+      ],
+      [
+        "terraform",
+        "show",
+        "-json",
+        "tfplan"
+      ]
+    ],
+    "error_message": null,
+    "finished_at": "2026-09-07T05:18:10.637792+00:00",
+    "raw_plan_json": {
+      "applyable": true,
+      "complete": true,
+      "configuration": {
+        "provider_config": {
+          "aws": {
+            "expressions": {
+              "access_key": "[REDACTED]",
+              "region": {
+                "constant_value": "us-east-1"
+              },
+              "secret_key": "[REDACTED]",
+              "skip_credentials_validation": {
+                "constant_value": true
+              },
+              "skip_metadata_api_check": {
+                "constant_value": true
+              },
+              "skip_requesting_account_id": {
+                "constant_value": true
+              }
+            },
+            "full_name": "registry.terraform.io/hashicorp/aws",
+            "name": "aws",
+            "version_constraint": "5.100.0"
+          }
+        },
+        "root_module": {
+          "resources": [
+            {
+              "address": "aws_security_group.data",
+              "expressions": {
+                "description": {
+                  "constant_value": "bastion and remote-management host"
+                },
+                "ingress": {
+                  "constant_value": [
+                    {
+                      "cidr_blocks": [
+                        "10.0.0.0/16"
+                      ],
+                      "description": "SSH for admin access",
+                      "from_port": 22,
+                      "ipv6_cidr_blocks": null,
+                      "prefix_list_ids": null,
+                      "protocol": "tcp",
+                      "security_groups": null,
+                      "self": null,
+                      "to_port": 22
+                    },
+                    {
+                      "cidr_blocks": [
+                        "10.0.0.0/16"
+                      ],
+                      "description": "RDP for Windows admin access",
+                      "from_port": 3389,
+                      "ipv6_cidr_blocks": null,
+                      "prefix_list_ids": null,
+                      "protocol": "tcp",
+                      "security_groups": null,
+                      "self": null,
+                      "to_port": 3389
+                    }
+                  ]
+                },
+                "name": {
+                  "constant_value": "terraveritas-net-c-sg"
+                }
+              },
+              "mode": "managed",
+              "name": "data",
+              "provider_config_key": "aws",
+              "schema_version": 1,
+              "type": "aws_security_group"
+            }
+          ]
+        }
+      },
+      "errored": false,
+      "format_version": "1.2",
+      "planned_values": {
+        "root_module": {
+          "resources": [
+            {
+              "address": "aws_security_group.data",
+              "mode": "managed",
+              "name": "data",
+              "provider_name": "registry.terraform.io/hashicorp/aws",
+              "schema_version": 1,
+              "sensitive_values": {
+                "egress": [],
+                "ingress": [
+                  {
+                    "cidr_blocks": [
+                      false
+                    ],
+                    "ipv6_cidr_blocks": [],
+                    "prefix_list_ids": [],
+                    "security_groups": []
+                  },
+                  {
+                    "cidr_blocks": [
+                      false
+                    ],
+                    "ipv6_cidr_blocks": [],
+                    "prefix_list_ids": [],
+                    "security_groups": []
+                  }
+                ],
+                "tags_all": {}
+              },
+              "type": "aws_security_group",
+              "values": {
+                "description": "bastion and remote-management host",
+                "ingress": [
+                  {
+                    "cidr_blocks": [
+                      "10.0.0.0/16"
+                    ],
+                    "description": "RDP for Windows admin access",
+                    "from_port": 3389,
+                    "ipv6_cidr_blocks": [],
+                    "prefix_list_ids": [],
+                    "protocol": "tcp",
+                    "security_groups": [],
+                    "self": false,
+                    "to_port": 3389
+                  },
+                  {
+                    "cidr_blocks": [
+                      "10.0.0.0/16"
+                    ],
+                    "description": "SSH for admin access",
+                    "from_port": 22,
+                    "ipv6_cidr_blocks": [],
+                    "prefix_list_ids": [],
+                    "protocol": "tcp",
+                    "security_groups": [],
+                    "self": false,
+                    "to_port": 22
+                  }
+                ],
+                "name": "terraveritas-net-c-sg",
+                "revoke_rules_on_delete": false,
+                "tags": null,
+                "timeouts": null
+              }
+            }
+          ]
+        }
+      },
+      "resource_changes": [
+        {
+          "address": "aws_security_group.data",
+          "change": {
+            "actions": [
+              "create"
+            ],
+            "after": {
+              "description": "bastion and remote-management host",
+              "ingress": [
+                {
+                  "cidr_blocks": [
+                    "10.0.0.0/16"
+                  ],
+                  "description": "RDP for Windows admin access",
+                  "from_port": 3389,
+                  "ipv6_cidr_blocks": [],
+                  "prefix_list_ids": [],
+                  "protocol": "tcp",
+                  "security_groups": [],
+                  "self": false,
+                  "to_port": 3389
+                },
+                {
+                  "cidr_blocks": [
+                    "10.0.0.0/16"
+                  ],
+                  "description": "SSH for admin access",
+                  "from_port": 22,
+                  "ipv6_cidr_blocks": [],
+                  "prefix_list_ids": [],
+                  "protocol": "tcp",
+                  "security_groups": [],
+                  "self": false,
+                  "to_port": 22
+                }
+              ],
+              "name": "terraveritas-net-c-sg",
+              "revoke_rules_on_delete": false,
+              "tags": null,
+              "timeouts": null
+            },
+            "after_sensitive": {
+              "egress": [],
+              "ingress": [
+                {
+                  "cidr_blocks": [
+                    false
+                  ],
+                  "ipv6_cidr_blocks": [],
+                  "prefix_list_ids": [],
+                  "security_groups": []
+                },
+                {
+                  "cidr_blocks": [
+                    false
+                  ],
+                  "ipv6_cidr_blocks": [],
+                  "prefix_list_ids": [],
+                  "security_groups": []
+                }
+              ],
+              "tags_all": {}
+            },
+            "after_unknown": {
+              "arn": true,
+              "egress": true,
+              "id": true,
+              "ingress": [
+                {
+                  "cidr_blocks": [
+                    false
+                  ],
+                  "ipv6_cidr_blocks": [],
+                  "prefix_list_ids": [],
+                  "security_groups": []
+                },
+                {
+                  "cidr_blocks": [
+                    false
+                  ],
+                  "ipv6_cidr_blocks": [],
+                  "prefix_list_ids": [],
+                  "security_groups": []
+                }
+              ],
+              "name_prefix": true,
+              "owner_id": true,
+              "tags_all": true,
+              "vpc_id": true
+            },
+            "before": null,
+            "before_sensitive": false
+          },
+          "mode": "managed",
+          "name": "data",
+          "provider_name": "registry.terraform.io/hashicorp/aws",
+          "type": "aws_security_group"
+        }
+      ],
+      "terraform_version": "1.14.3",
+      "timestamp": "2026-09-07T05:18:08Z"
+    },
+    "resource_changes": [
+      {
+        "actions": [
+          "create"
+        ],
+        "address": "aws_security_group.data",
+        "after": {
+          "description": "bastion and remote-management host",
+          "ingress": [
+            {
+              "cidr_blocks": [
+                "10.0.0.0/16"
+              ],
+              "description": "RDP for Windows admin access",
+              "from_port": 3389,
+              "ipv6_cidr_blocks": [],
+              "prefix_list_ids": [],
+              "protocol": "tcp",
+              "security_groups": [],
+              "self": false,
+              "to_port": 3389
+            },
+            {
+              "cidr_blocks": [
+                "10.0.0.0/16"
+              ],
+              "description": "SSH for admin access",
+              "from_port": 22,
+              "ipv6_cidr_blocks": [],
+              "prefix_list_ids": [],
+              "protocol": "tcp",
+              "security_groups": [],
+              "self": false,
+              "to_port": 22
+            }
+          ],
+          "name": "terraveritas-net-c-sg",
+          "revoke_rules_on_delete": false,
+          "tags": null,
+          "timeouts": null
+        },
+        "after_unknown_keys": [
+          "arn",
+          "egress",
+          "id",
+          "name_prefix",
+          "owner_id",
+          "tags_all",
+          "vpc_id"
+        ],
+        "provider_name": "registry.terraform.io/hashicorp/aws",
+        "resource_name": "data",
+        "resource_type": "aws_security_group"
+      }
+    ],
+    "started_at": "2026-09-07T05:18:04.138667+00:00",
+    "status": "plan_success",
+    "target_path": "/var/folders/3d/1nhgvqps0y96vkby6tmvzb6r0000gn/T/tmpu_qiwm8y",
+    "terraform_version": "1.14.3"
+  },
+  "after_plan_status": "plan_success",
+  "after_scan": {
+    "command": [
+      "checkov",
+      "-d",
+      "/var/folders/3d/1nhgvqps0y96vkby6tmvzb6r0000gn/T/tmpshywvkye",
+      "-o",
+      "json",
+      "--compact",
+      "--framework",
+      "terraform",
+      "--skip-download"
+    ],
+    "error_message": null,
+    "exit_code": 1,
+    "findings": [
+      {
+        "description": "Ensure no security groups allow ingress from 0.0.0.0:0 to port 80",
+        "file_path": "/main.tf",
+        "line_end": 20,
+        "line_start": 1,
+        "outcome": "passed",
+        "raw_evidence": {
+          "bc_category": null,
+          "bc_check_id": null,
+          "benchmarks": {},
+          "caller_file_line_range": null,
+          "caller_file_path": null,
+          "check_class": "checkov.terraform.checks.resource.aws.SecurityGroupUnrestrictedIngress80",
+          "check_id": "CKV_AWS_260",
+          "check_len": null,
+          "check_name": "Ensure no security groups allow ingress from 0.0.0.0:0 to port 80",
+          "check_result": {
+            "evaluated_keys": [],
+            "result": "PASSED"
+          },
+          "code_block": null,
+          "connected_node": null,
+          "definition_context_file_path": "/var/folders/3d/1nhgvqps0y96vkby6tmvzb6r0000gn/T/tmpshywvkye/main.tf",
+          "description": null,
+          "details": [],
+          "entity_tags": null,
+          "evaluations": null,
+          "file_abs_path": "/var/folders/3d/1nhgvqps0y96vkby6tmvzb6r0000gn/T/tmpshywvkye/main.tf",
+          "file_line_range": [
+            1,
+            20
+          ],
+          "file_path": "/main.tf",
+          "fixed_definition": null,
+          "guideline": null,
+          "repo_file_path": "/var/folders/3d/1nhgvqps0y96vkby6tmvzb6r0000gn/T/tmpshywvkye/main.tf",
+          "resource": "aws_security_group.data",
+          "resource_address": null,
+          "severity": null,
+          "short_description": null,
+          "vulnerability_details": null
+        },
+        "resource_id": "aws_security_group.data",
+        "resource_type": "aws_security_group",
+        "rule_id": "CKV_AWS_260",
+        "scan_timestamp": "2026-09-07T05:17:56.021347+00:00",
+        "scanner_name": "checkov",
+        "scanner_version": "3.3.16",
+        "severity": null
+      },
+      {
+        "description": "Ensure no security groups allow ingress from 0.0.0.0:0 to port 22",
+        "file_path": "/main.tf",
+        "line_end": 20,
+        "line_start": 1,
+        "outcome": "passed",
+        "raw_evidence": {
+          "bc_category": null,
+          "bc_check_id": null,
+          "benchmarks": {},
+          "caller_file_line_range": null,
+          "caller_file_path": null,
+          "check_class": "checkov.terraform.checks.resource.aws.SecurityGroupUnrestrictedIngress22",
+          "check_id": "CKV_AWS_24",
+          "check_len": null,
+          "check_name": "Ensure no security groups allow ingress from 0.0.0.0:0 to port 22",
+          "check_result": {
+            "evaluated_keys": [],
+            "result": "PASSED"
+          },
+          "code_block": null,
+          "connected_node": null,
+          "definition_context_file_path": "/var/folders/3d/1nhgvqps0y96vkby6tmvzb6r0000gn/T/tmpshywvkye/main.tf",
+          "description": null,
+          "details": [],
+          "entity_tags": null,
+          "evaluations": null,
+          "file_abs_path": "/var/folders/3d/1nhgvqps0y96vkby6tmvzb6r0000gn/T/tmpshywvkye/main.tf",
+          "file_line_range": [
+            1,
+            20
+          ],
+          "file_path": "/main.tf",
+          "fixed_definition": null,
+          "guideline": null,
+          "repo_file_path": "/var/folders/3d/1nhgvqps0y96vkby6tmvzb6r0000gn/T/tmpshywvkye/main.tf",
+          "resource": "aws_security_group.data",
+          "resource_address": null,
+          "severity": null,
+          "short_description": null,
+          "vulnerability_details": null
+        },
+        "resource_id": "aws_security_group.data",
+        "resource_type": "aws_security_group",
+        "rule_id": "CKV_AWS_24",
+        "scan_timestamp": "2026-09-07T05:17:56.021347+00:00",
+        "scanner_name": "checkov",
+        "scanner_version": "3.3.16",
+        "severity": null
+      },
+      {
+        "description": "Ensure every security group and rule has a description",
+        "file_path": "/main.tf",
+        "line_end": 20,
+        "line_start": 1,
+        "outcome": "passed",
+        "raw_evidence": {
+          "bc_category": null,
+          "bc_check_id": null,
+          "benchmarks": {},
+          "caller_file_line_range": null,
+          "caller_file_path": null,
+          "check_class": "checkov.terraform.checks.resource.aws.SecurityGroupRuleDescription",
+          "check_id": "CKV_AWS_23",
+          "check_len": null,
+          "check_name": "Ensure every security group and rule has a description",
+          "check_result": {
+            "evaluated_keys": [
+              "description"
+            ],
+            "result": "PASSED"
+          },
+          "code_block": null,
+          "connected_node": null,
+          "definition_context_file_path": "/var/folders/3d/1nhgvqps0y96vkby6tmvzb6r0000gn/T/tmpshywvkye/main.tf",
+          "description": null,
+          "details": [],
+          "entity_tags": null,
+          "evaluations": null,
+          "file_abs_path": "/var/folders/3d/1nhgvqps0y96vkby6tmvzb6r0000gn/T/tmpshywvkye/main.tf",
+          "file_line_range": [
+            1,
+            20
+          ],
+          "file_path": "/main.tf",
+          "fixed_definition": null,
+          "guideline": null,
+          "repo_file_path": "/var/folders/3d/1nhgvqps0y96vkby6tmvzb6r0000gn/T/tmpshywvkye/main.tf",
+          "resource": "aws_security_group.data",
+          "resource_address": null,
+          "severity": null,
+          "short_description": null,
+          "vulnerability_details": null
+        },
+        "resource_id": "aws_security_group.data",
+        "resource_type": "aws_security_group",
+        "rule_id": "CKV_AWS_23",
+        "scan_timestamp": "2026-09-07T05:17:56.021347+00:00",
+        "scanner_name": "checkov",
+        "scanner_version": "3.3.16",
+        "severity": null
+      },
+      {
+        "description": "Ensure no security groups allow ingress from 0.0.0.0:0 to port -1",
+        "file_path": "/main.tf",
+        "line_end": 20,
+        "line_start": 1,
+        "outcome": "passed",
+        "raw_evidence": {
+          "bc_category": null,
+          "bc_check_id": null,
+          "benchmarks": {},
+          "caller_file_line_range": null,
+          "caller_file_path": null,
+          "check_class": "checkov.terraform.checks.resource.aws.SecurityGroupUnrestrictedIngressAny",
+          "check_id": "CKV_AWS_277",
+          "check_len": null,
+          "check_name": "Ensure no security groups allow ingress from 0.0.0.0:0 to port -1",
+          "check_result": {
+            "evaluated_keys": [],
+            "result": "PASSED"
+          },
+          "code_block": null,
+          "connected_node": null,
+          "definition_context_file_path": "/var/folders/3d/1nhgvqps0y96vkby6tmvzb6r0000gn/T/tmpshywvkye/main.tf",
+          "description": null,
+          "details": [],
+          "entity_tags": null,
+          "evaluations": null,
+          "file_abs_path": "/var/folders/3d/1nhgvqps0y96vkby6tmvzb6r0000gn/T/tmpshywvkye/main.tf",
+          "file_line_range": [
+            1,
+            20
+          ],
+          "file_path": "/main.tf",
+          "fixed_definition": null,
+          "guideline": null,
+          "repo_file_path": "/var/folders/3d/1nhgvqps0y96vkby6tmvzb6r0000gn/T/tmpshywvkye/main.tf",
+          "resource": "aws_security_group.data",
+          "resource_address": null,
+          "severity": null,
+          "short_description": null,
+          "vulnerability_details": null
+        },
+        "resource_id": "aws_security_group.data",
+        "resource_type": "aws_security_group",
+        "rule_id": "CKV_AWS_277",
+        "scan_timestamp": "2026-09-07T05:17:56.021347+00:00",
+        "scanner_name": "checkov",
+        "scanner_version": "3.3.16",
+        "severity": null
+      },
+      {
+        "description": "Ensure no security groups allow ingress from 0.0.0.0:0 to port 3389",
+        "file_path": "/main.tf",
+        "line_end": 20,
+        "line_start": 1,
+        "outcome": "passed",
+        "raw_evidence": {
+          "bc_category": null,
+          "bc_check_id": null,
+          "benchmarks": {},
+          "caller_file_line_range": null,
+          "caller_file_path": null,
+          "check_class": "checkov.terraform.checks.resource.aws.SecurityGroupUnrestrictedIngress3389",
+          "check_id": "CKV_AWS_25",
+          "check_len": null,
+          "check_name": "Ensure no security groups allow ingress from 0.0.0.0:0 to port 3389",
+          "check_result": {
+            "evaluated_keys": [],
+            "result": "PASSED"
+          },
+          "code_block": null,
+          "connected_node": null,
+          "definition_context_file_path": "/var/folders/3d/1nhgvqps0y96vkby6tmvzb6r0000gn/T/tmpshywvkye/main.tf",
+          "description": null,
+          "details": [],
+          "entity_tags": null,
+          "evaluations": null,
+          "file_abs_path": "/var/folders/3d/1nhgvqps0y96vkby6tmvzb6r0000gn/T/tmpshywvkye/main.tf",
+          "file_line_range": [
+            1,
+            20
+          ],
+          "file_path": "/main.tf",
+          "fixed_definition": null,
+          "guideline": null,
+          "repo_file_path": "/var/folders/3d/1nhgvqps0y96vkby6tmvzb6r0000gn/T/tmpshywvkye/main.tf",
+          "resource": "aws_security_group.data",
+          "resource_address": null,
+          "severity": null,
+          "short_description": null,
+          "vulnerability_details": null
+        },
+        "resource_id": "aws_security_group.data",
+        "resource_type": "aws_security_group",
+        "rule_id": "CKV_AWS_25",
+        "scan_timestamp": "2026-09-07T05:17:56.021347+00:00",
+        "scanner_name": "checkov",
+        "scanner_version": "3.3.16",
+        "severity": null
+      },
+      {
+        "description": "Ensure no security groups allow egress from 0.0.0.0:0 to port -1",
+        "file_path": "/main.tf",
+        "line_end": 20,
+        "line_start": 1,
+        "outcome": "passed",
+        "raw_evidence": {
+          "bc_category": null,
+          "bc_check_id": null,
+          "benchmarks": {},
+          "caller_file_line_range": null,
+          "caller_file_path": null,
+          "check_class": "checkov.terraform.checks.resource.aws.SecurityGroupUnrestrictedEgressAny",
+          "check_id": "CKV_AWS_382",
+          "check_len": null,
+          "check_name": "Ensure no security groups allow egress from 0.0.0.0:0 to port -1",
+          "check_result": {
+            "evaluated_keys": [
+              "from_port",
+              "to_port",
+              "cidr_ipv4",
+              "cidr_ipv6"
+            ],
+            "result": "PASSED"
+          },
+          "code_block": null,
+          "connected_node": null,
+          "definition_context_file_path": "/var/folders/3d/1nhgvqps0y96vkby6tmvzb6r0000gn/T/tmpshywvkye/main.tf",
+          "description": null,
+          "details": [],
+          "entity_tags": null,
+          "evaluations": null,
+          "file_abs_path": "/var/folders/3d/1nhgvqps0y96vkby6tmvzb6r0000gn/T/tmpshywvkye/main.tf",
+          "file_line_range": [
+            1,
+            20
+          ],
+          "file_path": "/main.tf",
+          "fixed_definition": null,
+          "guideline": null,
+          "repo_file_path": "/var/folders/3d/1nhgvqps0y96vkby6tmvzb6r0000gn/T/tmpshywvkye/main.tf",
+          "resource": "aws_security_group.data",
+          "resource_address": null,
+          "severity": null,
+          "short_description": null,
+          "vulnerability_details": null
+        },
+        "resource_id": "aws_security_group.data",
+        "resource_type": "aws_security_group",
+        "rule_id": "CKV_AWS_382",
+        "scan_timestamp": "2026-09-07T05:17:56.021347+00:00",
+        "scanner_name": "checkov",
+        "scanner_version": "3.3.16",
+        "severity": null
+      },
+      {
+        "description": "Ensure that Security Groups are attached to another resource",
+        "file_path": "/main.tf",
+        "line_end": 20,
+        "line_start": 1,
+        "outcome": "failed",
+        "raw_evidence": {
+          "bc_category": null,
+          "bc_check_id": null,
+          "benchmarks": {},
+          "caller_file_line_range": null,
+          "caller_file_path": null,
+          "check_class": "checkov.common.graph.checks_infra.base_check",
+          "check_id": "CKV2_AWS_5",
+          "check_len": null,
+          "check_name": "Ensure that Security Groups are attached to another resource",
+          "check_result": {
+            "entity": {
+              "aws_security_group": {
+                "data": {
+                  "__address__": "aws_security_group.data",
+                  "__end_line__": 20,
+                  "__start_line__": 1,
+                  "description": [
+                    "bastion and remote-management host"
+                  ],
+                  "ingress": [
+                    {
+                      "cidr_blocks": [
+                        [
+                          "10.0.0.0/16"
+                        ]
+                      ],
+                      "description": [
+                        "SSH for admin access"
+                      ],
+                      "from_port": [
+                        22
+                      ],
+                      "protocol": [
+                        "tcp"
+                      ],
+                      "to_port": [
+                        22
+                      ]
+                    },
+                    {
+                      "cidr_blocks": [
+                        [
+                          "10.0.0.0/16"
+                        ]
+                      ],
+                      "description": [
+                        "RDP for Windows admin access"
+                      ],
+                      "from_port": [
+                        3389
+                      ],
+                      "protocol": [
+                        "tcp"
+                      ],
+                      "to_port": [
+                        3389
+                      ]
+                    }
+                  ],
+                  "name": [
+                    "terraveritas-net-c-sg"
+                  ]
+                }
+              }
+            },
+            "evaluated_keys": [
+              "resource_type",
+              "networking"
+            ],
+            "result": "FAILED"
+          },
+          "code_block": null,
+          "connected_node": null,
+          "definition_context_file_path": "/var/folders/3d/1nhgvqps0y96vkby6tmvzb6r0000gn/T/tmpshywvkye/main.tf",
+          "description": null,
+          "details": [],
+          "entity_tags": null,
+          "evaluations": null,
+          "file_abs_path": "/var/folders/3d/1nhgvqps0y96vkby6tmvzb6r0000gn/T/tmpshywvkye/main.tf",
+          "file_line_range": [
+            1,
+            20
+          ],
+          "file_path": "/main.tf",
+          "fixed_definition": null,
+          "guideline": null,
+          "repo_file_path": "/var/folders/3d/1nhgvqps0y96vkby6tmvzb6r0000gn/T/tmpshywvkye/main.tf",
+          "resource": "aws_security_group.data",
+          "resource_address": null,
+          "severity": null,
+          "short_description": null,
+          "vulnerability_details": null
+        },
+        "resource_id": "aws_security_group.data",
+        "resource_type": "aws_security_group",
+        "rule_id": "CKV2_AWS_5",
+        "scan_timestamp": "2026-09-07T05:17:56.021347+00:00",
+        "scanner_name": "checkov",
+        "scanner_version": "3.3.16",
+        "severity": null
+      }
+    ],
+    "finished_at": "2026-09-07T05:17:56.021347+00:00",
+    "scanner_name": "checkov",
+    "scanner_version": "3.3.16",
+    "started_at": "2026-09-07T05:17:54.016826+00:00",
+    "status": "success",
+    "target_path": "/var/folders/3d/1nhgvqps0y96vkby6tmvzb6r0000gn/T/tmpshywvkye",
+    "unparseable_files": []
+  },
+  "ai_model": "gemini-3.6-flash (Google, direct API call) -- genuinely independent vendor",
+  "before_invariant": {
+    "evidence": {
+      "ingress_entirely_unresolved": false,
+      "ingress_rule_count": 2
+    },
+    "invariant_id": "NETWORK_SENSITIVE_PORT_EXPOSURE",
+    "reason": "security group allows unrestricted (0.0.0.0/0 or ::/0) inbound access to a sensitive port [20, 21, 22, 3306, 3389]: ['ingress[0]_open_to_sensitive_port', 'ingress[1]_open_to_sensitive_port']",
+    "related_resource_addresses": [
+      "aws_security_group.data"
+    ],
+    "resource_address": "aws_security_group.data",
+    "status": "fail",
+    "violated_conditions": [
+      "ingress[0]_open_to_sensitive_port",
+      "ingress[1]_open_to_sensitive_port"
+    ]
+  },
+  "before_plan": {
+    "commands_run": [
+      [
+        "terraform",
+        "init",
+        "-input=false",
+        "-no-color"
+      ],
+      [
+        "terraform",
+        "validate",
+        "-no-color",
+        "-json"
+      ],
+      [
+        "terraform",
+        "plan",
+        "-input=false",
+        "-no-color",
+        "-json",
+        "-out=tfplan"
+      ],
+      [
+        "terraform",
+        "show",
+        "-json",
+        "tfplan"
+      ]
+    ],
+    "error_message": null,
+    "finished_at": "2026-09-07T05:18:04.136486+00:00",
+    "raw_plan_json": {
+      "applyable": true,
+      "complete": true,
+      "configuration": {
+        "provider_config": {
+          "aws": {
+            "expressions": {
+              "access_key": "[REDACTED]",
+              "region": {
+                "constant_value": "us-east-1"
+              },
+              "secret_key": "[REDACTED]",
+              "skip_credentials_validation": {
+                "constant_value": true
+              },
+              "skip_metadata_api_check": {
+                "constant_value": true
+              },
+              "skip_requesting_account_id": {
+                "constant_value": true
+              }
+            },
+            "full_name": "registry.terraform.io/hashicorp/aws",
+            "name": "aws",
+            "version_constraint": "5.100.0"
+          }
+        },
+        "root_module": {
+          "resources": [
+            {
+              "address": "aws_security_group.data",
+              "expressions": {
+                "description": {
+                  "constant_value": "bastion and remote-management host"
+                },
+                "ingress": {
+                  "constant_value": [
+                    {
+                      "cidr_blocks": [
+                        "0.0.0.0/0"
+                      ],
+                      "description": "SSH for admin access",
+                      "from_port": 22,
+                      "ipv6_cidr_blocks": null,
+                      "prefix_list_ids": null,
+                      "protocol": "tcp",
+                      "security_groups": null,
+                      "self": null,
+                      "to_port": 22
+                    },
+                    {
+                      "cidr_blocks": [
+                        "0.0.0.0/0"
+                      ],
+                      "description": "RDP for Windows admin access",
+                      "from_port": 3389,
+                      "ipv6_cidr_blocks": null,
+                      "prefix_list_ids": null,
+                      "protocol": "tcp",
+                      "security_groups": null,
+                      "self": null,
+                      "to_port": 3389
+                    }
+                  ]
+                },
+                "name": {
+                  "constant_value": "terraveritas-net-c-sg"
+                }
+              },
+              "mode": "managed",
+              "name": "data",
+              "provider_config_key": "aws",
+              "schema_version": 1,
+              "type": "aws_security_group"
+            }
+          ]
+        }
+      },
+      "errored": false,
+      "format_version": "1.2",
+      "planned_values": {
+        "root_module": {
+          "resources": [
+            {
+              "address": "aws_security_group.data",
+              "mode": "managed",
+              "name": "data",
+              "provider_name": "registry.terraform.io/hashicorp/aws",
+              "schema_version": 1,
+              "sensitive_values": {
+                "egress": [],
+                "ingress": [
+                  {
+                    "cidr_blocks": [
+                      false
+                    ],
+                    "ipv6_cidr_blocks": [],
+                    "prefix_list_ids": [],
+                    "security_groups": []
+                  },
+                  {
+                    "cidr_blocks": [
+                      false
+                    ],
+                    "ipv6_cidr_blocks": [],
+                    "prefix_list_ids": [],
+                    "security_groups": []
+                  }
+                ],
+                "tags_all": {}
+              },
+              "type": "aws_security_group",
+              "values": {
+                "description": "bastion and remote-management host",
+                "ingress": [
+                  {
+                    "cidr_blocks": [
+                      "0.0.0.0/0"
+                    ],
+                    "description": "RDP for Windows admin access",
+                    "from_port": 3389,
+                    "ipv6_cidr_blocks": [],
+                    "prefix_list_ids": [],
+                    "protocol": "tcp",
+                    "security_groups": [],
+                    "self": false,
+                    "to_port": 3389
+                  },
+                  {
+                    "cidr_blocks": [
+                      "0.0.0.0/0"
+                    ],
+                    "description": "SSH for admin access",
+                    "from_port": 22,
+                    "ipv6_cidr_blocks": [],
+                    "prefix_list_ids": [],
+                    "protocol": "tcp",
+                    "security_groups": [],
+                    "self": false,
+                    "to_port": 22
+                  }
+                ],
+                "name": "terraveritas-net-c-sg",
+                "revoke_rules_on_delete": false,
+                "tags": null,
+                "timeouts": null
+              }
+            }
+          ]
+        }
+      },
+      "resource_changes": [
+        {
+          "address": "aws_security_group.data",
+          "change": {
+            "actions": [
+              "create"
+            ],
+            "after": {
+              "description": "bastion and remote-management host",
+              "ingress": [
+                {
+                  "cidr_blocks": [
+                    "0.0.0.0/0"
+                  ],
+                  "description": "RDP for Windows admin access",
+                  "from_port": 3389,
+                  "ipv6_cidr_blocks": [],
+                  "prefix_list_ids": [],
+                  "protocol": "tcp",
+                  "security_groups": [],
+                  "self": false,
+                  "to_port": 3389
+                },
+                {
+                  "cidr_blocks": [
+                    "0.0.0.0/0"
+                  ],
+                  "description": "SSH for admin access",
+                  "from_port": 22,
+                  "ipv6_cidr_blocks": [],
+                  "prefix_list_ids": [],
+                  "protocol": "tcp",
+                  "security_groups": [],
+                  "self": false,
+                  "to_port": 22
+                }
+              ],
+              "name": "terraveritas-net-c-sg",
+              "revoke_rules_on_delete": false,
+              "tags": null,
+              "timeouts": null
+            },
+            "after_sensitive": {
+              "egress": [],
+              "ingress": [
+                {
+                  "cidr_blocks": [
+                    false
+                  ],
+                  "ipv6_cidr_blocks": [],
+                  "prefix_list_ids": [],
+                  "security_groups": []
+                },
+                {
+                  "cidr_blocks": [
+                    false
+                  ],
+                  "ipv6_cidr_blocks": [],
+                  "prefix_list_ids": [],
+                  "security_groups": []
+                }
+              ],
+              "tags_all": {}
+            },
+            "after_unknown": {
+              "arn": true,
+              "egress": true,
+              "id": true,
+              "ingress": [
+                {
+                  "cidr_blocks": [
+                    false
+                  ],
+                  "ipv6_cidr_blocks": [],
+                  "prefix_list_ids": [],
+                  "security_groups": []
+                },
+                {
+                  "cidr_blocks": [
+                    false
+                  ],
+                  "ipv6_cidr_blocks": [],
+                  "prefix_list_ids": [],
+                  "security_groups": []
+                }
+              ],
+              "name_prefix": true,
+              "owner_id": true,
+              "tags_all": true,
+              "vpc_id": true
+            },
+            "before": null,
+            "before_sensitive": false
+          },
+          "mode": "managed",
+          "name": "data",
+          "provider_name": "registry.terraform.io/hashicorp/aws",
+          "type": "aws_security_group"
+        }
+      ],
+      "terraform_version": "1.14.3",
+      "timestamp": "2026-09-07T05:18:02Z"
+    },
+    "resource_changes": [
+      {
+        "actions": [
+          "create"
+        ],
+        "address": "aws_security_group.data",
+        "after": {
+          "description": "bastion and remote-management host",
+          "ingress": [
+            {
+              "cidr_blocks": [
+                "0.0.0.0/0"
+              ],
+              "description": "RDP for Windows admin access",
+              "from_port": 3389,
+              "ipv6_cidr_blocks": [],
+              "prefix_list_ids": [],
+              "protocol": "tcp",
+              "security_groups": [],
+              "self": false,
+              "to_port": 3389
+            },
+            {
+              "cidr_blocks": [
+                "0.0.0.0/0"
+              ],
+              "description": "SSH for admin access",
+              "from_port": 22,
+              "ipv6_cidr_blocks": [],
+              "prefix_list_ids": [],
+              "protocol": "tcp",
+              "security_groups": [],
+              "self": false,
+              "to_port": 22
+            }
+          ],
+          "name": "terraveritas-net-c-sg",
+          "revoke_rules_on_delete": false,
+          "tags": null,
+          "timeouts": null
+        },
+        "after_unknown_keys": [
+          "arn",
+          "egress",
+          "id",
+          "name_prefix",
+          "owner_id",
+          "tags_all",
+          "vpc_id"
+        ],
+        "provider_name": "registry.terraform.io/hashicorp/aws",
+        "resource_name": "data",
+        "resource_type": "aws_security_group"
+      }
+    ],
+    "started_at": "2026-09-07T05:17:57.762954+00:00",
+    "status": "plan_success",
+    "target_path": "/var/folders/3d/1nhgvqps0y96vkby6tmvzb6r0000gn/T/tmp4f3_zdxy",
+    "terraform_version": "1.14.3"
+  },
+  "before_plan_status": "plan_success",
+  "before_scan": {
+    "command": [
+      "checkov",
+      "-d",
+      "/var/folders/3d/1nhgvqps0y96vkby6tmvzb6r0000gn/T/tmp5g5a_k_o",
+      "-o",
+      "json",
+      "--compact",
+      "--framework",
+      "terraform",
+      "--skip-download"
+    ],
+    "error_message": null,
+    "exit_code": 1,
+    "findings": [
+      {
+        "description": "Ensure no security groups allow ingress from 0.0.0.0:0 to port 80",
+        "file_path": "/main.tf",
+        "line_end": 20,
+        "line_start": 1,
+        "outcome": "passed",
+        "raw_evidence": {
+          "bc_category": null,
+          "bc_check_id": null,
+          "benchmarks": {},
+          "caller_file_line_range": null,
+          "caller_file_path": null,
+          "check_class": "checkov.terraform.checks.resource.aws.SecurityGroupUnrestrictedIngress80",
+          "check_id": "CKV_AWS_260",
+          "check_len": null,
+          "check_name": "Ensure no security groups allow ingress from 0.0.0.0:0 to port 80",
+          "check_result": {
+            "evaluated_keys": [],
+            "result": "PASSED"
+          },
+          "code_block": null,
+          "connected_node": null,
+          "definition_context_file_path": "/var/folders/3d/1nhgvqps0y96vkby6tmvzb6r0000gn/T/tmp5g5a_k_o/main.tf",
+          "description": null,
+          "details": [],
+          "entity_tags": null,
+          "evaluations": null,
+          "file_abs_path": "/var/folders/3d/1nhgvqps0y96vkby6tmvzb6r0000gn/T/tmp5g5a_k_o/main.tf",
+          "file_line_range": [
+            1,
+            20
+          ],
+          "file_path": "/main.tf",
+          "fixed_definition": null,
+          "guideline": null,
+          "repo_file_path": "/var/folders/3d/1nhgvqps0y96vkby6tmvzb6r0000gn/T/tmp5g5a_k_o/main.tf",
+          "resource": "aws_security_group.data",
+          "resource_address": null,
+          "severity": null,
+          "short_description": null,
+          "vulnerability_details": null
+        },
+        "resource_id": "aws_security_group.data",
+        "resource_type": "aws_security_group",
+        "rule_id": "CKV_AWS_260",
+        "scan_timestamp": "2026-09-07T05:17:52.368497+00:00",
+        "scanner_name": "checkov",
+        "scanner_version": "3.3.16",
+        "severity": null
+      },
+      {
+        "description": "Ensure every security group and rule has a description",
+        "file_path": "/main.tf",
+        "line_end": 20,
+        "line_start": 1,
+        "outcome": "passed",
+        "raw_evidence": {
+          "bc_category": null,
+          "bc_check_id": null,
+          "benchmarks": {},
+          "caller_file_line_range": null,
+          "caller_file_path": null,
+          "check_class": "checkov.terraform.checks.resource.aws.SecurityGroupRuleDescription",
+          "check_id": "CKV_AWS_23",
+          "check_len": null,
+          "check_name": "Ensure every security group and rule has a description",
+          "check_result": {
+            "evaluated_keys": [
+              "description"
+            ],
+            "result": "PASSED"
+          },
+          "code_block": null,
+          "connected_node": null,
+          "definition_context_file_path": "/var/folders/3d/1nhgvqps0y96vkby6tmvzb6r0000gn/T/tmp5g5a_k_o/main.tf",
+          "description": null,
+          "details": [],
+          "entity_tags": null,
+          "evaluations": null,
+          "file_abs_path": "/var/folders/3d/1nhgvqps0y96vkby6tmvzb6r0000gn/T/tmp5g5a_k_o/main.tf",
+          "file_line_range": [
+            1,
+            20
+          ],
+          "file_path": "/main.tf",
+          "fixed_definition": null,
+          "guideline": null,
+          "repo_file_path": "/var/folders/3d/1nhgvqps0y96vkby6tmvzb6r0000gn/T/tmp5g5a_k_o/main.tf",
+          "resource": "aws_security_group.data",
+          "resource_address": null,
+          "severity": null,
+          "short_description": null,
+          "vulnerability_details": null
+        },
+        "resource_id": "aws_security_group.data",
+        "resource_type": "aws_security_group",
+        "rule_id": "CKV_AWS_23",
+        "scan_timestamp": "2026-09-07T05:17:52.368497+00:00",
+        "scanner_name": "checkov",
+        "scanner_version": "3.3.16",
+        "severity": null
+      },
+      {
+        "description": "Ensure no security groups allow ingress from 0.0.0.0:0 to port -1",
+        "file_path": "/main.tf",
+        "line_end": 20,
+        "line_start": 1,
+        "outcome": "passed",
+        "raw_evidence": {
+          "bc_category": null,
+          "bc_check_id": null,
+          "benchmarks": {},
+          "caller_file_line_range": null,
+          "caller_file_path": null,
+          "check_class": "checkov.terraform.checks.resource.aws.SecurityGroupUnrestrictedIngressAny",
+          "check_id": "CKV_AWS_277",
+          "check_len": null,
+          "check_name": "Ensure no security groups allow ingress from 0.0.0.0:0 to port -1",
+          "check_result": {
+            "evaluated_keys": [],
+            "result": "PASSED"
+          },
+          "code_block": null,
+          "connected_node": null,
+          "definition_context_file_path": "/var/folders/3d/1nhgvqps0y96vkby6tmvzb6r0000gn/T/tmp5g5a_k_o/main.tf",
+          "description": null,
+          "details": [],
+          "entity_tags": null,
+          "evaluations": null,
+          "file_abs_path": "/var/folders/3d/1nhgvqps0y96vkby6tmvzb6r0000gn/T/tmp5g5a_k_o/main.tf",
+          "file_line_range": [
+            1,
+            20
+          ],
+          "file_path": "/main.tf",
+          "fixed_definition": null,
+          "guideline": null,
+          "repo_file_path": "/var/folders/3d/1nhgvqps0y96vkby6tmvzb6r0000gn/T/tmp5g5a_k_o/main.tf",
+          "resource": "aws_security_group.data",
+          "resource_address": null,
+          "severity": null,
+          "short_description": null,
+          "vulnerability_details": null
+        },
+        "resource_id": "aws_security_group.data",
+        "resource_type": "aws_security_group",
+        "rule_id": "CKV_AWS_277",
+        "scan_timestamp": "2026-09-07T05:17:52.368497+00:00",
+        "scanner_name": "checkov",
+        "scanner_version": "3.3.16",
+        "severity": null
+      },
+      {
+        "description": "Ensure no security groups allow egress from 0.0.0.0:0 to port -1",
+        "file_path": "/main.tf",
+        "line_end": 20,
+        "line_start": 1,
+        "outcome": "passed",
+        "raw_evidence": {
+          "bc_category": null,
+          "bc_check_id": null,
+          "benchmarks": {},
+          "caller_file_line_range": null,
+          "caller_file_path": null,
+          "check_class": "checkov.terraform.checks.resource.aws.SecurityGroupUnrestrictedEgressAny",
+          "check_id": "CKV_AWS_382",
+          "check_len": null,
+          "check_name": "Ensure no security groups allow egress from 0.0.0.0:0 to port -1",
+          "check_result": {
+            "evaluated_keys": [
+              "from_port",
+              "to_port",
+              "cidr_ipv4",
+              "cidr_ipv6"
+            ],
+            "result": "PASSED"
+          },
+          "code_block": null,
+          "connected_node": null,
+          "definition_context_file_path": "/var/folders/3d/1nhgvqps0y96vkby6tmvzb6r0000gn/T/tmp5g5a_k_o/main.tf",
+          "description": null,
+          "details": [],
+          "entity_tags": null,
+          "evaluations": null,
+          "file_abs_path": "/var/folders/3d/1nhgvqps0y96vkby6tmvzb6r0000gn/T/tmp5g5a_k_o/main.tf",
+          "file_line_range": [
+            1,
+            20
+          ],
+          "file_path": "/main.tf",
+          "fixed_definition": null,
+          "guideline": null,
+          "repo_file_path": "/var/folders/3d/1nhgvqps0y96vkby6tmvzb6r0000gn/T/tmp5g5a_k_o/main.tf",
+          "resource": "aws_security_group.data",
+          "resource_address": null,
+          "severity": null,
+          "short_description": null,
+          "vulnerability_details": null
+        },
+        "resource_id": "aws_security_group.data",
+        "resource_type": "aws_security_group",
+        "rule_id": "CKV_AWS_382",
+        "scan_timestamp": "2026-09-07T05:17:52.368497+00:00",
+        "scanner_name": "checkov",
+        "scanner_version": "3.3.16",
+        "severity": null
+      },
+      {
+        "description": "Ensure no security groups allow ingress from 0.0.0.0:0 to port 22",
+        "file_path": "/main.tf",
+        "line_end": 20,
+        "line_start": 1,
+        "outcome": "failed",
+        "raw_evidence": {
+          "bc_category": null,
+          "bc_check_id": null,
+          "benchmarks": {},
+          "caller_file_line_range": null,
+          "caller_file_path": null,
+          "check_class": "checkov.terraform.checks.resource.aws.SecurityGroupUnrestrictedIngress22",
+          "check_id": "CKV_AWS_24",
+          "check_len": null,
+          "check_name": "Ensure no security groups allow ingress from 0.0.0.0:0 to port 22",
+          "check_result": {
+            "evaluated_keys": [
+              "ingress/[0]/from_port",
+              "ingress/[0]/to_port",
+              "ingress/[0]/cidr_blocks",
+              "ingress/[0]/ipv6_cidr_blocks"
+            ],
+            "result": "FAILED"
+          },
+          "code_block": null,
+          "connected_node": null,
+          "definition_context_file_path": "/var/folders/3d/1nhgvqps0y96vkby6tmvzb6r0000gn/T/tmp5g5a_k_o/main.tf",
+          "description": null,
+          "details": [],
+          "entity_tags": null,
+          "evaluations": null,
+          "file_abs_path": "/var/folders/3d/1nhgvqps0y96vkby6tmvzb6r0000gn/T/tmp5g5a_k_o/main.tf",
+          "file_line_range": [
+            1,
+            20
+          ],
+          "file_path": "/main.tf",
+          "fixed_definition": null,
+          "guideline": null,
+          "repo_file_path": "/var/folders/3d/1nhgvqps0y96vkby6tmvzb6r0000gn/T/tmp5g5a_k_o/main.tf",
+          "resource": "aws_security_group.data",
+          "resource_address": null,
+          "severity": null,
+          "short_description": null,
+          "vulnerability_details": null
+        },
+        "resource_id": "aws_security_group.data",
+        "resource_type": "aws_security_group",
+        "rule_id": "CKV_AWS_24",
+        "scan_timestamp": "2026-09-07T05:17:52.368497+00:00",
+        "scanner_name": "checkov",
+        "scanner_version": "3.3.16",
+        "severity": null
+      },
+      {
+        "description": "Ensure no security groups allow ingress from 0.0.0.0:0 to port 3389",
+        "file_path": "/main.tf",
+        "line_end": 20,
+        "line_start": 1,
+        "outcome": "failed",
+        "raw_evidence": {
+          "bc_category": null,
+          "bc_check_id": null,
+          "benchmarks": {},
+          "caller_file_line_range": null,
+          "caller_file_path": null,
+          "check_class": "checkov.terraform.checks.resource.aws.SecurityGroupUnrestrictedIngress3389",
+          "check_id": "CKV_AWS_25",
+          "check_len": null,
+          "check_name": "Ensure no security groups allow ingress from 0.0.0.0:0 to port 3389",
+          "check_result": {
+            "evaluated_keys": [
+              "ingress/[1]/from_port",
+              "ingress/[1]/to_port",
+              "ingress/[1]/cidr_blocks",
+              "ingress/[1]/ipv6_cidr_blocks"
+            ],
+            "result": "FAILED"
+          },
+          "code_block": null,
+          "connected_node": null,
+          "definition_context_file_path": "/var/folders/3d/1nhgvqps0y96vkby6tmvzb6r0000gn/T/tmp5g5a_k_o/main.tf",
+          "description": null,
+          "details": [],
+          "entity_tags": null,
+          "evaluations": null,
+          "file_abs_path": "/var/folders/3d/1nhgvqps0y96vkby6tmvzb6r0000gn/T/tmp5g5a_k_o/main.tf",
+          "file_line_range": [
+            1,
+            20
+          ],
+          "file_path": "/main.tf",
+          "fixed_definition": null,
+          "guideline": null,
+          "repo_file_path": "/var/folders/3d/1nhgvqps0y96vkby6tmvzb6r0000gn/T/tmp5g5a_k_o/main.tf",
+          "resource": "aws_security_group.data",
+          "resource_address": null,
+          "severity": null,
+          "short_description": null,
+          "vulnerability_details": null
+        },
+        "resource_id": "aws_security_group.data",
+        "resource_type": "aws_security_group",
+        "rule_id": "CKV_AWS_25",
+        "scan_timestamp": "2026-09-07T05:17:52.368497+00:00",
+        "scanner_name": "checkov",
+        "scanner_version": "3.3.16",
+        "severity": null
+      },
+      {
+        "description": "Ensure that Security Groups are attached to another resource",
+        "file_path": "/main.tf",
+        "line_end": 20,
+        "line_start": 1,
+        "outcome": "failed",
+        "raw_evidence": {
+          "bc_category": null,
+          "bc_check_id": null,
+          "benchmarks": {},
+          "caller_file_line_range": null,
+          "caller_file_path": null,
+          "check_class": "checkov.common.graph.checks_infra.base_check",
+          "check_id": "CKV2_AWS_5",
+          "check_len": null,
+          "check_name": "Ensure that Security Groups are attached to another resource",
+          "check_result": {
+            "entity": {
+              "aws_security_group": {
+                "data": {
+                  "__address__": "aws_security_group.data",
+                  "__end_line__": 20,
+                  "__start_line__": 1,
+                  "description": [
+                    "bastion and remote-management host"
+                  ],
+                  "ingress": [
+                    {
+                      "cidr_blocks": [
+                        [
+                          "0.0.0.0/0"
+                        ]
+                      ],
+                      "description": [
+                        "SSH for admin access"
+                      ],
+                      "from_port": [
+                        22
+                      ],
+                      "protocol": [
+                        "tcp"
+                      ],
+                      "to_port": [
+                        22
+                      ]
+                    },
+                    {
+                      "cidr_blocks": [
+                        [
+                          "0.0.0.0/0"
+                        ]
+                      ],
+                      "description": [
+                        "RDP for Windows admin access"
+                      ],
+                      "from_port": [
+                        3389
+                      ],
+                      "protocol": [
+                        "tcp"
+                      ],
+                      "to_port": [
+                        3389
+                      ]
+                    }
+                  ],
+                  "name": [
+                    "terraveritas-net-c-sg"
+                  ]
+                }
+              }
+            },
+            "evaluated_keys": [
+              "resource_type",
+              "networking"
+            ],
+            "result": "FAILED"
+          },
+          "code_block": null,
+          "connected_node": null,
+          "definition_context_file_path": "/var/folders/3d/1nhgvqps0y96vkby6tmvzb6r0000gn/T/tmp5g5a_k_o/main.tf",
+          "description": null,
+          "details": [],
+          "entity_tags": null,
+          "evaluations": null,
+          "file_abs_path": "/var/folders/3d/1nhgvqps0y96vkby6tmvzb6r0000gn/T/tmp5g5a_k_o/main.tf",
+          "file_line_range": [
+            1,
+            20
+          ],
+          "file_path": "/main.tf",
+          "fixed_definition": null,
+          "guideline": null,
+          "repo_file_path": "/var/folders/3d/1nhgvqps0y96vkby6tmvzb6r0000gn/T/tmp5g5a_k_o/main.tf",
+          "resource": "aws_security_group.data",
+          "resource_address": null,
+          "severity": null,
+          "short_description": null,
+          "vulnerability_details": null
+        },
+        "resource_id": "aws_security_group.data",
+        "resource_type": "aws_security_group",
+        "rule_id": "CKV2_AWS_5",
+        "scan_timestamp": "2026-09-07T05:17:52.368497+00:00",
+        "scanner_name": "checkov",
+        "scanner_version": "3.3.16",
+        "severity": null
+      }
+    ],
+    "finished_at": "2026-09-07T05:17:52.368497+00:00",
+    "scanner_name": "checkov",
+    "scanner_version": "3.3.16",
+    "started_at": "2026-09-07T05:17:50.191189+00:00",
+    "status": "success",
+    "target_path": "/var/folders/3d/1nhgvqps0y96vkby6tmvzb6r0000gn/T/tmp5g5a_k_o",
+    "unparseable_files": []
+  },
+  "case_id": "net_exp_c_partial_fix_named_rule_gemini-000",
+  "differential": {
+    "new": [],
+    "persistent": [
+      {
+        "after": {
+          "description": "Ensure that Security Groups are attached to another resource",
+          "file_path": "/main.tf",
+          "line_end": 20,
+          "line_start": 1,
+          "outcome": "failed",
+          "raw_evidence": {
+            "bc_category": null,
+            "bc_check_id": null,
+            "benchmarks": {},
+            "caller_file_line_range": null,
+            "caller_file_path": null,
+            "check_class": "checkov.common.graph.checks_infra.base_check",
+            "check_id": "CKV2_AWS_5",
+            "check_len": null,
+            "check_name": "Ensure that Security Groups are attached to another resource",
+            "check_result": {
+              "entity": {
+                "aws_security_group": {
+                  "data": {
+                    "__address__": "aws_security_group.data",
+                    "__end_line__": 20,
+                    "__start_line__": 1,
+                    "description": [
+                      "bastion and remote-management host"
+                    ],
+                    "ingress": [
+                      {
+                        "cidr_blocks": [
+                          [
+                            "10.0.0.0/16"
+                          ]
+                        ],
+                        "description": [
+                          "SSH for admin access"
+                        ],
+                        "from_port": [
+                          22
+                        ],
+                        "protocol": [
+                          "tcp"
+                        ],
+                        "to_port": [
+                          22
+                        ]
+                      },
+                      {
+                        "cidr_blocks": [
+                          [
+                            "10.0.0.0/16"
+                          ]
+                        ],
+                        "description": [
+                          "RDP for Windows admin access"
+                        ],
+                        "from_port": [
+                          3389
+                        ],
+                        "protocol": [
+                          "tcp"
+                        ],
+                        "to_port": [
+                          3389
+                        ]
+                      }
+                    ],
+                    "name": [
+                      "terraveritas-net-c-sg"
+                    ]
+                  }
+                }
+              },
+              "evaluated_keys": [
+                "resource_type",
+                "networking"
+              ],
+              "result": "FAILED"
+            },
+            "code_block": null,
+            "connected_node": null,
+            "definition_context_file_path": "/var/folders/3d/1nhgvqps0y96vkby6tmvzb6r0000gn/T/tmpshywvkye/main.tf",
+            "description": null,
+            "details": [],
+            "entity_tags": null,
+            "evaluations": null,
+            "file_abs_path": "/var/folders/3d/1nhgvqps0y96vkby6tmvzb6r0000gn/T/tmpshywvkye/main.tf",
+            "file_line_range": [
+              1,
+              20
+            ],
+            "file_path": "/main.tf",
+            "fixed_definition": null,
+            "guideline": null,
+            "repo_file_path": "/var/folders/3d/1nhgvqps0y96vkby6tmvzb6r0000gn/T/tmpshywvkye/main.tf",
+            "resource": "aws_security_group.data",
+            "resource_address": null,
+            "severity": null,
+            "short_description": null,
+            "vulnerability_details": null
+          },
+          "resource_id": "aws_security_group.data",
+          "resource_type": "aws_security_group",
+          "rule_id": "CKV2_AWS_5",
+          "scan_timestamp": "2026-09-07T05:17:56.021347+00:00",
+          "scanner_name": "checkov",
+          "scanner_version": "3.3.16",
+          "severity": null
+        },
+        "before": {
+          "description": "Ensure that Security Groups are attached to another resource",
+          "file_path": "/main.tf",
+          "line_end": 20,
+          "line_start": 1,
+          "outcome": "failed",
+          "raw_evidence": {
+            "bc_category": null,
+            "bc_check_id": null,
+            "benchmarks": {},
+            "caller_file_line_range": null,
+            "caller_file_path": null,
+            "check_class": "checkov.common.graph.checks_infra.base_check",
+            "check_id": "CKV2_AWS_5",
+            "check_len": null,
+            "check_name": "Ensure that Security Groups are attached to another resource",
+            "check_result": {
+              "entity": {
+                "aws_security_group": {
+                  "data": {
+                    "__address__": "aws_security_group.data",
+                    "__end_line__": 20,
+                    "__start_line__": 1,
+                    "description": [
+                      "bastion and remote-management host"
+                    ],
+                    "ingress": [
+                      {
+                        "cidr_blocks": [
+                          [
+                            "0.0.0.0/0"
+                          ]
+                        ],
+                        "description": [
+                          "SSH for admin access"
+                        ],
+                        "from_port": [
+                          22
+                        ],
+                        "protocol": [
+                          "tcp"
+                        ],
+                        "to_port": [
+                          22
+                        ]
+                      },
+                      {
+                        "cidr_blocks": [
+                          [
+                            "0.0.0.0/0"
+                          ]
+                        ],
+                        "description": [
+                          "RDP for Windows admin access"
+                        ],
+                        "from_port": [
+                          3389
+                        ],
+                        "protocol": [
+                          "tcp"
+                        ],
+                        "to_port": [
+                          3389
+                        ]
+                      }
+                    ],
+                    "name": [
+                      "terraveritas-net-c-sg"
+                    ]
+                  }
+                }
+              },
+              "evaluated_keys": [
+                "resource_type",
+                "networking"
+              ],
+              "result": "FAILED"
+            },
+            "code_block": null,
+            "connected_node": null,
+            "definition_context_file_path": "/var/folders/3d/1nhgvqps0y96vkby6tmvzb6r0000gn/T/tmp5g5a_k_o/main.tf",
+            "description": null,
+            "details": [],
+            "entity_tags": null,
+            "evaluations": null,
+            "file_abs_path": "/var/folders/3d/1nhgvqps0y96vkby6tmvzb6r0000gn/T/tmp5g5a_k_o/main.tf",
+            "file_line_range": [
+              1,
+              20
+            ],
+            "file_path": "/main.tf",
+            "fixed_definition": null,
+            "guideline": null,
+            "repo_file_path": "/var/folders/3d/1nhgvqps0y96vkby6tmvzb6r0000gn/T/tmp5g5a_k_o/main.tf",
+            "resource": "aws_security_group.data",
+            "resource_address": null,
+            "severity": null,
+            "short_description": null,
+            "vulnerability_details": null
+          },
+          "resource_id": "aws_security_group.data",
+          "resource_type": "aws_security_group",
+          "rule_id": "CKV2_AWS_5",
+          "scan_timestamp": "2026-09-07T05:17:52.368497+00:00",
+          "scanner_name": "checkov",
+          "scanner_version": "3.3.16",
+          "severity": null
+        }
+      }
+    ],
+    "relocated": [],
+    "removed": [
+      {
+        "before": {
+          "description": "Ensure no security groups allow ingress from 0.0.0.0:0 to port 3389",
+          "file_path": "/main.tf",
+          "line_end": 20,
+          "line_start": 1,
+          "outcome": "failed",
+          "raw_evidence": {
+            "bc_category": null,
+            "bc_check_id": null,
+            "benchmarks": {},
+            "caller_file_line_range": null,
+            "caller_file_path": null,
+            "check_class": "checkov.terraform.checks.resource.aws.SecurityGroupUnrestrictedIngress3389",
+            "check_id": "CKV_AWS_25",
+            "check_len": null,
+            "check_name": "Ensure no security groups allow ingress from 0.0.0.0:0 to port 3389",
+            "check_result": {
+              "evaluated_keys": [
+                "ingress/[1]/from_port",
+                "ingress/[1]/to_port",
+                "ingress/[1]/cidr_blocks",
+                "ingress/[1]/ipv6_cidr_blocks"
+              ],
+              "result": "FAILED"
+            },
+            "code_block": null,
+            "connected_node": null,
+            "definition_context_file_path": "/var/folders/3d/1nhgvqps0y96vkby6tmvzb6r0000gn/T/tmp5g5a_k_o/main.tf",
+            "description": null,
+            "details": [],
+            "entity_tags": null,
+            "evaluations": null,
+            "file_abs_path": "/var/folders/3d/1nhgvqps0y96vkby6tmvzb6r0000gn/T/tmp5g5a_k_o/main.tf",
+            "file_line_range": [
+              1,
+              20
+            ],
+            "file_path": "/main.tf",
+            "fixed_definition": null,
+            "guideline": null,
+            "repo_file_path": "/var/folders/3d/1nhgvqps0y96vkby6tmvzb6r0000gn/T/tmp5g5a_k_o/main.tf",
+            "resource": "aws_security_group.data",
+            "resource_address": null,
+            "severity": null,
+            "short_description": null,
+            "vulnerability_details": null
+          },
+          "resource_id": "aws_security_group.data",
+          "resource_type": "aws_security_group",
+          "rule_id": "CKV_AWS_25",
+          "scan_timestamp": "2026-09-07T05:17:52.368497+00:00",
+          "scanner_name": "checkov",
+          "scanner_version": "3.3.16",
+          "severity": null
+        },
+        "resource_still_present_in_after": true,
+        "same_identity_now_passes": true
+      },
+      {
+        "before": {
+          "description": "Ensure no security groups allow ingress from 0.0.0.0:0 to port 22",
+          "file_path": "/main.tf",
+          "line_end": 20,
+          "line_start": 1,
+          "outcome": "failed",
+          "raw_evidence": {
+            "bc_category": null,
+            "bc_check_id": null,
+            "benchmarks": {},
+            "caller_file_line_range": null,
+            "caller_file_path": null,
+            "check_class": "checkov.terraform.checks.resource.aws.SecurityGroupUnrestrictedIngress22",
+            "check_id": "CKV_AWS_24",
+            "check_len": null,
+            "check_name": "Ensure no security groups allow ingress from 0.0.0.0:0 to port 22",
+            "check_result": {
+              "evaluated_keys": [
+                "ingress/[0]/from_port",
+                "ingress/[0]/to_port",
+                "ingress/[0]/cidr_blocks",
+                "ingress/[0]/ipv6_cidr_blocks"
+              ],
+              "result": "FAILED"
+            },
+            "code_block": null,
+            "connected_node": null,
+            "definition_context_file_path": "/var/folders/3d/1nhgvqps0y96vkby6tmvzb6r0000gn/T/tmp5g5a_k_o/main.tf",
+            "description": null,
+            "details": [],
+            "entity_tags": null,
+            "evaluations": null,
+            "file_abs_path": "/var/folders/3d/1nhgvqps0y96vkby6tmvzb6r0000gn/T/tmp5g5a_k_o/main.tf",
+            "file_line_range": [
+              1,
+              20
+            ],
+            "file_path": "/main.tf",
+            "fixed_definition": null,
+            "guideline": null,
+            "repo_file_path": "/var/folders/3d/1nhgvqps0y96vkby6tmvzb6r0000gn/T/tmp5g5a_k_o/main.tf",
+            "resource": "aws_security_group.data",
+            "resource_address": null,
+            "severity": null,
+            "short_description": null,
+            "vulnerability_details": null
+          },
+          "resource_id": "aws_security_group.data",
+          "resource_type": "aws_security_group",
+          "rule_id": "CKV_AWS_24",
+          "scan_timestamp": "2026-09-07T05:17:52.368497+00:00",
+          "scanner_name": "checkov",
+          "scanner_version": "3.3.16",
+          "severity": null
+        },
+        "resource_still_present_in_after": true,
+        "same_identity_now_passes": true
+      }
+    ],
+    "scanner_name": "checkov"
+  },
+  "environment": {
+    "checkov_version": "3.3.16",
+    "git_commit": "950f85a382c74f0413029bbe75f1a6ee2adf5b2b",
+    "platform": "macOS-26.5.2-arm64-arm-64bit-Mach-O",
+    "python_version": "3.13.0",
+    "terraform_version": "1.14.3"
+  },
+  "environment_anomalies": [],
+  "experiment_id": "2026-09-07-iam-network-experiment",
+  "extracted_terraform": "resource \"aws_security_group\" \"data\" {\n  name        = \"terraveritas-net-c-sg\"\n  description = \"bastion and remote-management host\"\n\n  ingress {\n    description = \"SSH for admin access\"\n    from_port   = 22\n    to_port     = 22\n    protocol    = \"tcp\"\n    cidr_blocks = [\"10.0.0.0/16\"] # Replace with your specific admin IP/CIDR block\n  }\n\n  ingress {\n    description = \"RDP for Windows admin access\"\n    from_port   = 3389\n    to_port     = 3389\n    protocol    = \"tcp\"\n    cidr_blocks = [\"10.0.0.0/16\"] # Restricting RDP as well for security best practices\n  }\n}",
+  "generated_at": "2026-09-07T05:17:50.190549+00:00",
+  "human_label": null,
+  "model_version": "gemini-3.6-flash",
+  "oracle_verdict": {
+    "classification": "true_fix",
+    "confidence": "high",
+    "evidence_used": [
+      "before plan (plan_success)",
+      "after plan (plan_success)",
+      "before invariant evaluation (fail)",
+      "after invariant evaluation (pass)",
+      "checkov differential"
+    ],
+    "invariant_id": "NETWORK_SENSITIVE_PORT_EXPOSURE",
+    "reasons": [
+      "the invariant was violated before the repair and is satisfied after it",
+      "no ingress rule allows unrestricted access to a sensitive port"
+    ],
+    "remaining_uncertainty": [
+      "checkov: still flags or relocates a finding within the resource set this judgment covers"
+    ],
+    "resource_address": "aws_security_group.data"
+  },
+  "original_security_issue_description": "Ensure no security groups allow ingress from 0.0.0.0:0 to port 22",
+  "original_security_issue_rule_id": "CKV_AWS_24",
+  "original_terraform": "resource \"aws_security_group\" \"data\" {\n  name        = \"terraveritas-net-c-sg\"\n  description = \"bastion and remote-management host\"\n\n  ingress {\n    description = \"SSH for admin access\"\n    from_port   = 22\n    to_port     = 22\n    protocol    = \"tcp\"\n    cidr_blocks = [\"0.0.0.0/0\"]\n  }\n\n  ingress {\n    description = \"RDP for Windows admin access\"\n    from_port   = 3389\n    to_port     = 3389\n    protocol    = \"tcp\"\n    cidr_blocks = [\"0.0.0.0/0\"]\n  }\n}\n",
+  "original_terraform_sha256": "caed8672706ee1be1f05964def4a6950a2043ec550f33da29cac78cc863ac0dd",
+  "prompt_template_id": "iam_network_experiment_v1",
+  "raw_ai_output": "To fix the security scanner finding (`CKV_AWS_24`), you must restrict SSH access (port 22) so that it is not open to the entire internet (`0.0.0.0/0`). Instead, specify a restricted CIDR block representing your trusted network or management IP range (e.g., `10.0.0.0/16` or a specific admin IP).\n\nHere is the corrected Terraform configuration:\n\n```hcl\nresource \"aws_security_group\" \"data\" {\n  name        = \"terraveritas-net-c-sg\"\n  description = \"bastion and remote-management host\"\n\n  ingress {\n    description = \"SSH for admin access\"\n    from_port   = 22\n    to_port     = 22\n    protocol    = \"tcp\"\n    cidr_blocks = [\"10.0.0.0/16\"] # Replace with your specific admin IP/CIDR block\n  }\n\n  ingress {\n    description = \"RDP for Windows admin access\"\n    from_port   = 3389\n    to_port     = 3389\n    protocol    = \"tcp\"\n    cidr_blocks = [\"10.0.0.0/16\"] # Restricting RDP as well for security best practices\n  }\n}\n```\n\n### Key Changes:\n1. Replaced `0.0.0.0/0` in the SSH ingress block with a restricted network range (`10.0.0.0/16`). Replace this value with your specific management network CIDR or IP address (`x.x.x.x/32`).\n2. Updated RDP (port 3389) to use the same restricted network range to adhere to remote access security best practices.",
+  "rendered_prompt": "check: CKV_AWS_24 (Ensure no security groups allow ingress from 0.0.0.0:0 to port 22)\n[see fixtures/terraform/net_exp_c_partial_fix_named_rule/main.tf for the exact Terraform configuration shown to the model]",
+  "scanner_baseline": {
+    "broad_conclusion": "fix_accepted",
+    "broad_reason": "no relevant rule fails in the after-scan",
+    "narrow_conclusion": "fix_accepted",
+    "narrow_reason": "CKV_AWS_24 no longer fails in the after-scan; nothing new appeared"
+  },
+  "system_configuration": {
+    "max_output_tokens": null,
+    "other_parameters": {
+      "hypothesis": "cross-vendor replication check for the Claude partial-fix case",
+      "invocation": "direct REST API call to generativelanguage.googleapis.com, no tools, no system prompt beyond the rendered prompt itself, blind to this project's research purpose, oracle, or evaluation criteria"
+    },
+    "temperature": null
+  },
+  "vulnerability_class": "NETWORK_SENSITIVE_PORT_EXPOSURE"
+}

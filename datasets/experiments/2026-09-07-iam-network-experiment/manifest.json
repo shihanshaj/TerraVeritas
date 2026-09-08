@@ -1,0 +1,20 @@
+{
+  "experiment_id": "2026-09-07-iam-network-experiment",
+  "matrix_cells": [
+    "iam_exp_a_admin_wildcard_claude-000",
+    "iam_exp_a_admin_wildcard_gemini-000",
+    "iam_exp_b_multi_statement_mixed_claude-000",
+    "iam_exp_c_partial_fix_named_statement_claude-000",
+    "iam_exp_c_partial_fix_named_statement_gemini-000",
+    "iam_exp_d_unresolved_policy_claude-000",
+    "iam_exp_e_attached_managed_policy_blindspot_claude-000",
+    "net_exp_a_ssh_open_claude-000",
+    "net_exp_a_ssh_open_gemini-000",
+    "net_exp_b_db_port_open_claude-000",
+    "net_exp_c_partial_fix_named_rule_claude-000",
+    "net_exp_c_partial_fix_named_rule_gemini-000",
+    "net_exp_d_unresolved_cidr_claude-000",
+    "net_exp_e_multi_sg_nested_complexity_claude-000"
+  ],
+  "record_count": 14
+}
