@@ -20,6 +20,10 @@ from __future__ import annotations
 from pathlib import Path
 
 from terraveritas.experiments.pipeline import evaluate_repair
+from terraveritas.invariants.iam_excessive_privilege import (
+    evaluate_iam_excessive_privilege_exposure,
+)
+from terraveritas.invariants.network_exposure import evaluate_network_sensitive_port_exposure
 from terraveritas.models.baseline import BaselineConclusion
 from terraveritas.models.invariant import InvariantStatus
 from terraveritas.models.oracle import Classification
@@ -67,3 +71,58 @@ def test_real_pipeline_reproduces_the_known_true_fix_result() -> None:
     assert result.after_invariant.status == InvariantStatus.PASS
     assert result.oracle_verdict.classification == Classification.TRUE_FIX
     assert result.scanner_baseline.narrow_conclusion == BaselineConclusion.FIX_ACCEPTED
+
+
+def test_real_pipeline_generalizes_to_the_iam_invariant() -> None:
+    """The pipeline was hardcoded to S3_PUBLIC_ACCESS_EXPOSURE until the
+    IAM/network experimental phase needed it generalized (see
+    docs/iam_network_experiment_report.md). This proves the generalized
+    `invariant_evaluator`/`resource_address` parameters produce a real,
+    correct TRUE_FIX against the IAM invariant end to end -- real Checkov,
+    real Terraform plan, real invariant, real oracle -- not just that the
+    parameters are accepted."""
+    original_tf = (REPO_ROOT / "fixtures" / "terraform" / "iam_vulnerable" / "main.tf").read_text()
+    secure_tf = (REPO_ROOT / "fixtures" / "terraform" / "iam_secure" / "main.tf").read_text()
+    raw_ai_output = f"```hcl\n{secure_tf}```\n"
+
+    result = evaluate_repair(
+        original_tf=original_tf,
+        raw_ai_output=raw_ai_output,
+        rule_id=None,
+        planner=TerraformPlanner(filesystem_mirror_dir=MIRROR_DIR),
+        scanner=CheckovAdapter(),
+        resource_address="aws_iam_role.data",
+        invariant_evaluator=evaluate_iam_excessive_privilege_exposure,
+    )
+
+    assert result.before_plan.status == PlanStatus.PLAN_SUCCESS
+    assert result.after_plan.status == PlanStatus.PLAN_SUCCESS
+    assert result.before_invariant.status == InvariantStatus.FAIL
+    assert result.after_invariant.status == InvariantStatus.PASS
+    assert result.oracle_verdict.classification == Classification.TRUE_FIX
+
+
+def test_real_pipeline_generalizes_to_the_network_invariant() -> None:
+    """Same generalization proof as the IAM test above, for
+    NETWORK_SENSITIVE_PORT_EXPOSURE -- the third and structurally most
+    different invariant (single-resource nested-block parsing, no
+    cross-resource correlation)."""
+    original_tf = (REPO_ROOT / "fixtures" / "terraform" / "sg_vulnerable" / "main.tf").read_text()
+    secure_tf = (REPO_ROOT / "fixtures" / "terraform" / "sg_secure" / "main.tf").read_text()
+    raw_ai_output = f"```hcl\n{secure_tf}```\n"
+
+    result = evaluate_repair(
+        original_tf=original_tf,
+        raw_ai_output=raw_ai_output,
+        rule_id=None,
+        planner=TerraformPlanner(filesystem_mirror_dir=MIRROR_DIR),
+        scanner=CheckovAdapter(),
+        resource_address="aws_security_group.data",
+        invariant_evaluator=evaluate_network_sensitive_port_exposure,
+    )
+
+    assert result.before_plan.status == PlanStatus.PLAN_SUCCESS
+    assert result.after_plan.status == PlanStatus.PLAN_SUCCESS
+    assert result.before_invariant.status == InvariantStatus.FAIL
+    assert result.after_invariant.status == InvariantStatus.PASS
+    assert result.oracle_verdict.classification == Classification.TRUE_FIX
