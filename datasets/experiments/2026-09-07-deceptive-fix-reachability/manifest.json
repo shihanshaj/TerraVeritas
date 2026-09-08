@@ -1,0 +1,15 @@
+{
+  "experiment_id": "2026-09-07-deceptive-fix-reachability",
+  "matrix_cells": [
+    "decep_s3_plain_claude-000",
+    "decep_s3_nudged_claude-000",
+    "decep_s3_nudged_gemini-000",
+    "decep_iam_plain_claude-000",
+    "decep_iam_nudged_claude-000",
+    "decep_iam_nudged_gemini-000",
+    "decep_net_plain_claude-000",
+    "decep_net_nudged_claude-000",
+    "decep_net_nudged_gemini-000"
+  ],
+  "record_count": 9
+}
